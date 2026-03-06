@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <title>Asesoramiento — César Hidalgo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@700;800;900&family=DM+Sans:wght@300;400;500&display=swap"
+        rel="stylesheet" />
+    <style>
+        :root {
+            --bg: #0f1520;
+            --bg2: #151e2e;
+            --bg3: #1a2438;
+            --accent: #00c2ff;
+            --accent2: #0077ff;
+            --text: #e8f0fe;
+            --muted: #7a8fa6;
+            --border: rgba(0, 194, 255, 0.12);
+            --card: rgba(255, 255, 255, 0.03);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        .inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 5%;
+        }
+
+        nav {
+            padding: 1.5rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(15, 21, 32, 0.8);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .nav-logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            text-decoration: none;
+            color: #fff;
+        }
+
+        .nav-logo span {
+            color: var(--accent);
+        }
+
+        .btn-back {
+            color: var(--muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: color 0.3s;
+        }
+
+        .btn-back:hover {
+            color: var(--accent);
+        }
+
+        .stag {
+            color: var(--accent);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-size: 0.8rem;
+            margin-bottom: 1rem;
+        }
+
+        h2 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            line-height: 1.1;
+        }
+
+        .sdesc {
+            color: var(--muted);
+            max-width: 700px;
+            margin-bottom: 3rem;
+        }
+
+        /* PRECIOS GRID */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .p-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 3rem 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .p-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--accent);
+            background: rgba(0, 194, 255, 0.03);
+        }
+
+        .p-card.featured {
+            border: 2px solid var(--accent);
+            background: rgba(0, 194, 255, 0.05);
+            transform: scale(1.05);
+            z-index: 2;
+        }
+
+        .p-card.featured::before {
+            content: 'MÁS POPULAR';
+            position: absolute;
+            top: 20px;
+            right: -30px;
+            background: var(--accent);
+            color: #fff;
+            font-size: 0.7rem;
+            font-weight: 800;
+            padding: 5px 40px;
+            transform: rotate(45deg);
+        }
+
+        .p-type {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--accent);
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+
+        .p-card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .p-price {
+            font-size: 3rem;
+            font-weight: 900;
+            margin-bottom: 0.5rem;
+            color: var(--text);
+        }
+
+        .p-subprice {
+            font-size: 0.9rem;
+            color: var(--muted);
+            margin-bottom: 2rem;
+        }
+
+        .p-features {
+            list-style: none;
+            width: 100%;
+            margin-bottom: 2.5rem;
+            text-align: left;
+        }
+
+        .p-features li {
+            color: var(--muted);
+            font-size: 0.95rem;
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .p-features li i {
+            color: var(--accent);
+            font-style: normal;
+            font-weight: bold;
+        }
+
+        /* Animación Wobble / Aleteo */
+        @keyframes wobble {
+            0% {
+                transform: scale(1);
+            }
+
+            20% {
+                transform: scale(1.1) rotate(3deg);
+            }
+
+            40% {
+                transform: scale(1.1) rotate(-3deg);
+            }
+
+            60% {
+                transform: scale(1.1) rotate(2deg);
+            }
+
+            80% {
+                transform: scale(1.1) rotate(-2deg);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .btn-wobble {
+            width: 100%;
+            padding: 1.2rem;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--accent2), var(--accent));
+            color: #fff;
+            font-weight: 700;
+            text-decoration: none;
+            box-shadow: 0 10px 20px rgba(0, 119, 255, 0.2);
+            transition: all 0.3s;
+            display: block;
+        }
+
+        /* Clase que activaremos con JS para el efecto entrada */
+        .wobble-active {
+            animation: wobble 1s ease-in-out;
+        }
+
+        .p-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 3rem;
+        }
+
+        .p-tab {
+            padding: 0.8rem 2rem;
+            border-radius: 100px;
+            background: var(--bg3);
+            color: var(--muted);
+            cursor: pointer;
+            font-weight: 600;
+            border: 1px solid var(--border);
+            transition: all 0.3s;
+        }
+
+        .p-tab.active {
+            background: var(--accent);
+            color: #fff;
+            border-color: var(--accent);
+        }
+
+        .p-group {
+            display: none;
+        }
+
+        .p-group.active {
+            display: grid;
+        }
+
+        @media(max-width: 900px) {
+            .pricing-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .p-card.featured {
+                transform: scale(1);
+                margin: 1rem 0;
+            }
+
+            h2 {
+                font-size: 2.2rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <a href="index.html" class="nav-logo">César<span>.</span></a>
+        <a href="index.html" class="btn-back">← Volver a la web</a>
+    </nav>
+
+    <main class="inner">
+        <p class="stag">Planes y Precios</p>
+        <h2>Inversión para tu proyecto</h2>
+        <p class="sdesc">Selecciona el plan que mejor se adapte a tus necesidades. Calidad profesional con resultados
+            medibles.</p>
+
+        <div class="p-tabs">
+            <div class="p-tab active" onclick="switchPrice('web')">Desarrollo Web</div>
+            <div class="p-tab" onclick="switchPrice('apps')">Apps Móviles</div>
+        </div>
+
+        <!-- GRUPO: WEB -->
+        <div id="p-web" class="p-group active pricing-grid">
+            <div class="p-card">
+                <div class="p-type">Básico</div>
+                <h3>Landing Page</h3>
+                <div class="p-price">Desde 250€</div>
+                <div class="p-subprice">Pago único</div>
+                <ul class="p-features">
+                    <li><i>✔</i> <span>Estructura de una sola página</span></li>
+                    <li><i>✔</i> <span>Hasta 10 fotografías optimizadas</span></li>
+                    <li><i>✔</i> <span>Formulario de contacto funcional</span></li>
+                    <li><i>✔</i> <span>Diseño 100% móvil-friendly</span></li>
+                    <li><i>✔</i> <span>SEO optimizado para Google</span></li>
+                </ul>
+                <a href="https://wa.me/34600000000?text=Hola%20César!%20Me%20interesa%20la%20Landing%20Page%20(desde%20250€)."
+                    class="btn-wobble">¡Me interesa!</a>
+            </div>
+
+            <div class="p-card featured">
+                <div class="p-type">Profesional</div>
+                <h3>Web Corporativa</h3>
+                <div class="p-price">Desde 590€</div>
+                <div class="p-subprice">Pago único</div>
+                <ul class="p-features">
+                    <li><i>✔</i> <span>Hasta 5 secciones personalizadas</span></li>
+                    <li><i>✔</i> <span>Gestor de contenidos (Blog/Noticias)</span></li>
+                    <li><i>✔</i> <span>Integración de Mapas y RRSS</span></li>
+                    <li><i>✔</i> <span>Carga ultra rápida</span></li>
+                    <li><i>✔</i> <span>Mantenimiento incluido 1 mes</span></li>
+                </ul>
+                <a href="https://wa.me/34600000000?text=Hola%20César!%20Me%20interesa%20la%20Web%20Corporativa%20(desde%20590€)."
+                    class="btn-wobble">¡Quiero crecer!</a>
+            </div>
+
+            <div class="p-card">
+                <div class="p-type">Empresa</div>
+                <h3>Web PRO / IA</h3>
+                <div class="p-price">Consultar</div>
+                <div class="p-subprice">Presupuesto a medida</div>
+                <ul class="p-features">
+                    <li><i>✔</i> <span>Integración de Inteligencia Artificial</span></li>
+                    <li><i>✔</i> <span>Sistemas de reservas o E-commerce</span></li>
+                    <li><i>✔</i> <span>Base de datos y panel privado</span></li>
+                    <li><i>✔</i> <span>Funcionalidades exclusivas</span></li>
+                    <li><i>✔</i> <span>Soporte técnico prioritario</span></li>
+                </ul>
+                <a href="https://wa.me/34600000000?text=Hola%20César!%20Quiero%20una%20Web%20PRO%20con%20IA."
+                    class="btn-wobble">Consultar proyecto</a>
+            </div>
+        </div>
+
+        <!-- GRUPO: APPS -->
+        <div id="p-apps" class="p-group pricing-grid">
+            <div class="p-card">
+                <div class="p-type">Starter</div>
+                <h3>App MVP</h3>
+                <div class="p-price">Desde 450€</div>
+                <div class="p-subprice">Pago único</div>
+                <ul class="p-features">
+                    <li><i>✔</i> <span>Funcionalidad principal única</span></li>
+                    <li><i>✔</i> <span>Diseño nativo para Android</span></li>
+                    <li><i>✔</i> <span>Base de datos local segura</span></li>
+                    <li><i>✔</i> <span>Subida a Google Play Store</span></li>
+                </ul>
+                <a href="https://wa.me/34600000000?text=Hola%20César!%20Me%20interesa%20el%20MVP%20de%20App."
+                    class="btn-wobble">¡Me interesa!</a>
+            </div>
+
+            <div class="p-card featured">
+                <div class="p-type">Advance</div>
+                <h3>App Full</h3>
+                <div class="p-price">Desde 950€</div>
+                <div class="p-subprice">Pago único</div>
+                <ul class="p-features">
+                    <li><i>✔</i> <span>Múltiples vistas y navegación</span></li>
+                    <li><i>✔</i> <span>Notificaciones Push integradas</span></li>
+                    <li><i>✔</i> <span>Conexión con servidores externos</span></li>
+                    <li><i>✔</i> <span>Gestión de usuarios y perfiles</span></li>
+                </ul>
+                <a href="https://wa.me/34600000000?text=Hola%20César!%20Me%20interesa%20la%20App%20Completa."
+                    class="btn-wobble">¡Quiero crecer!</a>
+            </div>
+
+            <div class="p-card">
+                <div class="p-type">Enterprise</div>
+                <h3>App IA Custom</h3>
+                <div class="p-price">Consultar</div>
+                <div class="p-subprice">A medida</div>
+                <ul class="p-features">
+                    <li><i>✔</i> <span>Inteligencia Artificial aplicada</span></li>
+                    <li><i>✔</i> <span>Sistemas complejos offline/online</span></li>
+                    <li><i>✔</i> <span>Panel de administración Web</span></li>
+                    <li><i>✔</i> <span>Mantenimiento y actualizaciones</span></li>
+                </ul>
+                <a href="https://wa.me/34600000000?text=Hola%20César!%20Quiero%20una%20App%20Enterprise."
+                    class="btn-wobble">Consultar presupuesto</a>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function switchPrice(type) {
+            document.querySelectorAll('.p-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.p-group').forEach(g => g.classList.remove('active'));
+
+            if (type === 'web') {
+                document.querySelector('.p-tab:nth-child(1)').classList.add('active');
+                document.getElementById('p-web').classList.add('active');
+            } else {
+                document.querySelector('.p-tab:nth-child(2)').classList.add('active');
+                document.getElementById('p-apps').classList.add('active');
+            }
+        }
+
+        // Trigger initial tab and animations on load
+        window.addEventListener('load', () => {
+            // Check URL parameters for initial tab
+            const urlParams = new URLSearchParams(window.location.search);
+            const tipo = urlParams.get('tipo');
+            if (tipo === 'apps') {
+                switchPrice('apps');
+            } else {
+                switchPrice('web'); // Default to web
+            }
+
+            document.querySelectorAll('.btn-wobble').forEach((btn, i) => {
+                setTimeout(() => {
+                    btn.classList.add('wobble-active');
+                }, i * 200 + 500);
+            });
+        });
+    </script>
+</body>
+
+</html>
