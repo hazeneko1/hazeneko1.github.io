@@ -12,6 +12,9 @@
     href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@700;800;900&family=DM+Sans:wght@300;400;500&display=swap"
     rel="stylesheet" />
   <style>
+    /* ==========================================================================
+       VARIABLES Y RESET
+       ========================================================================== */
     *,
     *::before,
     *::after {
@@ -43,6 +46,9 @@
       overflow-x: hidden
     }
 
+    /* ==========================================================================
+       NAVEGACIÓN (MENÚ)
+       ========================================================================== */
     nav {
       position: fixed;
       top: 0;
@@ -96,8 +102,11 @@
       font-weight: 600 !important
     }
 
+    /* ==========================================================================
+       HERO SECTION (PORTADA)
+       ========================================================================== */
     .hero {
-      min-height: 100vh;
+      min-height: 80vh;
       display: flex;
       align-items: center;
       padding: 7rem 5% 4rem;
@@ -131,9 +140,9 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 3rem;
+      gap: 4rem;
       width: 100%;
-      max-width: 1200px;
+      max-width: 1280px;
       margin: 0 auto;
       position: relative;
       z-index: 1
@@ -141,7 +150,22 @@
 
     .hero-text {
       flex: 1;
-      max-width: 600px
+      max-width: 600px;
+      /* <--- Animación de entrada */
+    }
+
+    .hero-text h1 {
+      /* Curva ajustada para que no frene tanto al final */
+      animation: titleArcIn 1.1s cubic-bezier(.16, .52, .33, 1.02) 0.1s forwards;
+      opacity: 0;
+    }
+
+    .hero-text p,
+    .hero-text .badge,
+    .hero-text .actions {
+      /* Entrada más rápida y directa */
+      animation: slideInLeft 0.9s cubic-bezier(0.34, 1, 0.68, 1) 0.3s forwards;
+      opacity: 0;
     }
 
     .badge {
@@ -251,22 +275,99 @@
 
     .hero-photo {
       flex-shrink: 0;
-      width: 300px;
-      height: 300px;
+      width: 490px;
+      height: 490px;
       border-radius: 50%;
       background: var(--bg3);
-      border: 2px solid var(--border);
+      border: 3px solid var(--border);
       display: flex;
       align-items: center;
       justify-content: center;
       overflow: hidden;
-      box-shadow: 0 0 60px rgba(0, 119, 255, .15)
+      box-shadow: 0 0 80px rgba(0, 119, 255, .25);
+      transition: transform .3s ease;
+      /* Animación ahora más lenta (2.2s) y con curva suave (ease-in-out) */
+      animation: sphereRotateIn 2s ease-in-out forwards;
+      perspective: 1000px;
     }
 
-    .hero-photo img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover
+    .hero-photo:hover {
+      transform: scale(1.2);
+    }
+
+    /* ANIMACIONES AVANZADAS */
+    @keyframes sphereRotateIn {
+      0% {
+        opacity: 0;
+        /* Viene desde la derecha (translateX) y un poco abajo (translateY) */
+        transform: translateX(150px) translateY(50px) rotate(8deg) scale(0.49);
+      }
+
+      50% {
+        opacity: 1;
+        /* Rebota suavemente hacia la izquierda (-15px) */
+        transform: translateX(-15px) translateY(-35px) rotate(0deg) scale(1.07);
+      }
+
+      100% {
+        opacity: 1;
+        transform: translateX(0) translateY(0) rotate(0deg) scale(1);
+      }
+    }
+
+    @keyframes titleArcIn {
+      0% {
+        opacity: 0;
+        /* translateX(-500px): viene desde muy a la izquierda | translateY: un poco arriba */
+        transform: translateX(-500px) translateY(-100px) rotate(-5deg);
+      }
+
+      100% {
+        opacity: 1;
+        /* Todo a 0 para que repose en su posición natural de la web */
+        transform: translateX(0) translateY(0) rotate(0deg);
+      }
+    }
+
+    @keyframes slideInLeft {
+      from {
+        opacity: 0;
+        transform: translateX(-40px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    /* =========================================================================
+       REVEAL ON SCROLL (ANIMACIONES AL BAJAR)
+       ========================================================================= */
+    .reveal {
+      opacity: 0;
+      transition: all 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+      /* Un pelín más lento para que se aprecie el recorrido */
+    }
+
+    .reveal-left {
+      transform: translateX(-150px);
+      /* Antes 20px, ahora viene desde mucho más a la izquierda */
+    }
+
+    .reveal-right {
+      transform: translateX(150px);
+      /* Antes 20px, ahora viene desde mucho más a la derecha */
+    }
+
+    .reveal-up {
+      transform: translateY(80px);
+      /* Un poco más de recorrido desde abajo */
+    }
+
+    .reveal.active {
+      opacity: 1;
+      transform: translate(0, 0);
     }
 
     .ph {
@@ -276,6 +377,17 @@
       padding: 1rem
     }
 
+    .hero-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      /* Centramos la foto para que no te veas cortado */
+    }
+
+    /* ==========================================================================
+       ESTADÍSTICAS
+       ========================================================================== */
     .stats {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -337,7 +449,7 @@
       font-size: 1rem;
       line-height: 1.7;
       max-width: 540px;
-      margin-bottom: 3rem;
+      margin-bottom: 1.8rem;
       font-weight: 300
     }
 
@@ -349,20 +461,21 @@
     }
 
     .about-img {
-      aspect-ratio: 4/3;
       border-radius: 16px;
       background: var(--bg3);
       border: 1px solid var(--border);
       display: flex;
       align-items: center;
       justify-content: center;
-      overflow: hidden
+      overflow: hidden;
+      /* He quitado el aspect-ratio fijo para que no se corte la captura */
     }
 
     .about-img img {
       width: 100%;
-      height: 100%;
-      object-fit: cover;
+      height: auto;
+      /* Para que la imagen se vea entera sin deformarse */
+      object-fit: contain;
       border-radius: 16px
     }
 
@@ -385,6 +498,16 @@
       margin-top: 1.5rem
     }
 
+    /* ==========================================================================
+       SOBRE MÍ
+       ========================================================================== */
+    #sobre-mi {
+      background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.15) 5%, transparent 65%);
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      padding: 8rem 5%;
+    }
+
     .tag {
       background: rgba(0, 194, 255, .07);
       border: 1px solid rgba(0, 194, 255, .15);
@@ -395,6 +518,9 @@
       font-weight: 500
     }
 
+    /* ==========================================================================
+       SERVICIOS
+       ========================================================================== */
     #servicios {
       background: var(--bg2)
     }
@@ -437,6 +563,7 @@
     }
 
     .srv-icon {
+      /* Mantenemos el estilo de icono por si acaso */
       width: 48px;
       height: 48px;
       border-radius: 12px;
@@ -446,6 +573,26 @@
       justify-content: center;
       font-size: 1.4rem;
       margin-bottom: 1.2rem
+    }
+
+    .srv-img {
+      width: 100%;
+      height: 160px;
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 1.5rem;
+      border: 1px solid var(--border);
+    }
+
+    .srv-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      transition: transform 0.5s ease;
+    }
+
+    .srv-card:hover .srv-img img {
+      transform: scale(1.1);
     }
 
     .srv-card h3 {
@@ -459,9 +606,80 @@
       color: var(--muted);
       font-size: .9rem;
       line-height: 1.6;
-      font-weight: 300
+      font-weight: 300;
+      margin-bottom: 1.5rem;
+      /* Más espacio para el botón */
     }
 
+    .srv-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(0, 194, 255, 0.05);
+      border: 1px solid rgba(0, 194, 255, 0.2);
+      color: var(--accent);
+      padding: 0.6rem 1.2rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    .srv-btn:hover {
+      background: var(--accent);
+      color: #fff;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0, 194, 255, 0.3);
+    }
+
+    /* WhatsApp Floating Button */
+    .wsp-float {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 60px;
+      height: 60px;
+      background: #25d366;
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 30px;
+      box-shadow: 0 10px 25px rgba(37, 211, 102, 0.3);
+      z-index: 1000;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      animation: wspPulse 2s infinite;
+    }
+
+    .wsp-float:hover {
+      transform: scale(1.1) rotate(5deg);
+      background: #20ba5a;
+    }
+
+    @keyframes wspPulse {
+      0% {
+        box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.4);
+      }
+
+      70% {
+        box-shadow: 0 0 0 15px rgba(37, 211, 102, 0);
+      }
+
+      100% {
+        box-shadow: 0 0 0 0 rgba(37, 211, 102, 0);
+      }
+    }
+
+    /* ==========================================================================
+       PORTFOLIO (PROYECTOS)
+       ========================================================================== */
+
+    /* ==========================================================================
+       PORTFOLIO (PROYECTOS)
+       ========================================================================== */
     .port-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
@@ -494,7 +712,10 @@
     .pimg img {
       width: 100%;
       height: 100%;
-      object-fit: cover
+      object-fit: contain;
+      /* Cambio de cover a contain para no cortar las capturas */
+      padding: 10px;
+      /* Un poco de margen para que no toque los bordes */
     }
 
     .pinfo {
@@ -531,6 +752,55 @@
       font-size: .75rem
     }
 
+    /* Estilos para etiquetas de sección */
+    .p-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+
+    .p-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      opacity: 0.8;
+    }
+
+    .p-label::before {
+      content: '';
+      width: 20px;
+      height: 1px;
+      background: var(--accent);
+      display: inline-block;
+    }
+
+    .p-index-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 2.5rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .p-nav-item {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--muted);
+      cursor: default;
+      transition: color 0.3s;
+    }
+
+    .p-nav-item span {
+      color: var(--accent);
+      margin-right: 0.4rem;
+    }
+
     .plink {
       display: inline-flex;
       align-items: center;
@@ -547,6 +817,9 @@
       gap: .6rem
     }
 
+    /* ==========================================================================
+       NEKOPHASE (YOUTUBE)
+       ========================================================================== */
     #nekophase {
       background: var(--bg2)
     }
@@ -561,14 +834,16 @@
     }
 
     .yt-thumb {
-      width: 380px;
+      width: 480px;
+      /* He subido de 380px a 480px */
       flex-shrink: 0;
       background: var(--bg3);
       display: flex;
       align-items: center;
       justify-content: center;
       position: relative;
-      min-height: 220px
+      min-height: 300px
+        /* He subido de 220px a 300px */
     }
 
     .yt-play {
@@ -591,7 +866,8 @@
     }
 
     .yt-info {
-      padding: 2.5rem;
+      padding: 3.5rem;
+      /* Más aire en el texto (de 2.5rem a 3.5rem) */
       display: flex;
       flex-direction: column;
       justify-content: center
@@ -599,7 +875,8 @@
 
     .yt-info h3 {
       font-family: 'DM Sans', sans-serif;
-      font-size: 1.4rem;
+      font-size: 1.8rem;
+      /* Título más grande (de 1.4rem a 1.8rem) */
       font-weight: 800;
       margin-bottom: .8rem
     }
@@ -611,6 +888,9 @@
       font-weight: 300
     }
 
+    /* ==========================================================================
+       CONTACTO
+       ========================================================================== */
     .con-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -761,6 +1041,9 @@
       font-size: .8rem
     }
 
+    /* ==========================================================================
+       DISEÑO RESPONSIVO (MÓVIL)
+       ========================================================================== */
     @media(max-width:900px) {
       .hero-inner {
         flex-direction: column-reverse;
@@ -768,8 +1051,9 @@
       }
 
       .hero-photo {
-        width: 200px;
-        height: 200px
+        width: 300px;
+        height: 300px;
+        margin-top: 2rem
       }
 
       .actions {
@@ -805,23 +1089,35 @@
         grid-template-columns: 1fr
       }
     }
+
+    .reveal-left.active,
+    .reveal-right.active {
+      transform: translateX(0);
+    }
   </style>
 </head>
 
 <body>
 
+  <!-- 
+  ==========================================================================
+  ESTRUCTURA HTML (BODY)
+  ========================================================================== 
+  -->
   <nav>
-    <a href="#" class="nav-logo">César<span>.</span></a>
+    <a href="#inicio" class="nav-logo">César<span>.</span></a>
     <ul class="nav-links">
       <li><a href="#sobre-mi">Sobre mí</a></li>
       <li><a href="#servicios">Servicios</a></li>
+      <li><a href="asesoramiento.html">Precios</a></li>
       <li><a href="#portfolio">Portfolio</a></li>
       <li><a href="#nekophase">Nekophase</a></li>
       <li><a href="#contacto" class="nav-cta">Contactar →</a></li>
     </ul>
   </nav>
 
-  <section class="hero">
+  <!-- SECTION: HERO (PORTADA) -->
+  <section id="inicio" class="hero">
     <div class="glow1"></div>
     <div class="glow2"></div>
     <div class="hero-inner">
@@ -831,7 +1127,7 @@
         <p class="sub">Desarrollo web, apps móviles e integración de IA.<br>Convierto lo que tienes en mente en algo
           real y funcional.</p>
         <div class="actions">
-          <a href="https://calendly.com" target="_blank" class="btn-p">→ Agendar llamada</a>
+          <a href="#servicios" class="btn-p">→ ¡Me interesa!</a>
           <a href="#portfolio" class="btn-s">Ver proyectos</a>
         </div>
       </div>
@@ -841,24 +1137,25 @@
     </div>
   </section>
 
-  <div class="stats">
+  <!-- SECTION: ESTADÍSTICAS -->
+  <div class="stats reveal reveal-up">
     <div class="stat"><span class="stat-n">+15</span><span class="stat-l">Años programando</span></div>
-    <div class="stat"><span class="stat-n">+10</span><span class="stat-l">Proyectos completados</span></div>
+    <div class="stat"><span class="stat-n">+20</span><span class="stat-l">Proyectos completados</span></div>
     <div class="stat"><span class="stat-n">100%</span><span class="stat-l">Compromiso con el cliente</span></div>
   </div>
 
+  <!-- SECTION: SOBRE MÍ -->
   <section id="sobre-mi">
     <div class="inner">
       <div class="about-grid">
-        <div class="about-img">
-          <!-- Reemplaza con: <img src="sobre-mi.jpg" alt="César Hidalgo" /> -->
-          <span class="ph">📸 Foto tuya aquí<br><small>Sube sobre-mi.jpg al repo</small></span>
+        <div class="about-img reveal reveal-left">
+          <img src="img/captura3.webp" alt="Ejemplo Programa" />
         </div>
-        <div class="about-text">
+        <div class="about-text reveal reveal-right">
           <p class="stag">Sobre mí</p>
           <h2>Soy César Hidalgo,<br><span style="color:var(--accent)">desarrollador</span></h2>
-          <p>Con <strong>más de 15 años programando</strong>, he trabajado en proyectos de todo tipo: desde webs
-            corporativas hasta apps móviles con integración de inteligencia artificial.</p>
+          <p><strong>Más de 15 años programando</strong>, he trabajado en proyectos de todo tipo: desde webs
+            corporativas hasta Apps móviles con integración de inteligencia artificial.</p>
           <p>Me apasiona encontrar soluciones simples a problemas complejos. Trabajo de forma cercana con cada cliente
             para entender bien qué necesitan y entregar algo que de verdad funcione.</p>
           <p>También comparto mi proceso en mi canal de YouTube <strong>Nekophase</strong>, donde muestro las apps y
@@ -872,135 +1169,167 @@
     </div>
   </section>
 
+  <!-- SECTION: SERVICIOS -->
   <section id="servicios">
     <div class="inner">
       <p class="stag">Servicios</p>
       <h2>¿En qué puedo ayudarte?</h2>
-      <p class="sdesc">Desde una landing page hasta una app con IA integrada. Me adapto al proyecto que necesitas.</p>
+      <p class="sdesc">Desde una landing page hasta una App para Móviles con IA integrada. Me adapto al proyecto que
+        necesitas.</p>
       <div class="srv-grid">
-        <div class="srv-card">
-          <div class="srv-icon">🌐</div>
+        <div class="srv-card reveal reveal-up">
+          <div class="srv-img" style="background: #0e1728;">
+            <img src="img/desarrolloweb1.webp" alt="Desarrollo Web" />
+          </div>
           <h3>Desarrollo Web</h3>
           <p>Webs profesionales, landing pages y aplicaciones web a medida. Rápidas, modernas y optimizadas para captar
             clientes.</p>
+          <a href="asesoramiento.html?tipo=web" class="srv-btn">¡Me interesa!</a>
         </div>
-        <div class="srv-card">
-          <div class="srv-icon">📱</div>
+        <div class="srv-card reveal reveal-up" style="transition-delay: 0.2s;">
+          <div class="srv-img" style="background: #eff1f5;">
+            <img src="img/appmovil.webp" alt="Apps Móviles" />
+          </div>
           <h3>Apps Móviles</h3>
           <p>Aplicaciones Android nativas. Desde la idea hasta publicación en Google Play, con todo el proceso incluido.
           </p>
+          <a href="asesoramiento.html?tipo=apps" class="srv-btn">¡Me interesa!</a>
         </div>
-        <div class="srv-card">
-          <div class="srv-icon">🤖</div>
+        <div class="srv-card reveal reveal-up" style="transition-delay: 0.4s;">
+          <div class="srv-img" style="background: #0e1728;">
+            <img src="img/iaintegrada.webp" alt="Integración de IA" style="object-fit: cover;" />
+          </div>
           <h3>Integración de IA</h3>
           <p>Añado inteligencia artificial a tus productos: chatbots, automatizaciones, análisis de datos o funciones
             autónomas.</p>
+          <a href="asesoramiento.html?tipo=web" class="srv-btn">¡Me interesa!</a>
         </div>
       </div>
     </div>
   </section>
 
+  </section>
+
+  <!-- SECTION: PORTFOLIO -->
   <section id="portfolio">
     <div class="inner">
       <p class="stag">Portfolio</p>
       <h2>Proyectos realizados</h2>
       <p class="sdesc">Algunos de los proyectos que he desarrollado. Puedo contarte más detalles en una llamada.</p>
+
+      <!-- ÍNDICE DE SECCIONES PARA MEJORAR LA LECTURA -->
+
+
       <div class="port-grid">
-        <div class="pcard">
-          <div class="pimg">
-            <!-- <img src="proyecto1.jpg" alt="Battlefield REDSEC Guide" /> -->
-            <span class="ph">📸 Captura del proyecto</span>
-          </div>
-          <div class="pinfo">
-            <h3>Battlefield REDSEC Guide</h3>
-            <p>App Android publicada en Google Play. Guía interactiva con información detallada para jugadores del
-              juego.</p>
-            <div class="ptags"><span class="ptag">Android</span><span class="ptag">Java</span><span class="ptag">Google
-                Play</span></div>
-            <a href="https://play.google.com" target="_blank" class="plink">Ver en Google Play →</a>
-          </div>
-        </div>
-        <div class="pcard">
-          <div class="pimg"><span class="ph">📸 Captura del proyecto</span></div>
-          <div class="pinfo">
-            <h3>Proyecto 2</h3>
-            <p>Descripción breve: qué hace, para quién y qué problema resuelve.</p>
-            <div class="ptags"><span class="ptag">Web</span><span class="ptag">Python</span></div>
-            <a href="#" class="plink">Ver proyecto →</a>
+        <!-- SECCIÓN 1 -->
+        <div class="p-item reveal reveal-up">
+          <div class="pcard">
+            <div class="pimg">
+              <img src="img/appnegocios.webp" alt="App Negocio" />
+            </div>
+            <div class="pinfo">
+              <h3>App de Negocios móvil</h3>
+              <p>Desarrollo de aplicación móvil nativa enfocada en la gestión empresarial y administración de recursos.
+              </p>
+              <div class="ptags"><span class="ptag">Android</span><span class="ptag">Java</span><span
+                  class="ptag">Google Play</span></div>
+              <a href="https://play.google.com/store/apps/details?id=com.nekophase.battlefieldredsecguide"
+                target="_blank" class="plink">Ver en Google Play →</a>
+            </div>
           </div>
         </div>
-        <div class="pcard">
-          <div class="pimg"><span class="ph">📸 Captura del proyecto</span></div>
-          <div class="pinfo">
-            <h3>Proyecto 3</h3>
-            <p>Descripción breve: qué hace, para quién y qué problema resuelve.</p>
-            <div class="ptags"><span class="ptag">IA</span><span class="ptag">App móvil</span></div>
-            <a href="#" class="plink">Ver proyecto →</a>
+        <!-- SECCIÓN 2 -->
+        <div class="p-item reveal reveal-up" style="transition-delay: 0.1s;">
+          <div class="pcard">
+            <div class="pimg">
+              <img src="img/pginaweb.webp" alt="App Negocio" />
+            </div>
+            <div class="pinfo">
+              <h3>Páginas Webs</h3>
+              <p>Desarrollo de página web para empresa.</p>
+              <div class="ptags"><span class="ptag">Web</span><span class="ptag">Html</span></div>
+              <a href="https://hazeneko1.github.io/escuelaParapente/" target="_blank" class="plink">Ver proyecto →</a>
+            </div>
           </div>
         </div>
-        <div class="pcard">
-          <div class="pimg"><span class="ph">📸 Captura del proyecto</span></div>
-          <div class="pinfo">
-            <h3>Proyecto 4</h3>
-            <p>Descripción breve: qué hace, para quién y qué problema resuelve.</p>
-            <div class="ptags"><span class="ptag">Web</span><span class="ptag">API</span></div>
-            <a href="#" class="plink">Ver proyecto →</a>
+
+        <!-- PROYECTOS OCULTOS TEMPORALMENTE (Sección 3 y 4)
+        <div class="p-item reveal reveal-up" style="transition-delay: 0.2s;">
+          <div class="pcard">
+            <div class="pimg"><span class="ph">📸 Captura del proyecto</span></div>
+            <div class="pinfo">
+              <h3>Proyecto 3: IA & Mobile</h3>
+              <p>Sistemas inteligentes integrados en entornos móviles para la automatización de tareas complejas.</p>
+              <div class="ptags"><span class="ptag">IA</span><span class="ptag">App móvil</span></div>
+              <a href="#" class="plink">Ver proyecto →</a>
+            </div>
           </div>
         </div>
+        <div class="p-item reveal reveal-up" style="transition-delay: 0.3s;">
+          <div class="pcard">
+            <div class="pimg"><span class="ph">📸 Captura del proyecto</span></div>
+            <div class="pinfo">
+              <h3>Proyecto 4: API & Web</h3>
+              <p>Plataformas web escalables conectadas mediante APIs RESTful para una experiencia de usuario fluida.</p>
+              <div class="ptags"><span class="ptag">Web</span><span class="ptag">API</span></div>
+              <a href="#" class="plink">Ver proyecto →</a>
+            </div>
+          </div>
+        </div>
+        -->
       </div>
     </div>
   </section>
 
+  <!-- SECTION: NEKOPHASE (YOUTUBE) -->
   <section id="nekophase">
     <div class="inner">
       <p class="stag">Canal de YouTube</p>
       <h2>Nekophase</h2>
       <p class="sdesc">Comparto el proceso de desarrollo de mis apps y herramientas. Si te gusta ver cómo se construyen
         cosas reales, esto te va a gustar.</p>
-      <div class="yt-card">
+      <div class="yt-card reveal reveal-up">
         <div class="yt-thumb">
-          <!-- <img src="yt-thumb.jpg" alt="Nekophase" style="width:100%;height:100%;object-fit:cover" /> -->
-          <span class="ph">📺 Thumbnail del vídeo<br><small>Sube yt-thumb.jpg al repo</small></span>
-          <a href="https://youtube.com/@nekophase" target="_blank" class="yt-play">▶</a>
+          <img src="img/thumbnail.webp" alt="Nekophase" style="width:100%;height:100%;object-fit:contain" />
+          <a href="https://www.youtube.com/watch?v=FweqL2XNErw&t" target="_blank" class="yt-play">▶</a>
         </div>
         <div class="yt-info">
           <h3>Apps reales, proceso real</h3>
           <p>En Nekophase muestro cómo desarrollo aplicaciones móviles, integro IA y creo herramientas útiles. Sin
             filtros, con el proceso completo.</p>
-          <a href="https://youtube.com/@nekophase" target="_blank" class="btn-p" style="align-self:flex-start">▶ Ver el
+          <a href="https://youtube.com/@NekoPhase199" target="_blank" class="btn-p" style="align-self:flex-start">▶ Ver
+            el
             canal</a>
         </div>
       </div>
     </div>
   </section>
 
+  <!-- SECTION: CONTACTO -->
   <section id="contacto">
     <div class="inner">
       <p class="stag">Contacto</p>
       <h2>Hablemos de tu proyecto</h2>
       <div class="con-grid">
-        <div>
+        <div class="reveal reveal-left">
           <p style="color:var(--muted);line-height:1.7;font-weight:300">¿Tienes una idea en mente? Cuéntamela. Tanto si
             es una web, una app o algo con IA, le echamos un vistazo juntos sin compromiso.</p>
           <div class="con-methods">
-            <a href="/cdn-cgi/l/email-protection#1d7e786e7c6f337574797c717a722c5d72686971727276337e7270"
-              class="con-method">
+            <a href="mailto:cesar.hidalgo1@outlook.com" class="con-method">
               <div class="con-icon">✉️</div>
               <div>
-                <div><span class="__cf_email__"
-                    data-cfemail="1d7e786e7c6f337574797c717a722c5d72686971727276337e7270">[email&#160;protected]</span>
-                </div>
+                <div>cesar.hidalgo1@outlook.com</div>
                 <div class="con-label">Email directo</div>
               </div>
             </a>
-            <a href="https://calendly.com" target="_blank" class="con-method">
+            <a href="https://calendly.com/cesar-hidalgo1/30min" target="_blank" class="con-method">
               <div class="con-icon">📅</div>
               <div>
                 <div>Agendar una llamada</div>
                 <div class="con-label">Elige el día y hora que mejor te venga</div>
               </div>
             </a>
-            <a href="https://youtube.com/@nekophase" target="_blank" class="con-method">
+            <a href="https://www.youtube.com/@NekoPhase199/shorts" target="_blank" class="con-method">
               <div class="con-icon">▶️</div>
               <div>
                 <div>@nekophase</div>
@@ -1009,14 +1338,15 @@
             </a>
           </div>
         </div>
-        <form class="form" action="mailto:cesar.hidalgo1@outlook.com" method="get" enctype="text/plain">
+        <form id="contact-form" class="form reveal reveal-right" action="https://formspree.io/f/xeerqapd" method="POST">
           <div class="fg"><label>Nombre</label><input type="text" name="nombre" placeholder="Tu nombre" required />
           </div>
-          <div class="fg"><label>Email</label><input type="email" name="email" placeholder="tu@email.com" required />
+          <div class="fg"><label>Email</label><input type="email" name="_replyto" placeholder="tu@email.com" required />
           </div>
-          <div class="fg"><label>Cuéntame tu proyecto</label><textarea name="body"
+          <div class="fg"><label>Cuéntame tu proyecto</label><textarea name="mensaje"
               placeholder="App, web, integración de IA..."></textarea></div>
-          <button type="submit" class="fsub">Enviar mensaje →</button>
+          <button type="submit" id="form-submit" class="fsub">Enviar mensaje →</button>
+          <div id="form-status" style="margin-top:1rem; font-size:0.9rem; display:none;"></div>
         </form>
       </div>
     </div>
@@ -1028,4 +1358,85 @@
       <a href="#sobre-mi">Sobre mí</a>
       <a href="#servicios">Servicios</a>
       <a href="#portfolio">Portfolio</a>
-      <a href
+      <a href="#contacto">Contacto</a>
+    </div>
+  </footer>
+
+  <script>
+    /* OBSERVADOR PARA REVELAR ELEMENTOS AL BAJAR */
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('active');
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    /* MANEJO DEL FORMULARIO CON FORMSPREE */
+    const form = document.getElementById("contact-form");
+    const status = document.getElementById("form-status");
+    const submitBtn = document.getElementById("form-submit");
+
+    form.addEventListener("submit", async function (event) {
+      event.preventDefault();
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Enviando...";
+
+      const data = new FormData(event.target);
+      fetch(event.target.action, {
+        method: form.method,
+        body: data,
+        headers: {
+          'Accept': 'application/json'
+        }
+      }).then(response => {
+        if (response.ok) {
+          status.innerHTML = "✓ ¡Mensaje enviado con éxito! Te responderé pronto.";
+          status.style.display = "block";
+          status.style.color = "#00c2ff";
+          form.reset();
+          submitBtn.textContent = "Mensaje enviado";
+        } else {
+          response.json().then(data => {
+            if (Object.hasOwn(data, 'errors')) {
+              status.innerHTML = data["errors"].map(error => error["message"]).join(", ");
+            } else {
+              status.innerHTML = "Oops! Hubo un problema al enviar el formulario";
+            }
+          })
+        }
+      }).catch(error => {
+        status.innerHTML = "Oops! Hubo un problema al conectar con el servidor";
+        status.style.display = "block";
+        status.style.color = "red";
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Enviar mensaje →";
+      });
+    });
+
+    // Asegura que al recargar la página siempre empiece desde arriba, 
+    // incluso si la URL tiene un #ancla de un clic anterior.
+    if ('scrollRestoration' in history) {
+      history.scrollRestoration = 'manual';
+    }
+
+    window.addEventListener('load', () => {
+      window.scrollTo(0, 0);
+      // Limpia el # de la URL para que la próxima recarga también empiece arriba
+      if (window.location.hash) {
+        history.replaceState(null, null, window.location.pathname + window.location.search);
+      }
+    });
+
+  </script>
+
+  <!-- Botón Flotante de WhatsApp -->
+  <a href="https://wa.me/34672398219?text=Hola%20César!%20Vengo%20de%20tu%20web%20y%20me%20gustaría%20hablar%20contigo."
+    class="wsp-float" target="_blank" title="Contactar por WhatsApp">
+    <svg viewBox="0 0 32 32" style="width:35px;height:35px;fill:currentColor;">
+      <path
+        d="M16 0C7.163 0 0 7.163 0 16c0 2.825.733 5.475 2.015 7.781L0 32l8.47-1.748C10.74 31.428 13.273 32 16 32c8.837 0 16-7.163 16-16S24.837 0 16 0zm8.807 23.32c-.365 1.03-1.84 1.88-2.613 2.01-.773.13-1.73.235-2.825-.105-1.095-.34-2.19-.785-3.285-1.23-.71-.29-1.395-.625-2.03-1.01-4.04-2.455-6.685-6.525-6.885-6.79-.2-.265-1.465-1.95-1.465-3.725 0-1.775.93-2.645 1.265-3.005.335-.36 1.03-.45 1.395-.45h.865c.295 0 .56.015.82.72.33.895 1.13 2.755 1.23 2.95s.165.425.035.69c-.13.265-.295.425-.595.785-.3.36-.63.66-.895.995-.265.33-.535.69-.235 1.23.3.535 1.325 2.185 2.85 3.54 1.96 1.74 3.61 2.28 4.14 2.545.535.265.865.23 1.195-.14.33-.37 1.43-1.655 1.825-2.22s.76-.46 1.295-.265c.535.195 3.385 1.595 3.98 1.89s.995.425 1.13.66c.135.235.135 1.365-.23 2.395z" />
+    </svg>
+  </a>
+</body>
+
+</html>
