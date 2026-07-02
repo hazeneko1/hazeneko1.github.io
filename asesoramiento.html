@@ -514,16 +514,15 @@
     </script>
 
     <!-- Google Translate Integración -->
-    <div id="google_translate_element" style="display:none;"></div>
+    <div id="google_translate_element" style="position: absolute; top: -9999px; left: -9999px;"></div>
     <script type="text/javascript">
         function changeLanguage(langCode) {
-            const translateCombo = document.querySelector('.goog-te-combo');
-            if (translateCombo) {
-                translateCombo.value = langCode;
-                translateCombo.dispatchEvent(new Event('change'));
-            } else {
-                setTimeout(() => changeLanguage(langCode), 150);
-            }
+            // Establecer la cookie de traducción de Google
+            document.cookie = "googtrans=/es/" + langCode + "; path=/";
+            document.cookie = "googtrans=/es/" + langCode + "; path=/; domain=" + window.location.hostname;
+            
+            // Recargar la página para aplicar los cambios de inmediato
+            window.location.reload();
         }
 
         function googleTranslateElementInit() {
@@ -535,20 +534,18 @@
             }, 'google_translate_element');
         }
 
-        // Sincronizar estado inicial
+        // Obtener idioma desde la cookie para sincronizar el selector al cargar la página
+        function getLanguageFromCookie() {
+            const match = document.cookie.match(/googtrans=\/es\/([^;]+)/);
+            return match ? match[1] : 'es';
+        }
+
         window.addEventListener('load', () => {
-            const checkAndSync = setInterval(() => {
-                const translateCombo = document.querySelector('.goog-te-combo');
-                if (translateCombo) {
-                    const selectVal = translateCombo.value;
-                    if (selectVal) {
-                        const selectEl = document.getElementById('lang-select');
-                        if (selectEl) selectEl.value = selectVal;
-                    }
-                    clearInterval(checkAndSync);
-                }
-            }, 200);
-            setTimeout(() => clearInterval(checkAndSync), 5000);
+            const activeLang = getLanguageFromCookie();
+            const selectEl = document.getElementById('lang-select');
+            if (selectEl) {
+                selectEl.value = activeLang;
+            }
         });
     </script>
     <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
