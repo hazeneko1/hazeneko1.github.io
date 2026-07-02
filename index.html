@@ -1095,6 +1095,63 @@
     .reveal-right.active {
       transform: translateX(0);
     }
+
+    /* Language Selector Styles */
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .lang-selector-container {
+      position: relative;
+      display: inline-block;
+    }
+
+    .lang-select {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 0.45rem 1.8rem 0.45rem 0.8rem;
+      border-radius: 6px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      outline: none;
+      transition: all 0.2s ease;
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' fill='%237a8fa6' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: calc(100% - 0.6rem) center;
+    }
+
+    .lang-select:hover, .lang-select:focus {
+      border-color: var(--accent);
+      background-color: var(--bg3);
+      box-shadow: 0 0 10px rgba(0, 194, 255, 0.2);
+    }
+
+    /* Hide Google Translate toolbar and banner */
+    body {
+      top: 0 !important;
+    }
+    .skiptranslate, .goog-te-banner-frame, #goog-gt-tt, .goog-te-balloon-frame {
+      display: none !important;
+    }
+    .goog-tooltip {
+      display: none !important;
+    }
+    .goog-tooltip:hover {
+      display: none !important;
+    }
+    .goog-text-highlight {
+      background-color: transparent !important;
+      border: none !important;
+      box-shadow: none !important;
+    }
   </style>
 </head>
 
@@ -1107,14 +1164,28 @@
   -->
   <nav>
     <a href="#inicio" class="nav-logo">César<span>.</span></a>
-    <ul class="nav-links">
-      <li><a href="#sobre-mi">Sobre mí</a></li>
-      <li><a href="#servicios">Servicios</a></li>
-      <li><a href="asesoramiento.html">Precios</a></li>
-      <li><a href="#portfolio">Portfolio</a></li>
-      <li><a href="#nekophase">Nekophase</a></li>
-      <li><a href="#contacto" class="nav-cta">Contactar →</a></li>
-    </ul>
+    <div class="nav-actions">
+      <ul class="nav-links">
+        <li><a href="#sobre-mi">Sobre mí</a></li>
+        <li><a href="#servicios">Servicios</a></li>
+        <li><a href="asesoramiento.html">Precios</a></li>
+        <li><a href="#portfolio">Portfolio</a></li>
+        <li><a href="#nekophase">Nekophase</a></li>
+        <li><a href="#contacto" class="nav-cta">Contactar →</a></li>
+      </ul>
+      <div class="lang-selector-container">
+        <select id="lang-select" class="lang-select" onchange="changeLanguage(this.value)">
+          <option value="es">Español</option>
+          <option value="en">English</option>
+          <option value="it">Italiano</option>
+          <option value="fr">Français</option>
+          <option value="nl">Nederlands</option>
+          <option value="de">Deutsch</option>
+          <option value="zh-CN">中文</option>
+          <option value="ja">日本語</option>
+        </select>
+      </div>
+    </div>
   </nav>
 
   <!-- SECTION: HERO (PORTADA) -->
@@ -1438,6 +1509,46 @@
         d="M16 0C7.163 0 0 7.163 0 16c0 2.825.733 5.475 2.015 7.781L0 32l8.47-1.748C10.74 31.428 13.273 32 16 32c8.837 0 16-7.163 16-16S24.837 0 16 0zm8.807 23.32c-.365 1.03-1.84 1.88-2.613 2.01-.773.13-1.73.235-2.825-.105-1.095-.34-2.19-.785-3.285-1.23-.71-.29-1.395-.625-2.03-1.01-4.04-2.455-6.685-6.525-6.885-6.79-.2-.265-1.465-1.95-1.465-3.725 0-1.775.93-2.645 1.265-3.005.335-.36 1.03-.45 1.395-.45h.865c.295 0 .56.015.82.72.33.895 1.13 2.755 1.23 2.95s.165.425.035.69c-.13.265-.295.425-.595.785-.3.36-.63.66-.895.995-.265.33-.535.69-.235 1.23.3.535 1.325 2.185 2.85 3.54 1.96 1.74 3.61 2.28 4.14 2.545.535.265.865.23 1.195-.14.33-.37 1.43-1.655 1.825-2.22s.76-.46 1.295-.265c.535.195 3.385 1.595 3.98 1.89s.995.425 1.13.66c.135.235.135 1.365-.23 2.395z" />
     </svg>
   </a>
+
+  <!-- Google Translate Integración -->
+  <div id="google_translate_element" style="display:none;"></div>
+  <script type="text/javascript">
+    function changeLanguage(langCode) {
+      const translateCombo = document.querySelector('.goog-te-combo');
+      if (translateCombo) {
+        translateCombo.value = langCode;
+        translateCombo.dispatchEvent(new Event('change'));
+      } else {
+        setTimeout(() => changeLanguage(langCode), 150);
+      }
+    }
+
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({
+        pageLanguage: 'es',
+        includedLanguages: 'es,en,it,fr,nl,de,zh-CN,ja',
+        layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+        autoDisplay: false
+      }, 'google_translate_element');
+    }
+
+    // Sincronizar estado inicial
+    window.addEventListener('load', () => {
+      const checkAndSync = setInterval(() => {
+        const translateCombo = document.querySelector('.goog-te-combo');
+        if (translateCombo) {
+          const selectVal = translateCombo.value;
+          if (selectVal) {
+            const selectEl = document.getElementById('lang-select');
+            if (selectEl) selectEl.value = selectVal;
+          }
+          clearInterval(checkAndSync);
+        }
+      }, 200);
+      setTimeout(() => clearInterval(checkAndSync), 5000);
+    });
+  </script>
+  <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </body>
 
 </html>

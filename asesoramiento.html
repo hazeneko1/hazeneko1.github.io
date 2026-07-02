@@ -289,13 +289,84 @@
                 font-size: 2.2rem;
             }
         }
+
+        /* Language Selector Styles */
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .lang-selector-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .lang-select {
+            background: var(--bg2);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 0.45rem 1.8rem 0.45rem 0.8rem;
+            border-radius: 6px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            outline: none;
+            transition: all 0.2s ease;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' fill='%237a8fa6' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: calc(100% - 0.6rem) center;
+        }
+
+        .lang-select:hover, .lang-select:focus {
+            border-color: var(--accent);
+            background-color: var(--bg3);
+            box-shadow: 0 0 10px rgba(0, 194, 255, 0.2);
+        }
+
+        /* Hide Google Translate toolbar and banner */
+        body {
+            top: 0 !important;
+        }
+        .skiptranslate, .goog-te-banner-frame, #goog-gt-tt, .goog-te-balloon-frame {
+            display: none !important;
+        }
+        .goog-tooltip {
+            display: none !important;
+        }
+        .goog-tooltip:hover {
+            display: none !important;
+        }
+        .goog-text-highlight {
+            background-color: transparent !important;
+            border: none !important;
+            box-shadow: none !important;
+        }
     </style>
 </head>
 
 <body>
     <nav>
         <a href="index.html" class="nav-logo">César<span>.</span></a>
-        <a href="index.html" class="btn-back">← Volver a la web</a>
+        <div class="nav-actions">
+            <a href="index.html" class="btn-back">← Volver a la web</a>
+            <div class="lang-selector-container">
+                <select id="lang-select" class="lang-select" onchange="changeLanguage(this.value)">
+                    <option value="es">Español</option>
+                    <option value="en">English</option>
+                    <option value="it">Italiano</option>
+                    <option value="fr">Français</option>
+                    <option value="nl">Nederlands</option>
+                    <option value="de">Deutsch</option>
+                    <option value="zh-CN">中文</option>
+                    <option value="ja">日本語</option>
+                </select>
+            </div>
+        </div>
     </nav>
 
     <main class="inner">
@@ -441,6 +512,46 @@
             });
         });
     </script>
+
+    <!-- Google Translate Integración -->
+    <div id="google_translate_element" style="display:none;"></div>
+    <script type="text/javascript">
+        function changeLanguage(langCode) {
+            const translateCombo = document.querySelector('.goog-te-combo');
+            if (translateCombo) {
+                translateCombo.value = langCode;
+                translateCombo.dispatchEvent(new Event('change'));
+            } else {
+                setTimeout(() => changeLanguage(langCode), 150);
+            }
+        }
+
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'es',
+                includedLanguages: 'es,en,it,fr,nl,de,zh-CN,ja',
+                layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+                autoDisplay: false
+            }, 'google_translate_element');
+        }
+
+        // Sincronizar estado inicial
+        window.addEventListener('load', () => {
+            const checkAndSync = setInterval(() => {
+                const translateCombo = document.querySelector('.goog-te-combo');
+                if (translateCombo) {
+                    const selectVal = translateCombo.value;
+                    if (selectVal) {
+                        const selectEl = document.getElementById('lang-select');
+                        if (selectEl) selectEl.value = selectVal;
+                    }
+                    clearInterval(checkAndSync);
+                }
+            }, 200);
+            setTimeout(() => clearInterval(checkAndSync), 5000);
+        });
+    </script>
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </body>
 
 </html>
