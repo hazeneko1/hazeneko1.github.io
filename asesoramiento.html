@@ -328,23 +328,12 @@
             box-shadow: 0 0 10px rgba(0, 194, 255, 0.2);
         }
 
-        /* Hide Google Translate toolbar and banner */
-        body {
-            top: 0 !important;
+        /* Transición suave al cambiar idioma */
+        [data-i18n] {
+          transition: opacity 0.15s ease;
         }
-        .skiptranslate, .goog-te-banner-frame, #goog-gt-tt, .goog-te-balloon-frame {
-            display: none !important;
-        }
-        .goog-tooltip {
-            display: none !important;
-        }
-        .goog-tooltip:hover {
-            display: none !important;
-        }
-        .goog-text-highlight {
-            background-color: transparent !important;
-            border: none !important;
-            box-shadow: none !important;
+        .lang-switching [data-i18n] {
+          opacity: 0;
         }
     </style>
 </head>
@@ -353,7 +342,7 @@
     <nav>
         <a href="index.html" class="nav-logo">César<span>.</span></a>
         <div class="nav-actions">
-            <a href="index.html" class="btn-back">← Volver a la web</a>
+            <a href="index.html" class="btn-back" data-i18n="back">← Volver a la web</a>
             <div class="lang-selector-container">
                 <select id="lang-select" class="lang-select" onchange="changeLanguage(this.value)">
                     <option value="es">Español</option>
@@ -370,64 +359,63 @@
     </nav>
 
     <main class="inner">
-        <p class="stag">Planes y Precios</p>
-        <h2>Inversión para tu proyecto</h2>
-        <p class="sdesc">Selecciona el plan que mejor se adapte a tus necesidades. Calidad profesional con resultados
-            medibles.</p>
+        <p class="stag" data-i18n="page_tag">Planes y Precios</p>
+        <h2 data-i18n="page_h2">Inversión para tu proyecto</h2>
+        <p class="sdesc" data-i18n="page_desc">Selecciona el plan que mejor se adapte a tus necesidades. Calidad profesional con resultados medibles.</p>
 
         <div class="p-tabs">
-            <div class="p-tab active" onclick="switchPrice('web')">Desarrollo Web</div>
-            <div class="p-tab" onclick="switchPrice('apps')">Apps Móviles</div>
+            <div class="p-tab active" onclick="switchPrice('web')" data-i18n="tab_web">Desarrollo Web</div>
+            <div class="p-tab" onclick="switchPrice('apps')" data-i18n="tab_apps">Apps Móviles</div>
         </div>
 
         <!-- GRUPO: WEB -->
         <div id="p-web" class="p-group active pricing-grid">
             <div class="p-card">
-                <div class="p-type">Básico</div>
-                <h3>Landing Page</h3>
-                <div class="p-price">Desde 250€</div>
-                <div class="p-subprice">Pago único</div>
+                <div class="p-type" data-i18n="web1_type">Básico</div>
+                <h3 data-i18n="web1_h3">Landing Page</h3>
+                <div class="p-price" data-i18n="web1_price">Desde 250€</div>
+                <div class="p-subprice" data-i18n="single_pay">Pago único</div>
                 <ul class="p-features">
-                    <li><i>✔</i> <span>Estructura de una sola página</span></li>
-                    <li><i>✔</i> <span>Hasta 10 fotografías optimizadas</span></li>
-                    <li><i>✔</i> <span>Formulario de contacto funcional</span></li>
-                    <li><i>✔</i> <span>Diseño 100% móvil-friendly</span></li>
-                    <li><i>✔</i> <span>SEO optimizado para Google</span></li>
+                    <li><i>✔</i> <span data-i18n="web1_f1">Estructura de una sola página</span></li>
+                    <li><i>✔</i> <span data-i18n="web1_f2">Hasta 10 fotografías optimizadas</span></li>
+                    <li><i>✔</i> <span data-i18n="web1_f3">Formulario de contacto funcional</span></li>
+                    <li><i>✔</i> <span data-i18n="web1_f4">Diseño 100% móvil-friendly</span></li>
+                    <li><i>✔</i> <span data-i18n="web1_f5">SEO optimizado para Google</span></li>
                 </ul>
                 <a href="https://wa.me/34722398219?text=Hola%20César!%20Me%20interesa%20la%20Landing%20Page%20(desde%20250€)."
-                    class="btn-wobble">¡Me interesa!</a>
+                    class="btn-wobble" data-i18n="btn_interested">¡Me interesa!</a>
             </div>
 
             <div class="p-card featured">
-                <div class="p-type">Profesional</div>
-                <h3>Web Corporativa</h3>
-                <div class="p-price">Desde 590€</div>
-                <div class="p-subprice">Pago único</div>
+                <div class="p-type" data-i18n="web2_type">Profesional</div>
+                <h3 data-i18n="web2_h3">Web Corporativa</h3>
+                <div class="p-price" data-i18n="web2_price">Desde 590€</div>
+                <div class="p-subprice" data-i18n="single_pay">Pago único</div>
                 <ul class="p-features">
-                    <li><i>✔</i> <span>Hasta 5 secciones personalizadas</span></li>
-                    <li><i>✔</i> <span>Gestor de contenidos (Blog/Noticias)</span></li>
-                    <li><i>✔</i> <span>Integración de Mapas y RRSS</span></li>
-                    <li><i>✔</i> <span>Carga ultra rápida</span></li>
-                    <li><i>✔</i> <span>Mantenimiento incluido 1 mes</span></li>
+                    <li><i>✔</i> <span data-i18n="web2_f1">Hasta 5 secciones personalizadas</span></li>
+                    <li><i>✔</i> <span data-i18n="web2_f2">Gestor de contenidos (Blog/Noticias)</span></li>
+                    <li><i>✔</i> <span data-i18n="web2_f3">Integración de Mapas y RRSS</span></li>
+                    <li><i>✔</i> <span data-i18n="web2_f4">Carga ultra rápida</span></li>
+                    <li><i>✔</i> <span data-i18n="web2_f5">Mantenimiento incluido 1 mes</span></li>
                 </ul>
                 <a href="https://wa.me/34722398219?text=Hola%20César!%20Me%20interesa%20la%20Web%20Corporativa%20(desde%20590€)."
-                    class="btn-wobble">¡Quiero crecer!</a>
+                    class="btn-wobble" data-i18n="btn_grow">¡Quiero crecer!</a>
             </div>
 
             <div class="p-card">
-                <div class="p-type">Empresa</div>
-                <h3>Web PRO / IA</h3>
-                <div class="p-price">Consultar</div>
-                <div class="p-subprice">Presupuesto a medida</div>
+                <div class="p-type" data-i18n="web3_type">Empresa</div>
+                <h3 data-i18n="web3_h3">Web PRO / IA</h3>
+                <div class="p-price" data-i18n="consult">Consultar</div>
+                <div class="p-subprice" data-i18n="custom_budget">Presupuesto a medida</div>
                 <ul class="p-features">
-                    <li><i>✔</i> <span>Integración de Inteligencia Artificial</span></li>
-                    <li><i>✔</i> <span>Sistemas de reservas o E-commerce</span></li>
-                    <li><i>✔</i> <span>Base de datos y panel privado</span></li>
-                    <li><i>✔</i> <span>Funcionalidades exclusivas</span></li>
-                    <li><i>✔</i> <span>Soporte técnico prioritario</span></li>
+                    <li><i>✔</i> <span data-i18n="web3_f1">Integración de Inteligencia Artificial</span></li>
+                    <li><i>✔</i> <span data-i18n="web3_f2">Sistemas de reservas o E-commerce</span></li>
+                    <li><i>✔</i> <span data-i18n="web3_f3">Base de datos y panel privado</span></li>
+                    <li><i>✔</i> <span data-i18n="web3_f4">Funcionalidades exclusivas</span></li>
+                    <li><i>✔</i> <span data-i18n="web3_f5">Soporte técnico prioritario</span></li>
                 </ul>
                 <a href="https://wa.me/34722398219?text=Hola%20César!%20Quiero%20una%20Web%20PRO%20con%20IA."
-                    class="btn-wobble">Consultar proyecto</a>
+                    class="btn-wobble" data-i18n="btn_consult">Consultar proyecto</a>
             </div>
         </div>
 
@@ -436,46 +424,46 @@
             <div class="p-card">
                 <div class="p-type">Starter</div>
                 <h3>App MVP</h3>
-                <div class="p-price">Desde 450€</div>
-                <div class="p-subprice">Pago único</div>
+                <div class="p-price" data-i18n="app1_price">Desde 450€</div>
+                <div class="p-subprice" data-i18n="single_pay">Pago único</div>
                 <ul class="p-features">
-                    <li><i>✔</i> <span>Funcionalidad principal única</span></li>
-                    <li><i>✔</i> <span>Diseño nativo para Android</span></li>
-                    <li><i>✔</i> <span>Base de datos local segura</span></li>
-                    <li><i>✔</i> <span>Subida a Google Play Store</span></li>
+                    <li><i>✔</i> <span data-i18n="app1_f1">Funcionalidad principal única</span></li>
+                    <li><i>✔</i> <span data-i18n="app1_f2">Diseño nativo para Android</span></li>
+                    <li><i>✔</i> <span data-i18n="app1_f3">Base de datos local segura</span></li>
+                    <li><i>✔</i> <span data-i18n="app1_f4">Subida a Google Play Store</span></li>
                 </ul>
                 <a href="https://wa.me/34722398219?text=Hola%20César!%20Me%20interesa%20el%20MVP%20de%20App."
-                    class="btn-wobble">¡Me interesa!</a>
+                    class="btn-wobble" data-i18n="btn_interested">¡Me interesa!</a>
             </div>
 
             <div class="p-card featured">
                 <div class="p-type">Advance</div>
                 <h3>App Full</h3>
-                <div class="p-price">Desde 950€</div>
-                <div class="p-subprice">Pago único</div>
+                <div class="p-price" data-i18n="app2_price">Desde 950€</div>
+                <div class="p-subprice" data-i18n="single_pay">Pago único</div>
                 <ul class="p-features">
-                    <li><i>✔</i> <span>Múltiples vistas y navegación</span></li>
-                    <li><i>✔</i> <span>Notificaciones Push integradas</span></li>
-                    <li><i>✔</i> <span>Conexión con servidores externos</span></li>
-                    <li><i>✔</i> <span>Gestión de usuarios y perfiles</span></li>
+                    <li><i>✔</i> <span data-i18n="app2_f1">Múltiples vistas y navegación</span></li>
+                    <li><i>✔</i> <span data-i18n="app2_f2">Notificaciones Push integradas</span></li>
+                    <li><i>✔</i> <span data-i18n="app2_f3">Conexión con servidores externos</span></li>
+                    <li><i>✔</i> <span data-i18n="app2_f4">Gestión de usuarios y perfiles</span></li>
                 </ul>
                 <a href="https://wa.me/34722398219?text=Hola%20César!%20Me%20interesa%20la%20App%20Completa."
-                    class="btn-wobble">¡Quiero crecer!</a>
+                    class="btn-wobble" data-i18n="btn_grow">¡Quiero crecer!</a>
             </div>
 
             <div class="p-card">
                 <div class="p-type">Enterprise</div>
                 <h3>App IA Custom</h3>
-                <div class="p-price">Consultar</div>
-                <div class="p-subprice">A medida</div>
+                <div class="p-price" data-i18n="consult">Consultar</div>
+                <div class="p-subprice" data-i18n="custom_budget2">A medida</div>
                 <ul class="p-features">
-                    <li><i>✔</i> <span>Inteligencia Artificial aplicada</span></li>
-                    <li><i>✔</i> <span>Sistemas complejos offline/online</span></li>
-                    <li><i>✔</i> <span>Panel de administración Web</span></li>
-                    <li><i>✔</i> <span>Mantenimiento y actualizaciones</span></li>
+                    <li><i>✔</i> <span data-i18n="app3_f1">Inteligencia Artificial aplicada</span></li>
+                    <li><i>✔</i> <span data-i18n="app3_f2">Sistemas complejos offline/online</span></li>
+                    <li><i>✔</i> <span data-i18n="app3_f3">Panel de administración Web</span></li>
+                    <li><i>✔</i> <span data-i18n="app3_f4">Mantenimiento y actualizaciones</span></li>
                 </ul>
                 <a href="https://wa.me/34722398219?text=Hola%20César!%20Quiero%20una%20App%20Enterprise."
-                    class="btn-wobble">Consultar presupuesto</a>
+                    class="btn-wobble" data-i18n="btn_consult_budget">Consultar presupuesto</a>
             </div>
         </div>
     </main>
@@ -513,42 +501,237 @@
         });
     </script>
 
-    <!-- Google Translate Integración -->
-    <div id="google_translate_element" style="position: absolute; top: -9999px; left: -9999px;"></div>
-    <script type="text/javascript">
-        function changeLanguage(langCode) {
-            // Establecer la cookie de traducción de Google
-            document.cookie = "googtrans=/es/" + langCode + "; path=/";
-            document.cookie = "googtrans=/es/" + langCode + "; path=/; domain=" + window.location.hostname;
-            
-            // Recargar la página para aplicar los cambios de inmediato
-            window.location.reload();
+    <!-- Sistema de traducción instantánea -->
+    <script>
+      const TRANSLATIONS_ASE = {
+        es: {
+          back: '← Volver a la web',
+          page_tag: 'Planes y Precios', page_h2: 'Inversión para tu proyecto',
+          page_desc: 'Selecciona el plan que mejor se adapte a tus necesidades. Calidad profesional con resultados medibles.',
+          tab_web: 'Desarrollo Web', tab_apps: 'Apps Móviles',
+          web1_type: 'Básico', web1_h3: 'Landing Page', web1_price: 'Desde 250€', single_pay: 'Pago único',
+          web1_f1: 'Estructura de una sola página', web1_f2: 'Hasta 10 fotografías optimizadas',
+          web1_f3: 'Formulario de contacto funcional', web1_f4: 'Diseño 100% móvil-friendly', web1_f5: 'SEO optimizado para Google',
+          web2_type: 'Profesional', web2_h3: 'Web Corporativa', web2_price: 'Desde 590€',
+          web2_f1: 'Hasta 5 secciones personalizadas', web2_f2: 'Gestor de contenidos (Blog/Noticias)',
+          web2_f3: 'Integración de Mapas y RRSS', web2_f4: 'Carga ultra rápida', web2_f5: 'Mantenimiento incluido 1 mes',
+          web3_type: 'Empresa', web3_h3: 'Web PRO / IA', consult: 'Consultar', custom_budget: 'Presupuesto a medida',
+          web3_f1: 'Integración de Inteligencia Artificial', web3_f2: 'Sistemas de reservas o E-commerce',
+          web3_f3: 'Base de datos y panel privado', web3_f4: 'Funcionalidades exclusivas', web3_f5: 'Soporte técnico prioritario',
+          app1_price: 'Desde 450€',
+          app1_f1: 'Funcionalidad principal única', app1_f2: 'Diseño nativo para Android',
+          app1_f3: 'Base de datos local segura', app1_f4: 'Subida a Google Play Store',
+          app2_price: 'Desde 950€',
+          app2_f1: 'Múltiples vistas y navegación', app2_f2: 'Notificaciones Push integradas',
+          app2_f3: 'Conexión con servidores externos', app2_f4: 'Gestión de usuarios y perfiles',
+          custom_budget2: 'A medida',
+          app3_f1: 'Inteligencia Artificial aplicada', app3_f2: 'Sistemas complejos offline/online',
+          app3_f3: 'Panel de administración Web', app3_f4: 'Mantenimiento y actualizaciones',
+          btn_interested: '¡Me interesa!', btn_grow: '¡Quiero crecer!', btn_consult: 'Consultar proyecto', btn_consult_budget: 'Consultar presupuesto'
+        },
+        en: {
+          back: '← Back to website',
+          page_tag: 'Plans & Pricing', page_h2: 'Investment for your project',
+          page_desc: 'Select the plan that best suits your needs. Professional quality with measurable results.',
+          tab_web: 'Web Development', tab_apps: 'Mobile Apps',
+          web1_type: 'Basic', web1_h3: 'Landing Page', web1_price: 'From €250', single_pay: 'One-time payment',
+          web1_f1: 'Single-page structure', web1_f2: 'Up to 10 optimized photos',
+          web1_f3: 'Working contact form', web1_f4: '100% mobile-friendly design', web1_f5: 'SEO optimized for Google',
+          web2_type: 'Professional', web2_h3: 'Corporate Website', web2_price: 'From €590',
+          web2_f1: 'Up to 5 custom sections', web2_f2: 'Content manager (Blog/News)',
+          web2_f3: 'Maps & Social Media integration', web2_f4: 'Ultra fast loading', web2_f5: '1 month maintenance included',
+          web3_type: 'Enterprise', web3_h3: 'PRO Web / AI', consult: 'Get a quote', custom_budget: 'Custom budget',
+          web3_f1: 'Artificial Intelligence integration', web3_f2: 'Booking systems or E-commerce',
+          web3_f3: 'Database and private panel', web3_f4: 'Exclusive features', web3_f5: 'Priority technical support',
+          app1_price: 'From €450',
+          app1_f1: 'Single core functionality', app1_f2: 'Native Android design',
+          app1_f3: 'Secure local database', app1_f4: 'Upload to Google Play Store',
+          app2_price: 'From €950',
+          app2_f1: 'Multiple views and navigation', app2_f2: 'Integrated Push notifications',
+          app2_f3: 'Connection with external servers', app2_f4: 'User and profile management',
+          custom_budget2: 'Custom',
+          app3_f1: 'Applied Artificial Intelligence', app3_f2: 'Complex offline/online systems',
+          app3_f3: 'Web administration panel', app3_f4: 'Maintenance and updates',
+          btn_interested: "I'm interested!", btn_grow: 'I want to grow!', btn_consult: 'Consult project', btn_consult_budget: 'Get a quote'
+        },
+        it: {
+          back: '← Torna al sito',
+          page_tag: 'Piani e Prezzi', page_h2: 'Investimento per il tuo progetto',
+          page_desc: 'Seleziona il piano che meglio si adatta alle tue esigenze. Qualità professionale con risultati misurabili.',
+          tab_web: 'Sviluppo Web', tab_apps: 'App Mobile',
+          web1_type: 'Base', web1_h3: 'Landing Page', web1_price: 'Da 250€', single_pay: 'Pagamento unico',
+          web1_f1: 'Struttura a pagina singola', web1_f2: 'Fino a 10 foto ottimizzate',
+          web1_f3: 'Modulo di contatto funzionante', web1_f4: 'Design 100% mobile-friendly', web1_f5: 'SEO ottimizzato per Google',
+          web2_type: 'Professionale', web2_h3: 'Sito Aziendale', web2_price: 'Da 590€',
+          web2_f1: 'Fino a 5 sezioni personalizzate', web2_f2: 'Gestore di contenuti (Blog/Notizie)',
+          web2_f3: 'Integrazione Mappe e Social', web2_f4: 'Caricamento ultra rapido', web2_f5: '1 mese di manutenzione incluso',
+          web3_type: 'Azienda', web3_h3: 'Web PRO / IA', consult: 'Richiedi preventivo', custom_budget: 'Preventivo personalizzato',
+          web3_f1: 'Integrazione di Intelligenza Artificiale', web3_f2: 'Sistemi di prenotazione o E-commerce',
+          web3_f3: 'Database e pannello privato', web3_f4: 'Funzionalità esclusive', web3_f5: 'Supporto tecnico prioritario',
+          app1_price: 'Da 450€',
+          app1_f1: 'Funzionalità principale unica', app1_f2: 'Design nativo per Android',
+          app1_f3: 'Database locale sicuro', app1_f4: 'Caricamento su Google Play Store',
+          app2_price: 'Da 950€',
+          app2_f1: 'Viste multiple e navigazione', app2_f2: 'Notifiche Push integrate',
+          app2_f3: 'Connessione con server esterni', app2_f4: 'Gestione utenti e profili',
+          custom_budget2: 'Su misura',
+          app3_f1: 'Intelligenza Artificiale applicata', app3_f2: 'Sistemi complessi offline/online',
+          app3_f3: 'Pannello di amministrazione Web', app3_f4: 'Manutenzione e aggiornamenti',
+          btn_interested: 'Mi interessa!', btn_grow: 'Voglio crescere!', btn_consult: 'Consulta progetto', btn_consult_budget: 'Richiedi preventivo'
+        },
+        fr: {
+          back: '← Retour au site',
+          page_tag: 'Plans et Tarifs', page_h2: 'Investissement pour votre projet',
+          page_desc: 'Sélectionnez le plan qui correspond le mieux à vos besoins. Qualité professionnelle avec des résultats mesurables.',
+          tab_web: 'Développement Web', tab_apps: 'Apps Mobiles',
+          web1_type: 'Basique', web1_h3: 'Landing Page', web1_price: 'À partir de 250€', single_pay: 'Paiement unique',
+          web1_f1: 'Structure d\'une seule page', web1_f2: "Jusqu'à 10 photos optimisées",
+          web1_f3: 'Formulaire de contact fonctionnel', web1_f4: 'Design 100% mobile-friendly', web1_f5: 'SEO optimisé pour Google',
+          web2_type: 'Professionnel', web2_h3: 'Site d\'Entreprise', web2_price: 'À partir de 590€',
+          web2_f1: "Jusqu'à 5 sections personnalisées", web2_f2: 'Gestionnaire de contenu (Blog/Actualités)',
+          web2_f3: 'Intégration Cartes et Réseaux sociaux', web2_f4: 'Chargement ultra rapide', web2_f5: '1 mois de maintenance inclus',
+          web3_type: 'Entreprise', web3_h3: 'Web PRO / IA', consult: 'Demander un devis', custom_budget: 'Devis personnalisé',
+          web3_f1: "Intégration d'Intelligence Artificielle", web3_f2: 'Systèmes de réservation ou E-commerce',
+          web3_f3: 'Base de données et panneau privé', web3_f4: 'Fonctionnalités exclusives', web3_f5: 'Support technique prioritaire',
+          app1_price: 'À partir de 450€',
+          app1_f1: 'Fonctionnalité principale unique', app1_f2: 'Design natif pour Android',
+          app1_f3: 'Base de données locale sécurisée', app1_f4: 'Upload sur Google Play Store',
+          app2_price: 'À partir de 950€',
+          app2_f1: 'Vues multiples et navigation', app2_f2: 'Notifications Push intégrées',
+          app2_f3: 'Connexion avec serveurs externes', app2_f4: 'Gestion des utilisateurs et profils',
+          custom_budget2: 'Sur mesure',
+          app3_f1: 'Intelligence Artificielle appliquée', app3_f2: 'Systèmes complexes offline/online',
+          app3_f3: "Panneau d'administration Web", app3_f4: 'Maintenance et mises à jour',
+          btn_interested: 'Ça m\'intéresse!', btn_grow: 'Je veux grandir!', btn_consult: 'Consulter le projet', btn_consult_budget: 'Demander un devis'
+        },
+        nl: {
+          back: '← Terug naar de website',
+          page_tag: 'Plannen en Prijzen', page_h2: 'Investering voor jouw project',
+          page_desc: 'Selecteer het plan dat het beste bij jouw behoeften past. Professionele kwaliteit met meetbare resultaten.',
+          tab_web: 'Webontwikkeling', tab_apps: 'Mobiele Apps',
+          web1_type: 'Basis', web1_h3: 'Landing Page', web1_price: 'Vanaf €250', single_pay: 'Eenmalige betaling',
+          web1_f1: 'Structuur van één pagina', web1_f2: 'Tot 10 geoptimaliseerde foto\'s',
+          web1_f3: 'Werkend contactformulier', web1_f4: '100% mobiel-vriendelijk design', web1_f5: 'SEO geoptimaliseerd voor Google',
+          web2_type: 'Professioneel', web2_h3: 'Bedrijfswebsite', web2_price: 'Vanaf €590',
+          web2_f1: 'Tot 5 aangepaste secties', web2_f2: 'Contentbeheer (Blog/Nieuws)',
+          web2_f3: 'Kaarten & Sociale media integratie', web2_f4: 'Ultrasnelle laadtijden', web2_f5: '1 maand onderhoud inbegrepen',
+          web3_type: 'Onderneming', web3_h3: 'PRO Web / AI', consult: 'Offerte aanvragen', custom_budget: 'Maatwerk budget',
+          web3_f1: 'Kunstmatige Intelligentie integratie', web3_f2: 'Boekingssystemen of E-commerce',
+          web3_f3: 'Database en privaat paneel', web3_f4: 'Exclusieve functies', web3_f5: 'Prioritaire technische ondersteuning',
+          app1_price: 'Vanaf €450',
+          app1_f1: 'Unieke kernfunctionaliteit', app1_f2: 'Natief Android-design',
+          app1_f3: 'Veilige lokale database', app1_f4: 'Upload naar Google Play Store',
+          app2_price: 'Vanaf €950',
+          app2_f1: 'Meerdere schermen en navigatie', app2_f2: 'Geïntegreerde pushmeldingen',
+          app2_f3: 'Verbinding met externe servers', app2_f4: 'Gebruikers- en profielbeheer',
+          custom_budget2: 'Op maat',
+          app3_f1: 'Toegepaste Kunstmatige Intelligentie', app3_f2: 'Complexe offline/online systemen',
+          app3_f3: 'Web-beheerderspan', app3_f4: 'Onderhoud en updates',
+          btn_interested: 'Ik ben geïnteresseerd!', btn_grow: 'Ik wil groeien!', btn_consult: 'Project bespreken', btn_consult_budget: 'Offerte aanvragen'
+        },
+        de: {
+          back: '← Zurück zur Website',
+          page_tag: 'Pläne und Preise', page_h2: 'Investition für dein Projekt',
+          page_desc: 'Wähle den Plan, der am besten zu deinen Bedürfnissen passt. Professionelle Qualität mit messbaren Ergebnissen.',
+          tab_web: 'Webentwicklung', tab_apps: 'Mobile Apps',
+          web1_type: 'Basis', web1_h3: 'Landing Page', web1_price: 'Ab 250€', single_pay: 'Einmalige Zahlung',
+          web1_f1: 'Einseitige Struktur', web1_f2: 'Bis zu 10 optimierte Fotos',
+          web1_f3: 'Funktionierendes Kontaktformular', web1_f4: '100% mobilfreundliches Design', web1_f5: 'SEO für Google optimiert',
+          web2_type: 'Professionell', web2_h3: 'Unternehmenswebsite', web2_price: 'Ab 590€',
+          web2_f1: 'Bis zu 5 individuelle Bereiche', web2_f2: 'Inhaltsverwaltungssystem (Blog/Nachrichten)',
+          web2_f3: 'Karten- und Social-Media-Integration', web2_f4: 'Ultraschnelle Ladezeiten', web2_f5: '1 Monat Wartung inklusive',
+          web3_type: 'Unternehmen', web3_h3: 'PRO Web / KI', consult: 'Angebot anfordern', custom_budget: 'Maßgeschneidertes Budget',
+          web3_f1: 'Integration von Künstlicher Intelligenz', web3_f2: 'Buchungssysteme oder E-Commerce',
+          web3_f3: 'Datenbank und privates Panel', web3_f4: 'Exklusive Funktionen', web3_f5: 'Prioritärer technischer Support',
+          app1_price: 'Ab 450€',
+          app1_f1: 'Einzigartige Kernfunktionalität', app1_f2: 'Natives Android-Design',
+          app1_f3: 'Sichere lokale Datenbank', app1_f4: 'Upload in den Google Play Store',
+          app2_price: 'Ab 950€',
+          app2_f1: 'Mehrere Ansichten und Navigation', app2_f2: 'Integrierte Push-Benachrichtigungen',
+          app2_f3: 'Verbindung mit externen Servern', app2_f4: 'Benutzer- und Profilmanagement',
+          custom_budget2: 'Maßgeschneidert',
+          app3_f1: 'Angewandte Künstliche Intelligenz', app3_f2: 'Komplexe Offline/Online-Systeme',
+          app3_f3: 'Web-Administrationspanel', app3_f4: 'Wartung und Updates',
+          btn_interested: 'Interessiert mich!', btn_grow: 'Ich will wachsen!', btn_consult: 'Projekt besprechen', btn_consult_budget: 'Angebot anfordern'
+        },
+        'zh-CN': {
+          back: '← 返回网站',
+          page_tag: '计划与价格', page_h2: '您项目的投资',
+          page_desc: '选择最适合您需求的计划。专业质量，可衡量的结果。',
+          tab_web: '网页开发', tab_apps: '移动应用',
+          web1_type: '基础', web1_h3: '落地页', web1_price: '起价250€', single_pay: '一次性付款',
+          web1_f1: '单页结构', web1_f2: '最多10张优化照片',
+          web1_f3: '功能性联系表单', web1_f4: '100%移动端友好设计', web1_f5: 'Google SEO优化',
+          web2_type: '专业', web2_h3: '企业网站', web2_price: '起价590€',
+          web2_f1: '最多5个自定义模块', web2_f2: '内容管理系统（博客/新闻）',
+          web2_f3: '地图与社交媒体集成', web2_f4: '超高速加载', web2_f5: '包括1个月维护',
+          web3_type: '企业级', web3_h3: 'PRO网站/AI', consult: '和误', custom_budget: '定制预算',
+          web3_f1: '人工智能集成', web3_f2: '预订系统或电商',
+          web3_f3: '数据库和私人面板', web3_f4: '独家功能', web3_f5: '优先技术支持',
+          app1_price: '起价450€',
+          app1_f1: '单一核心功能', app1_f2: 'Android原生设计',
+          app1_f3: '安全的本地数据库', app1_f4: '上Google Play商店',
+          app2_price: '起价950€',
+          app2_f1: '多个视图和导航', app2_f2: '集成推送通知',
+          app2_f3: '连接外部服务器', app2_f4: '用户和配置文件管理',
+          custom_budget2: '定制',
+          app3_f1: '应用人工智能', app3_f2: '复杂离线/在线系统',
+          app3_f3: 'Web管理面板', app3_f4: '维护和更新',
+          btn_interested: '我感兴趣！', btn_grow: '我想成长！', btn_consult: '和误项目', btn_consult_budget: '和误预算'
+        },
+        ja: {
+          back: '← ウェブサイトに戻る',
+          page_tag: 'プランと料金', page_h2: 'プロジェクトへの投資',
+          page_desc: 'ニーズに最も適したプランを選んでください。測定可能な結果を伴うプロフェッショナルな品質。',
+          tab_web: 'Web開発', tab_apps: 'モバイルアプリ',
+          web1_type: 'ベーシック', web1_h3: 'ランディングページ', web1_price: '250€から', single_pay: '一回払い',
+          web1_f1: '単一ページ構造', web1_f2: '最大10枚の最適化写真',
+          web1_f3: '機能するお問い合わせフォーム', web1_f4: '100%モバイルフレンドリーデザイン', web1_f5: 'Google向けSEO最適化',
+          web2_type: 'プロフェッショナル', web2_h3: '企業サイト', web2_price: '590€から',
+          web2_f1: '最大5つのカスタムセクション', web2_f2: 'コンテンツ管理システム（ブログ/ニュース）',
+          web2_f3: '地図とソーシャルメディア連携', web2_f4: '超高速ロード', web2_f5: '1ヶ月のメンテナンスサポートが付く',
+          web3_type: 'エンタープライズ', web3_h3: 'PRO Web / AI', consult: '見積もり請求', custom_budget: 'カスタム予算',
+          web3_f1: '人工知能の統合', web3_f2: '予約システムまたはEコマース',
+          web3_f3: 'データベースとプライベートパネル', web3_f4: '独自機能', web3_f5: '優先テクニカルサポート',
+          app1_price: '450€から',
+          app1_f1: '単一のコア機能', app1_f2: 'Androidネイティブデザイン',
+          app1_f3: '安全なローカルデータベース', app1_f4: 'Google Playストアへのアップロード',
+          app2_price: '950€から',
+          app2_f1: '複数の画面とナビゲーション', app2_f2: 'プッシュ通知の統合',
+          app2_f3: '外部サーバーとの接続', app2_f4: 'ユーザーとプロフィール管理',
+          custom_budget2: 'カスタム',
+          app3_f1: '応用人工知能', app3_f2: '複雑なオフライン/オンラインシステム',
+          app3_f3: 'Web管理パネル', app3_f4: 'メンテナンスとアップデート',
+          btn_interested: '興味があります！', btn_grow: '成長したい！', btn_consult: 'プロジェクトを相談', btn_consult_budget: '見積もりを請求'
         }
+      };
 
-        function googleTranslateElementInit() {
-            new google.translate.TranslateElement({
-                pageLanguage: 'es',
-                includedLanguages: 'es,en,it,fr,nl,de,zh-CN,ja',
-                layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
-                autoDisplay: false
-            }, 'google_translate_element');
-        }
+      function applyTranslations(lang) {
+        const t = TRANSLATIONS_ASE[lang] || TRANSLATIONS_ASE['es'];
+        document.body.classList.add('lang-switching');
+        setTimeout(() => {
+          document.querySelectorAll('[data-i18n]').forEach(el => {
+            const key = el.getAttribute('data-i18n');
+            if (t[key] !== undefined) el.innerHTML = t[key];
+          });
+          document.body.classList.remove('lang-switching');
+        }, 150);
+      }
 
-        // Obtener idioma desde la cookie para sincronizar el selector al cargar la página
-        function getLanguageFromCookie() {
-            const match = document.cookie.match(/googtrans=\/es\/([^;]+)/);
-            return match ? match[1] : 'es';
-        }
+      function changeLanguage(langCode) {
+        localStorage.setItem('siteLang', langCode);
+        applyTranslations(langCode);
+        const selectEl = document.getElementById('lang-select');
+        if (selectEl) selectEl.value = langCode;
+      }
 
-        window.addEventListener('load', () => {
-            const activeLang = getLanguageFromCookie();
-            const selectEl = document.getElementById('lang-select');
-            if (selectEl) {
-                selectEl.value = activeLang;
-            }
-        });
+      window.addEventListener('DOMContentLoaded', () => {
+        const savedLang = localStorage.getItem('siteLang') || 'es';
+        const selectEl = document.getElementById('lang-select');
+        if (selectEl) selectEl.value = savedLang;
+        if (savedLang !== 'es') applyTranslations(savedLang);
+      });
     </script>
-    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </body>
 
 </html>

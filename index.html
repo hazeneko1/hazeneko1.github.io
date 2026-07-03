@@ -15,8 +15,7 @@
   <!-- Script síncrono: detecta idioma activo ANTES de que se rendericen animaciones CSS -->
   <script>
     (function() {
-      var match = document.cookie.match(/googtrans=\/es\/([^;]+)/);
-      var lang = match ? match[1] : 'es';
+      var lang = localStorage.getItem('siteLang') || 'es';
       if (lang && lang !== 'es') {
         document.documentElement.classList.add('translated');
       }
@@ -1164,23 +1163,12 @@
       box-shadow: 0 0 10px rgba(0, 194, 255, 0.2);
     }
 
-    /* Hide Google Translate toolbar and banner */
-    body {
-      top: 0 !important;
+    /* Transición suave al cambiar idioma */
+    [data-i18n] {
+      transition: opacity 0.15s ease;
     }
-    .skiptranslate, .goog-te-banner-frame, #goog-gt-tt, .goog-te-balloon-frame {
-      display: none !important;
-    }
-    .goog-tooltip {
-      display: none !important;
-    }
-    .goog-tooltip:hover {
-      display: none !important;
-    }
-    .goog-text-highlight {
-      background-color: transparent !important;
-      border: none !important;
-      box-shadow: none !important;
+    .lang-switching [data-i18n] {
+      opacity: 0;
     }
   </style>
 </head>
@@ -1196,12 +1184,12 @@
     <a href="#inicio" class="nav-logo">César<span>.</span></a>
     <div class="nav-actions">
       <ul class="nav-links">
-        <li><a href="#sobre-mi">Sobre mí</a></li>
-        <li><a href="#servicios">Servicios</a></li>
-        <li><a href="asesoramiento.html">Precios</a></li>
+        <li><a href="#sobre-mi" data-i18n="nav_about">Sobre mí</a></li>
+        <li><a href="#servicios" data-i18n="nav_services">Servicios</a></li>
+        <li><a href="asesoramiento.html" data-i18n="nav_prices">Precios</a></li>
         <li><a href="#portfolio">Portfolio</a></li>
         <li><a href="#nekophase">Nekophase</a></li>
-        <li><a href="#contacto" class="nav-cta">Contactar →</a></li>
+        <li><a href="#contacto" class="nav-cta" data-i18n="nav_contact">Contactar →</a></li>
       </ul>
       <div class="lang-selector-container">
         <select id="lang-select" class="lang-select" onchange="changeLanguage(this.value)">
@@ -1224,13 +1212,12 @@
     <div class="glow2"></div>
     <div class="hero-inner">
       <div class="hero-text">
-        <div class="badge">Disponible para proyectos</div>
-        <h1>Tu idea,<br>convertida en<br><span class="ac">producto digital</span></h1>
-        <p class="sub">Desarrollo web, apps móviles e integración de IA.<br>Convierto lo que tienes en mente en algo
-          real y funcional.</p>
+        <div class="badge" data-i18n="hero_badge">Disponible para proyectos</div>
+        <h1 data-i18n="hero_h1">Tu idea,<br>convertida en<br><span class="ac">producto digital</span></h1>
+        <p class="sub" data-i18n="hero_sub">Desarrollo web, apps móviles e integración de IA.<br>Convierto lo que tienes en mente en algo real y funcional.</p>
         <div class="actions">
-          <a href="#servicios" class="btn-p">→ ¡Me interesa!</a>
-          <a href="#portfolio" class="btn-s">Ver proyectos</a>
+          <a href="#servicios" class="btn-p" data-i18n="hero_cta1">→ ¡Me interesa!</a>
+          <a href="#portfolio" class="btn-s" data-i18n="hero_cta2">Ver proyectos</a>
         </div>
       </div>
       <div class="hero-photo">
@@ -1241,9 +1228,9 @@
 
   <!-- SECTION: ESTADÍSTICAS -->
   <div class="stats reveal reveal-up">
-    <div class="stat"><span class="stat-n">+15</span><span class="stat-l">Años programando</span></div>
-    <div class="stat"><span class="stat-n">+20</span><span class="stat-l">Proyectos completados</span></div>
-    <div class="stat"><span class="stat-n">100%</span><span class="stat-l">Compromiso con el cliente</span></div>
+    <div class="stat"><span class="stat-n">+15</span><span class="stat-l" data-i18n="stat1">Años programando</span></div>
+    <div class="stat"><span class="stat-n">+20</span><span class="stat-l" data-i18n="stat2">Proyectos completados</span></div>
+    <div class="stat"><span class="stat-n">100%</span><span class="stat-l" data-i18n="stat3">Compromiso con el cliente</span></div>
   </div>
 
   <!-- SECTION: SOBRE MÍ -->
@@ -1254,14 +1241,11 @@
           <img src="img/captura3.webp" alt="Ejemplo Programa" />
         </div>
         <div class="about-text reveal reveal-right">
-          <p class="stag">Sobre mí</p>
-          <h2>Soy César Hidalgo,<br><span style="color:var(--accent)">desarrollador</span></h2>
-          <p><strong>Más de 15 años programando</strong>, he trabajado en proyectos de todo tipo: desde webs
-            corporativas hasta Apps móviles con integración de inteligencia artificial.</p>
-          <p>Me apasiona encontrar soluciones simples a problemas complejos. Trabajo de forma cercana con cada cliente
-            para entender bien qué necesitan y entregar algo que de verdad funcione.</p>
-          <p>También comparto mi proceso en mi canal de YouTube <strong>Nekophase</strong>, donde muestro las apps y
-            herramientas que desarrollo.</p>
+          <p class="stag" data-i18n="about_tag">Sobre mí</p>
+          <h2 data-i18n="about_h2">Soy César Hidalgo,<br><span style="color:var(--accent)">desarrollador</span></h2>
+          <p data-i18n="about_p1"><strong>Más de 15 años programando</strong>, he trabajado en proyectos de todo tipo: desde webs corporativas hasta Apps móviles con integración de inteligencia artificial.</p>
+          <p data-i18n="about_p2">Me apasiona encontrar soluciones simples a problemas complejos. Trabajo de forma cercana con cada cliente para entender bien qué necesitan y entregar algo que de verdad funcione.</p>
+          <p data-i18n="about_p3">También comparto mi proceso en mi canal de YouTube <strong>Nekophase</strong>, donde muestro las apps y herramientas que desarrollo.</p>
           <div class="tags">
             <span class="tag">Android</span><span class="tag">Web</span><span class="tag">Python</span>
             <span class="tag">IA</span><span class="tag">Java</span><span class="tag">HTML/CSS/JS</span>
@@ -1274,37 +1258,33 @@
   <!-- SECTION: SERVICIOS -->
   <section id="servicios">
     <div class="inner">
-      <p class="stag">Servicios</p>
-      <h2>¿En qué puedo ayudarte?</h2>
-      <p class="sdesc">Desde una landing page hasta una App para Móviles con IA integrada. Me adapto al proyecto que
-        necesitas.</p>
+      <p class="stag" data-i18n="srv_tag">Servicios</p>
+      <h2 data-i18n="srv_h2">¿En qué puedo ayudarte?</h2>
+      <p class="sdesc" data-i18n="srv_desc">Desde una landing page hasta una App para Móviles con IA integrada. Me adapto al proyecto que necesitas.</p>
       <div class="srv-grid">
         <div class="srv-card reveal reveal-up">
           <div class="srv-img" style="background: #0e1728;">
             <img src="img/desarrolloweb1.webp" alt="Desarrollo Web" />
           </div>
-          <h3>Desarrollo Web</h3>
-          <p>Webs profesionales, landing pages y aplicaciones web a medida. Rápidas, modernas y optimizadas para captar
-            clientes.</p>
-          <a href="asesoramiento.html?tipo=web" class="srv-btn">¡Me interesa!</a>
+          <h3 data-i18n="srv1_h3">Desarrollo Web</h3>
+          <p data-i18n="srv1_p">Webs profesionales, landing pages y aplicaciones web a medida. Rápidas, modernas y optimizadas para captar clientes.</p>
+          <a href="asesoramiento.html?tipo=web" class="srv-btn" data-i18n="srv_btn">¡Me interesa!</a>
         </div>
         <div class="srv-card reveal reveal-up" style="transition-delay: 0.2s;">
           <div class="srv-img" style="background: #eff1f5;">
             <img src="img/appmovil.webp" alt="Apps Móviles" />
           </div>
-          <h3>Apps Móviles</h3>
-          <p>Aplicaciones Android nativas. Desde la idea hasta publicación en Google Play, con todo el proceso incluido.
-          </p>
-          <a href="asesoramiento.html?tipo=apps" class="srv-btn">¡Me interesa!</a>
+          <h3 data-i18n="srv2_h3">Apps Móviles</h3>
+          <p data-i18n="srv2_p">Aplicaciones Android nativas. Desde la idea hasta publicación en Google Play, con todo el proceso incluido.</p>
+          <a href="asesoramiento.html?tipo=apps" class="srv-btn" data-i18n="srv_btn">¡Me interesa!</a>
         </div>
         <div class="srv-card reveal reveal-up" style="transition-delay: 0.4s;">
           <div class="srv-img" style="background: #0e1728;">
             <img src="img/iaintegrada.webp" alt="Integración de IA" style="object-fit: cover;" />
           </div>
-          <h3>Integración de IA</h3>
-          <p>Añado inteligencia artificial a tus productos: chatbots, automatizaciones, análisis de datos o funciones
-            autónomas.</p>
-          <a href="asesoramiento.html?tipo=web" class="srv-btn">¡Me interesa!</a>
+          <h3 data-i18n="srv3_h3">Integración de IA</h3>
+          <p data-i18n="srv3_p">Añado inteligencia artificial a tus productos: chatbots, automatizaciones, análisis de datos o funciones autónomas.</p>
+          <a href="asesoramiento.html?tipo=web" class="srv-btn" data-i18n="srv_btn">¡Me interesa!</a>
         </div>
       </div>
     </div>
@@ -1315,9 +1295,9 @@
   <!-- SECTION: PORTFOLIO -->
   <section id="portfolio">
     <div class="inner">
-      <p class="stag">Portfolio</p>
-      <h2>Proyectos realizados</h2>
-      <p class="sdesc">Algunos de los proyectos que he desarrollado. Puedo contarte más detalles en una llamada.</p>
+      <p class="stag" data-i18n="port_tag">Portfolio</p>
+      <h2 data-i18n="port_h2">Proyectos realizados</h2>
+      <p class="sdesc" data-i18n="port_desc">Algunos de los proyectos que he desarrollado. Puedo contarte más detalles en una llamada.</p>
 
       <!-- ÍNDICE DE SECCIONES PARA MEJORAR LA LECTURA -->
 
@@ -1330,13 +1310,11 @@
               <img src="img/appnegocios.webp" alt="App Negocio" />
             </div>
             <div class="pinfo">
-              <h3>App de Negocios móvil</h3>
-              <p>Desarrollo de aplicación móvil nativa enfocada en la gestión empresarial y administración de recursos.
-              </p>
-              <div class="ptags"><span class="ptag">Android</span><span class="ptag">Java</span><span
-                  class="ptag">Google Play</span></div>
+              <h3 data-i18n="proj1_h3">App de Negocios móvil</h3>
+              <p data-i18n="proj1_p">Desarrollo de aplicación móvil nativa enfocada en la gestión empresarial y administración de recursos.</p>
+              <div class="ptags"><span class="ptag">Android</span><span class="ptag">Java</span><span class="ptag">Google Play</span></div>
               <a href="https://play.google.com/store/apps/details?id=com.nekophase.battlefieldredsecguide"
-                target="_blank" class="plink">Ver en Google Play →</a>
+                target="_blank" class="plink" data-i18n="proj1_link">Ver en Google Play →</a>
             </div>
           </div>
         </div>
@@ -1347,10 +1325,10 @@
               <img src="img/pginaweb.webp" alt="App Negocio" />
             </div>
             <div class="pinfo">
-              <h3>Páginas Webs</h3>
-              <p>Desarrollo de página web para empresa.</p>
+              <h3 data-i18n="proj2_h3">Páginas Webs</h3>
+              <p data-i18n="proj2_p">Desarrollo de página web para empresa.</p>
               <div class="ptags"><span class="ptag">Web</span><span class="ptag">Html</span></div>
-              <a href="https://hazeneko1.github.io/escuelaParapente/" target="_blank" class="plink">Ver proyecto →</a>
+              <a href="https://hazeneko1.github.io/escuelaParapente/" target="_blank" class="plink" data-i18n="proj2_link">Ver proyecto →</a>
             </div>
           </div>
         </div>
@@ -1386,22 +1364,18 @@
   <!-- SECTION: NEKOPHASE (YOUTUBE) -->
   <section id="nekophase">
     <div class="inner">
-      <p class="stag">Canal de YouTube</p>
+      <p class="stag" data-i18n="yt_tag">Canal de YouTube</p>
       <h2>Nekophase</h2>
-      <p class="sdesc">Comparto el proceso de desarrollo de mis apps y herramientas. Si te gusta ver cómo se construyen
-        cosas reales, esto te va a gustar.</p>
+      <p class="sdesc" data-i18n="yt_desc">Comparto el proceso de desarrollo de mis apps y herramientas. Si te gusta ver cómo se construyen cosas reales, esto te va a gustar.</p>
       <div class="yt-card reveal reveal-up">
         <div class="yt-thumb">
           <img src="img/thumbnail.webp" alt="Nekophase" style="width:100%;height:100%;object-fit:contain" />
           <a href="https://www.youtube.com/watch?v=FweqL2XNErw&t" target="_blank" class="yt-play">▶</a>
         </div>
         <div class="yt-info">
-          <h3>Apps reales, proceso real</h3>
-          <p>En Nekophase muestro cómo desarrollo aplicaciones móviles, integro IA y creo herramientas útiles. Sin
-            filtros, con el proceso completo.</p>
-          <a href="https://youtube.com/@NekoPhase199" target="_blank" class="btn-p" style="align-self:flex-start">▶ Ver
-            el
-            canal</a>
+          <h3 data-i18n="yt_h3">Apps reales, proceso real</h3>
+          <p data-i18n="yt_p">En Nekophase muestro cómo desarrollo aplicaciones móviles, integro IA y creo herramientas útiles. Sin filtros, con el proceso completo.</p>
+          <a href="https://youtube.com/@NekoPhase199" target="_blank" class="btn-p" style="align-self:flex-start" data-i18n="yt_btn">▶ Ver el canal</a>
         </div>
       </div>
     </div>
@@ -1410,44 +1384,40 @@
   <!-- SECTION: CONTACTO -->
   <section id="contacto">
     <div class="inner">
-      <p class="stag">Contacto</p>
-      <h2>Hablemos de tu proyecto</h2>
+      <p class="stag" data-i18n="con_tag">Contacto</p>
+      <h2 data-i18n="con_h2">Hablemos de tu proyecto</h2>
       <div class="con-grid">
         <div class="reveal reveal-left">
-          <p style="color:var(--muted);line-height:1.7;font-weight:300">¿Tienes una idea en mente? Cuéntamela. Tanto si
-            es una web, una app o algo con IA, le echamos un vistazo juntos sin compromiso.</p>
+          <p style="color:var(--muted);line-height:1.7;font-weight:300" data-i18n="con_intro">¿Tienes una idea en mente? Cuéntamela. Tanto si es una web, una app o algo con IA, le echamos un vistazo juntos sin compromiso.</p>
           <div class="con-methods">
             <a href="mailto:cesar.hidalgo1@outlook.com" class="con-method">
               <div class="con-icon">✉️</div>
               <div>
                 <div>cesar.hidalgo1@outlook.com</div>
-                <div class="con-label">Email directo</div>
+                <div class="con-label" data-i18n="con_email_label">Email directo</div>
               </div>
             </a>
             <a href="https://calendly.com/cesar-hidalgo1/30min" target="_blank" class="con-method">
               <div class="con-icon">📅</div>
               <div>
-                <div>Agendar una llamada</div>
-                <div class="con-label">Elige el día y hora que mejor te venga</div>
+                <div data-i18n="con_cal">Agendar una llamada</div>
+                <div class="con-label" data-i18n="con_cal_label">Elige el día y hora que mejor te venga</div>
               </div>
             </a>
             <a href="https://www.youtube.com/@NekoPhase199/shorts" target="_blank" class="con-method">
               <div class="con-icon">▶️</div>
               <div>
                 <div>@nekophase</div>
-                <div class="con-label">Canal de YouTube</div>
+                <div class="con-label" data-i18n="con_yt_label">Canal de YouTube</div>
               </div>
             </a>
           </div>
         </div>
         <form id="contact-form" class="form reveal reveal-right" action="https://formspree.io/f/xeerqapd" method="POST">
-          <div class="fg"><label>Nombre</label><input type="text" name="nombre" placeholder="Tu nombre" required />
-          </div>
-          <div class="fg"><label>Email</label><input type="email" name="_replyto" placeholder="tu@email.com" required />
-          </div>
-          <div class="fg"><label>Cuéntame tu proyecto</label><textarea name="mensaje"
-              placeholder="App, web, integración de IA..."></textarea></div>
-          <button type="submit" id="form-submit" class="fsub">Enviar mensaje →</button>
+          <div class="fg"><label data-i18n="form_name">Nombre</label><input type="text" name="nombre" data-i18n-placeholder="form_name_ph" placeholder="Tu nombre" required /></div>
+          <div class="fg"><label>Email</label><input type="email" name="_replyto" placeholder="tu@email.com" required /></div>
+          <div class="fg"><label data-i18n="form_msg">Cuéntame tu proyecto</label><textarea name="mensaje" data-i18n-placeholder="form_msg_ph" placeholder="App, web, integración de IA..."></textarea></div>
+          <button type="submit" id="form-submit" class="fsub" data-i18n="form_submit">Enviar mensaje →</button>
           <div id="form-status" style="margin-top:1rem; font-size:0.9rem; display:none;"></div>
         </form>
       </div>
@@ -1457,10 +1427,10 @@
   <footer>
     <div class="f-logo">César<span>.</span></div>
     <div class="f-links">
-      <a href="#sobre-mi">Sobre mí</a>
-      <a href="#servicios">Servicios</a>
+      <a href="#sobre-mi" data-i18n="nav_about">Sobre mí</a>
+      <a href="#servicios" data-i18n="nav_services">Servicios</a>
       <a href="#portfolio">Portfolio</a>
-      <a href="#contacto">Contacto</a>
+      <a href="#contacto" data-i18n="nav_contact2">Contacto</a>
     </div>
   </footer>
 
@@ -1540,42 +1510,324 @@
     </svg>
   </a>
 
-  <!-- Google Translate Integración -->
-  <div id="google_translate_element" style="position: absolute; top: -9999px; left: -9999px;"></div>
-  <script type="text/javascript">
-    function changeLanguage(langCode) {
-      // Establecer la cookie de traducción de Google
-      document.cookie = "googtrans=/es/" + langCode + "; path=/";
-      document.cookie = "googtrans=/es/" + langCode + "; path=/; domain=" + window.location.hostname;
-      
-      // Recargar la página para aplicar los cambios de inmediato
-      window.location.reload();
-    }
-
-    function googleTranslateElementInit() {
-      new google.translate.TranslateElement({
-        pageLanguage: 'es',
-        includedLanguages: 'es,en,it,fr,nl,de,zh-CN,ja',
-        layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
-        autoDisplay: false
-      }, 'google_translate_element');
-    }
-
-    // Obtener idioma desde la cookie para sincronizar el selector al cargar la página
-    function getLanguageFromCookie() {
-      const match = document.cookie.match(/googtrans=\/es\/([^;]+)/);
-      return match ? match[1] : 'es';
-    }
-
-    window.addEventListener('load', () => {
-      const activeLang = getLanguageFromCookie();
-      const selectEl = document.getElementById('lang-select');
-      if (selectEl) {
-        selectEl.value = activeLang;
+  <!-- Sistema de traducción instantánea (sin recarga de página) -->
+  <script>
+    const TRANSLATIONS = {
+      es: {
+        nav_about: 'Sobre mí', nav_services: 'Servicios', nav_prices: 'Precios',
+        nav_contact: 'Contactar →', nav_contact2: 'Contacto',
+        hero_badge: 'Disponible para proyectos',
+        hero_h1: 'Tu idea,<br>convertida en<br><span class="ac">producto digital</span>',
+        hero_sub: 'Desarrollo web, apps móviles e integración de IA.<br>Convierto lo que tienes en mente en algo real y funcional.',
+        hero_cta1: '→ ¡Me interesa!', hero_cta2: 'Ver proyectos',
+        stat1: 'Años programando', stat2: 'Proyectos completados', stat3: 'Compromiso con el cliente',
+        about_tag: 'Sobre mí',
+        about_h2: 'Soy César Hidalgo,<br><span style="color:var(--accent)">desarrollador</span>',
+        about_p1: '<strong>Más de 15 años programando</strong>, he trabajado en proyectos de todo tipo: desde webs corporativas hasta Apps móviles con integración de inteligencia artificial.',
+        about_p2: 'Me apasiona encontrar soluciones simples a problemas complejos. Trabajo de forma cercana con cada cliente para entender bien qué necesitan y entregar algo que de verdad funcione.',
+        about_p3: 'También comparto mi proceso en mi canal de YouTube <strong>Nekophase</strong>, donde muestro las apps y herramientas que desarrollo.',
+        srv_tag: 'Servicios', srv_h2: '¿En qué puedo ayudarte?',
+        srv_desc: 'Desde una landing page hasta una App para Móviles con IA integrada. Me adapto al proyecto que necesitas.',
+        srv1_h3: 'Desarrollo Web', srv1_p: 'Webs profesionales, landing pages y aplicaciones web a medida. Rápidas, modernas y optimizadas para captar clientes.',
+        srv2_h3: 'Apps Móviles', srv2_p: 'Aplicaciones Android nativas. Desde la idea hasta publicación en Google Play, con todo el proceso incluido.',
+        srv3_h3: 'Integración de IA', srv3_p: 'Añado inteligencia artificial a tus productos: chatbots, automatizaciones, análisis de datos o funciones autónomas.',
+        srv_btn: '¡Me interesa!',
+        port_tag: 'Portfolio', port_h2: 'Proyectos realizados',
+        port_desc: 'Algunos de los proyectos que he desarrollado. Puedo contarte más detalles en una llamada.',
+        proj1_h3: 'App de Negocios móvil', proj1_p: 'Desarrollo de aplicación móvil nativa enfocada en la gestión empresarial y administración de recursos.', proj1_link: 'Ver en Google Play →',
+        proj2_h3: 'Páginas Webs', proj2_p: 'Desarrollo de página web para empresa.', proj2_link: 'Ver proyecto →',
+        yt_tag: 'Canal de YouTube', yt_h3: 'Apps reales, proceso real',
+        yt_desc: 'Comparto el proceso de desarrollo de mis apps y herramientas. Si te gusta ver cómo se construyen cosas reales, esto te va a gustar.',
+        yt_p: 'En Nekophase muestro cómo desarrollo aplicaciones móviles, integro IA y creo herramientas útiles. Sin filtros, con el proceso completo.',
+        yt_btn: '▶ Ver el canal',
+        con_tag: 'Contacto', con_h2: 'Hablemos de tu proyecto',
+        con_intro: '¿Tienes una idea en mente? Cuéntamela. Tanto si es una web, una app o algo con IA, le echamos un vistazo juntos sin compromiso.',
+        con_email_label: 'Email directo', con_cal: 'Agendar una llamada',
+        con_cal_label: 'Elige el día y hora que mejor te venga', con_yt_label: 'Canal de YouTube',
+        form_name: 'Nombre', form_name_ph: 'Tu nombre',
+        form_msg: 'Cuéntame tu proyecto', form_msg_ph: 'App, web, integración de IA...',
+        form_submit: 'Enviar mensaje →'
+      },
+      en: {
+        nav_about: 'About me', nav_services: 'Services', nav_prices: 'Pricing',
+        nav_contact: 'Contact →', nav_contact2: 'Contact',
+        hero_badge: 'Available for projects',
+        hero_h1: 'Your idea,<br>turned into a<br><span class="ac">digital product</span>',
+        hero_sub: 'Web development, mobile apps and AI integration.<br>I turn what you have in mind into something real and functional.',
+        hero_cta1: '→ I\'m interested!', hero_cta2: 'View projects',
+        stat1: 'Years coding', stat2: 'Completed projects', stat3: 'Client commitment',
+        about_tag: 'About me',
+        about_h2: 'I am César Hidalgo,<br><span style="color:var(--accent)">developer</span>',
+        about_p1: '<strong>Over 15 years programming</strong>, I have worked on all kinds of projects: from corporate websites to mobile apps with artificial intelligence integration.',
+        about_p2: 'I love finding simple solutions to complex problems. I work closely with each client to understand what they need and deliver something that truly works.',
+        about_p3: 'I also share my process on my YouTube channel <strong>Nekophase</strong>, where I show the apps and tools I develop.',
+        srv_tag: 'Services', srv_h2: 'How can I help you?',
+        srv_desc: 'From a landing page to a mobile app with integrated AI. I adapt to the project you need.',
+        srv1_h3: 'Web Development', srv1_p: 'Professional websites, landing pages and custom web applications. Fast, modern and optimized to attract clients.',
+        srv2_h3: 'Mobile Apps', srv2_p: 'Native Android applications. From idea to Google Play publication, with the whole process included.',
+        srv3_h3: 'AI Integration', srv3_p: 'I add artificial intelligence to your products: chatbots, automations, data analysis or autonomous functions.',
+        srv_btn: 'I\'m interested!',
+        port_tag: 'Portfolio', port_h2: 'Completed projects',
+        port_desc: 'Some of the projects I have developed. I can tell you more details in a call.',
+        proj1_h3: 'Business Mobile App', proj1_p: 'Development of a native mobile application focused on business management and resource administration.', proj1_link: 'View on Google Play →',
+        proj2_h3: 'Websites', proj2_p: 'Web page development for a company.', proj2_link: 'View project →',
+        yt_tag: 'YouTube Channel', yt_h3: 'Real apps, real process',
+        yt_desc: 'I share the development process of my apps and tools. If you like to see how real things are built, you will enjoy this.',
+        yt_p: 'On Nekophase I show how I develop mobile applications, integrate AI and create useful tools. No filters, the complete process.',
+        yt_btn: '▶ View channel',
+        con_tag: 'Contact', con_h2: 'Let\'s talk about your project',
+        con_intro: 'Do you have an idea in mind? Tell me about it. Whether it\'s a website, an app or something with AI, we\'ll take a look together with no commitment.',
+        con_email_label: 'Direct email', con_cal: 'Schedule a call',
+        con_cal_label: 'Choose the day and time that suits you best', con_yt_label: 'YouTube Channel',
+        form_name: 'Name', form_name_ph: 'Your name',
+        form_msg: 'Tell me about your project', form_msg_ph: 'App, web, AI integration...',
+        form_submit: 'Send message →'
+      },
+      it: {
+        nav_about: 'Chi sono', nav_services: 'Servizi', nav_prices: 'Prezzi',
+        nav_contact: 'Contattami →', nav_contact2: 'Contatto',
+        hero_badge: 'Disponibile per progetti',
+        hero_h1: 'La tua idea,<br>trasformata in<br><span class="ac">prodotto digitale</span>',
+        hero_sub: 'Sviluppo web, app mobile e integrazione IA.<br>Trasformo ciò che hai in mente in qualcosa di reale e funzionale.',
+        hero_cta1: '→ Mi interessa!', hero_cta2: 'Vedi progetti',
+        stat1: 'Anni di programmazione', stat2: 'Progetti completati', stat3: 'Impegno con il cliente',
+        about_tag: 'Chi sono',
+        about_h2: 'Sono César Hidalgo,<br><span style="color:var(--accent)">sviluppatore</span>',
+        about_p1: '<strong>Oltre 15 anni di programmazione</strong>, ho lavorato su tutti i tipi di progetti: dai siti web aziendali alle app mobile con integrazione di intelligenza artificiale.',
+        about_p2: 'Amo trovare soluzioni semplici a problemi complessi. Lavoro a stretto contatto con ogni cliente per capire le sue esigenze e consegnare qualcosa che funzioni davvero.',
+        about_p3: 'Condivido anche il mio processo sul mio canale YouTube <strong>Nekophase</strong>, dove mostro le app e gli strumenti che sviluppo.',
+        srv_tag: 'Servizi', srv_h2: 'Come posso aiutarti?',
+        srv_desc: 'Da una landing page a un\'app mobile con IA integrata. Mi adatto al progetto di cui hai bisogno.',
+        srv1_h3: 'Sviluppo Web', srv1_p: 'Siti web professionali, landing page e applicazioni web personalizzate. Veloci, moderne e ottimizzate per acquisire clienti.',
+        srv2_h3: 'App Mobile', srv2_p: 'Applicazioni Android native. Dall\'idea alla pubblicazione su Google Play, con tutto il processo incluso.',
+        srv3_h3: 'Integrazione IA', srv3_p: 'Aggiungo intelligenza artificiale ai tuoi prodotti: chatbot, automazioni, analisi dei dati o funzioni autonome.',
+        srv_btn: 'Mi interessa!',
+        port_tag: 'Portfolio', port_h2: 'Progetti realizzati',
+        port_desc: 'Alcuni dei progetti che ho sviluppato. Posso raccontarti più dettagli in una chiamata.',
+        proj1_h3: 'App Mobile Aziendale', proj1_p: 'Sviluppo di un\'applicazione mobile nativa focalizzata sulla gestione aziendale e l\'amministrazione delle risorse.', proj1_link: 'Vedi su Google Play →',
+        proj2_h3: 'Siti Web', proj2_p: 'Sviluppo di sito web per azienda.', proj2_link: 'Vedi progetto →',
+        yt_tag: 'Canale YouTube', yt_h3: 'App reali, processo reale',
+        yt_desc: 'Condivido il processo di sviluppo delle mie app e strumenti. Se ti piace vedere come vengono costruite cose reali, questo ti piacerà.',
+        yt_p: 'Su Nekophase mostro come sviluppo applicazioni mobile, integro IA e creo strumenti utili. Senza filtri, con il processo completo.',
+        yt_btn: '▶ Vedi il canale',
+        con_tag: 'Contatto', con_h2: 'Parliamo del tuo progetto',
+        con_intro: 'Hai un\'idea in mente? Raccontamela. Che si tratti di un sito web, un\'app o qualcosa con l\'IA, la esaminiamo insieme senza impegno.',
+        con_email_label: 'Email diretta', con_cal: 'Programma una chiamata',
+        con_cal_label: 'Scegli il giorno e l\'ora che ti conviene di più', con_yt_label: 'Canale YouTube',
+        form_name: 'Nome', form_name_ph: 'Il tuo nome',
+        form_msg: 'Parlami del tuo progetto', form_msg_ph: 'App, web, integrazione IA...',
+        form_submit: 'Invia messaggio →'
+      },
+      fr: {
+        nav_about: 'À propos', nav_services: 'Services', nav_prices: 'Tarifs',
+        nav_contact: 'Me contacter →', nav_contact2: 'Contact',
+        hero_badge: 'Disponible pour des projets',
+        hero_h1: 'Votre idée,<br>transformée en<br><span class="ac">produit numérique</span>',
+        hero_sub: 'Développement web, apps mobiles et intégration IA.<br>Je transforme ce que vous avez en tête en quelque chose de réel et fonctionnel.',
+        hero_cta1: '→ Ça m\'intéresse!', hero_cta2: 'Voir les projets',
+        stat1: 'Ans de programmation', stat2: 'Projets réalisés', stat3: 'Engagement client',
+        about_tag: 'À propos',
+        about_h2: 'Je suis César Hidalgo,<br><span style="color:var(--accent)">développeur</span>',
+        about_p1: '<strong>Plus de 15 ans de programmation</strong>, j\'ai travaillé sur toutes sortes de projets: des sites web d\'entreprise aux apps mobiles avec intégration d\'intelligence artificielle.',
+        about_p2: 'J\'aime trouver des solutions simples à des problèmes complexes. Je travaille en étroite collaboration avec chaque client pour bien comprendre ses besoins et livrer quelque chose qui fonctionne vraiment.',
+        about_p3: 'Je partage également mon processus sur ma chaîne YouTube <strong>Nekophase</strong>, où je montre les apps et outils que je développe.',
+        srv_tag: 'Services', srv_h2: 'Comment puis-je vous aider?',
+        srv_desc: 'D\'une landing page à une app mobile avec IA intégrée. Je m\'adapte au projet dont vous avez besoin.',
+        srv1_h3: 'Développement Web', srv1_p: 'Sites web professionnels, landing pages et applications web sur mesure. Rapides, modernes et optimisés pour attirer des clients.',
+        srv2_h3: 'Apps Mobiles', srv2_p: 'Applications Android natives. De l\'idée à la publication sur Google Play, avec tout le processus inclus.',
+        srv3_h3: 'Intégration IA', srv3_p: 'J\'ajoute de l\'intelligence artificielle à vos produits: chatbots, automatisations, analyse de données ou fonctions autonomes.',
+        srv_btn: 'Ça m\'intéresse!',
+        port_tag: 'Portfolio', port_h2: 'Projets réalisés',
+        port_desc: 'Quelques-uns des projets que j\'ai développés. Je peux vous donner plus de détails lors d\'un appel.',
+        proj1_h3: 'App Mobile d\'Entreprise', proj1_p: 'Développement d\'une application mobile native axée sur la gestion d\'entreprise et l\'administration des ressources.', proj1_link: 'Voir sur Google Play →',
+        proj2_h3: 'Sites Web', proj2_p: 'Développement de site web pour une entreprise.', proj2_link: 'Voir le projet →',
+        yt_tag: 'Chaîne YouTube', yt_h3: 'Apps réelles, processus réel',
+        yt_desc: 'Je partage le processus de développement de mes apps et outils. Si vous aimez voir comment les vraies choses sont construites, vous allez adorer.',
+        yt_p: 'Sur Nekophase, je montre comment je développe des applications mobiles, intègre l\'IA et crée des outils utiles. Sans filtres, avec le processus complet.',
+        yt_btn: '▶ Voir la chaîne',
+        con_tag: 'Contact', con_h2: 'Parlons de votre projet',
+        con_intro: 'Vous avez une idée en tête? Racontez-moi. Qu\'il s\'agisse d\'un site web, d\'une app ou de quelque chose avec l\'IA, nous y jetons un œil ensemble sans engagement.',
+        con_email_label: 'Email direct', con_cal: 'Planifier un appel',
+        con_cal_label: 'Choisissez le jour et l\'heure qui vous convient le mieux', con_yt_label: 'Chaîne YouTube',
+        form_name: 'Nom', form_name_ph: 'Votre nom',
+        form_msg: 'Parlez-moi de votre projet', form_msg_ph: 'App, web, intégration IA...',
+        form_submit: 'Envoyer le message →'
+      },
+      nl: {
+        nav_about: 'Over mij', nav_services: 'Diensten', nav_prices: 'Prijzen',
+        nav_contact: 'Contact →', nav_contact2: 'Contact',
+        hero_badge: 'Beschikbaar voor projecten',
+        hero_h1: 'Jouw idee,<br>omgezet in een<br><span class="ac">digitaal product</span>',
+        hero_sub: 'Webontwikkeling, mobiele apps en AI-integratie.<br>Ik zet wat je in gedachten hebt om in iets echts en functioneels.',
+        hero_cta1: '→ Ik ben geïnteresseerd!', hero_cta2: 'Projecten bekijken',
+        stat1: 'Jaar programmeren', stat2: 'Afgeronde projecten', stat3: 'Klantbetrokkenheid',
+        about_tag: 'Over mij',
+        about_h2: 'Ik ben César Hidalgo,<br><span style="color:var(--accent)">ontwikkelaar</span>',
+        about_p1: '<strong>Meer dan 15 jaar programmeren</strong>, ik heb gewerkt aan allerlei projecten: van zakelijke websites tot mobiele apps met kunstmatige intelligentie-integratie.',
+        about_p2: 'Ik ben dol op het vinden van eenvoudige oplossingen voor complexe problemen. Ik werk nauw samen met elke klant om goed te begrijpen wat ze nodig hebben en iets te leveren dat echt werkt.',
+        about_p3: 'Ik deel ook mijn proces op mijn YouTube-kanaal <strong>Nekophase</strong>, waar ik de apps en tools laat zien die ik ontwikkel.',
+        srv_tag: 'Diensten', srv_h2: 'Hoe kan ik je helpen?',
+        srv_desc: 'Van een landingspagina tot een mobiele app met geïntegreerde AI. Ik pas me aan het project aan dat je nodig hebt.',
+        srv1_h3: 'Webontwikkeling', srv1_p: 'Professionele websites, landingspagina\'s en maatwerk webapplicaties. Snel, modern en geoptimaliseerd om klanten aan te trekken.',
+        srv2_h3: 'Mobiele Apps', srv2_p: 'Native Android-applicaties. Van idee tot publicatie op Google Play, met het hele proces inbegrepen.',
+        srv3_h3: 'AI-integratie', srv3_p: 'Ik voeg kunstmatige intelligentie toe aan jouw producten: chatbots, automatiseringen, data-analyse of autonome functies.',
+        srv_btn: 'Ik ben geïnteresseerd!',
+        port_tag: 'Portfolio', port_h2: 'Gerealiseerde projecten',
+        port_desc: 'Enkele van de projecten die ik heb ontwikkeld. Ik kan je meer details vertellen in een gesprek.',
+        proj1_h3: 'Zakelijke Mobiele App', proj1_p: 'Ontwikkeling van een native mobiele applicatie gericht op bedrijfsbeheer en resourcebeheer.', proj1_link: 'Bekijk op Google Play →',
+        proj2_h3: 'Websites', proj2_p: 'Webpagina-ontwikkeling voor een bedrijf.', proj2_link: 'Project bekijken →',
+        yt_tag: 'YouTube-kanaal', yt_h3: 'Echte apps, echt proces',
+        yt_desc: 'Ik deel het ontwikkelproces van mijn apps en tools. Als je graag ziet hoe echte dingen worden gemaakt, zul je dit geweldig vinden.',
+        yt_p: 'Op Nekophase laat ik zien hoe ik mobiele applicaties ontwikkel, AI integreer en nuttige tools maak. Zonder filters, met het volledige proces.',
+        yt_btn: '▶ Kanaal bekijken',
+        con_tag: 'Contact', con_h2: 'Laten we over jouw project praten',
+        con_intro: 'Heb je een idee in gedachten? Vertel het me. Of het nu een website, een app of iets met AI is, we bekijken het samen zonder verplichtingen.',
+        con_email_label: 'Directe e-mail', con_cal: 'Een gesprek plannen',
+        con_cal_label: 'Kies de dag en tijd die jou het beste uitkomt', con_yt_label: 'YouTube-kanaal',
+        form_name: 'Naam', form_name_ph: 'Jouw naam',
+        form_msg: 'Vertel me over jouw project', form_msg_ph: 'App, web, AI-integratie...',
+        form_submit: 'Bericht versturen →'
+      },
+      de: {
+        nav_about: 'Über mich', nav_services: 'Dienste', nav_prices: 'Preise',
+        nav_contact: 'Kontakt →', nav_contact2: 'Kontakt',
+        hero_badge: 'Verfügbar für Projekte',
+        hero_h1: 'Deine Idee,<br>verwandelt in ein<br><span class="ac">digitales Produkt</span>',
+        hero_sub: 'Webentwicklung, mobile Apps und KI-Integration.<br>Ich verwandle das, was du im Sinn hast, in etwas Reales und Funktionales.',
+        hero_cta1: '→ Interessiert mich!', hero_cta2: 'Projekte ansehen',
+        stat1: 'Jahre Programmierung', stat2: 'Abgeschlossene Projekte', stat3: 'Kundenverpflichtung',
+        about_tag: 'Über mich',
+        about_h2: 'Ich bin César Hidalgo,<br><span style="color:var(--accent)">Entwickler</span>',
+        about_p1: '<strong>Über 15 Jahre Programmierung</strong>, ich habe an allen Arten von Projekten gearbeitet: von Unternehmenswebsites bis hin zu mobilen Apps mit Integration von künstlicher Intelligenz.',
+        about_p2: 'Ich liebe es, einfache Lösungen für komplexe Probleme zu finden. Ich arbeite eng mit jedem Kunden zusammen, um ihre Bedürfnisse genau zu verstehen und etwas zu liefern, das wirklich funktioniert.',
+        about_p3: 'Ich teile auch meinen Prozess auf meinem YouTube-Kanal <strong>Nekophase</strong>, wo ich die Apps und Tools zeige, die ich entwickle.',
+        srv_tag: 'Dienste', srv_h2: 'Wie kann ich dir helfen?',
+        srv_desc: 'Von einer Landing Page bis zu einer mobilen App mit integrierter KI. Ich passe mich dem Projekt an, das du brauchst.',
+        srv1_h3: 'Webentwicklung', srv1_p: 'Professionelle Websites, Landing Pages und maßgeschneiderte Webanwendungen. Schnell, modern und optimiert, um Kunden zu gewinnen.',
+        srv2_h3: 'Mobile Apps', srv2_p: 'Native Android-Anwendungen. Von der Idee bis zur Veröffentlichung im Google Play, mit dem gesamten Prozess inklusive.',
+        srv3_h3: 'KI-Integration', srv3_p: 'Ich füge künstliche Intelligenz zu deinen Produkten hinzu: Chatbots, Automatisierungen, Datenanalyse oder autonome Funktionen.',
+        srv_btn: 'Interessiert mich!',
+        port_tag: 'Portfolio', port_h2: 'Realisierte Projekte',
+        port_desc: 'Einige der Projekte, die ich entwickelt habe. Ich kann dir mehr Details in einem Gespräch mitteilen.',
+        proj1_h3: 'Business Mobile App', proj1_p: 'Entwicklung einer nativen mobilen Anwendung, die sich auf Unternehmensführung und Ressourcenverwaltung konzentriert.', proj1_link: 'Auf Google Play ansehen →',
+        proj2_h3: 'Webseiten', proj2_p: 'Entwicklung einer Webseite für ein Unternehmen.', proj2_link: 'Projekt ansehen →',
+        yt_tag: 'YouTube-Kanal', yt_h3: 'Echte Apps, echter Prozess',
+        yt_desc: 'Ich teile den Entwicklungsprozess meiner Apps und Tools. Wenn du gerne siehst, wie echte Dinge gebaut werden, wirst du das lieben.',
+        yt_p: 'Auf Nekophase zeige ich, wie ich mobile Anwendungen entwickle, KI integriere und nützliche Tools erstelle. Ohne Filter, mit dem gesamten Prozess.',
+        yt_btn: '▶ Kanal ansehen',
+        con_tag: 'Kontakt', con_h2: 'Lass uns über dein Projekt sprechen',
+        con_intro: 'Hast du eine Idee? Erzähl mir davon. Ob es eine Website, eine App oder etwas mit KI ist, wir schauen es uns gemeinsam unverbindlich an.',
+        con_email_label: 'Direkte E-Mail', con_cal: 'Einen Anruf planen',
+        con_cal_label: 'Wähle den Tag und die Uhrzeit, die dir am besten passen', con_yt_label: 'YouTube-Kanal',
+        form_name: 'Name', form_name_ph: 'Dein Name',
+        form_msg: 'Erzähl mir von deinem Projekt', form_msg_ph: 'App, Web, KI-Integration...',
+        form_submit: 'Nachricht senden →'
+      },
+      'zh-CN': {
+        nav_about: '关于我', nav_services: '服务', nav_prices: '价格',
+        nav_contact: '联系我 →', nav_contact2: '联系',
+        hero_badge: '接受项目委托',
+        hero_h1: '您的想法，<br>转化为<br><span class="ac">数字产品</span>',
+        hero_sub: '网页开发、移动应用和AI集成。<br>我将您脑海中的想法变成真实可用的产品。',
+        hero_cta1: '→ 我感兴趣！', hero_cta2: '查看项目',
+        stat1: '年编程经验', stat2: '已完成项目', stat3: '客户承诺',
+        about_tag: '关于我',
+        about_h2: '我是César Hidalgo，<br><span style="color:var(--accent)">开发者</span>',
+        about_p1: '<strong>超过15年的编程经验</strong>，我参与过各类项目：从企业网站到集成人工智能的移动应用。',
+        about_p2: '我热衷于为复杂问题找到简单解决方案。我与每位客户密切合作，充分了解他们的需求，并交付真正有效的成果。',
+        about_p3: '我也在我的YouTube频道 <strong>Nekophase</strong> 上分享我的开发过程，展示我开发的应用和工具。',
+        srv_tag: '服务', srv_h2: '我能为您做什么？',
+        srv_desc: '从落地页到集成AI的移动应用，我适应您所需的项目。',
+        srv1_h3: '网页开发', srv1_p: '专业网站、落地页和定制网络应用。快速、现代，优化以吸引客户。',
+        srv2_h3: '移动应用', srv2_p: '原生Android应用。从创意到Google Play发布，包含整个流程。',
+        srv3_h3: 'AI集成', srv3_p: '我为您的产品添加人工智能：聊天机器人、自动化、数据分析或自主功能。',
+        srv_btn: '我感兴趣！',
+        port_tag: '作品集', port_h2: '已完成项目',
+        port_desc: '我开发的一些项目。我可以在电话中告诉您更多详情。',
+        proj1_h3: '商业移动应用', proj1_p: '专注于企业管理和资源管理的原生移动应用开发。', proj1_link: '在Google Play上查看 →',
+        proj2_h3: '网站', proj2_p: '为企业开发网页。', proj2_link: '查看项目 →',
+        yt_tag: 'YouTube频道', yt_h3: '真实应用，真实过程',
+        yt_desc: '我分享应用和工具的开发过程。如果您喜欢看真实的东西是如何构建的，您会喜欢这个。',
+        yt_p: '在Nekophase上，我展示如何开发移动应用、集成AI和创建有用的工具。不加滤镜，展示完整过程。',
+        yt_btn: '▶ 查看频道',
+        con_tag: '联系', con_h2: '让我们谈谈您的项目',
+        con_intro: '有想法？告诉我。无论是网站、应用还是AI相关内容，我们一起看看，没有任何义务。',
+        con_email_label: '直接邮件', con_cal: '安排通话',
+        con_cal_label: '选择最适合您的日期和时间', con_yt_label: 'YouTube频道',
+        form_name: '姓名', form_name_ph: '您的姓名',
+        form_msg: '告诉我您的项目', form_msg_ph: '应用、网站、AI集成...',
+        form_submit: '发送消息 →'
+      },
+      ja: {
+        nav_about: '私について', nav_services: 'サービス', nav_prices: '料金',
+        nav_contact: 'お問い合わせ →', nav_contact2: 'お問い合わせ',
+        hero_badge: 'プロジェクト受付中',
+        hero_h1: 'あなたのアイデアを、<br>デジタル製品に<br><span class="ac">変えます</span>',
+        hero_sub: 'Web開発、モバイルアプリ、AI統合。<br>あなたの考えを現実の機能するものに変えます。',
+        hero_cta1: '→ 興味があります！', hero_cta2: 'プロジェクトを見る',
+        stat1: '年のプログラミング経験', stat2: '完了したプロジェクト', stat3: 'クライアントへのコミットメント',
+        about_tag: '私について',
+        about_h2: '私はCésar Hidalgo、<br><span style="color:var(--accent)">開発者です</span>',
+        about_p1: '<strong>15年以上のプログラミング経験</strong>があり、企業向けWebサイトからAI統合モバイルアプリまで、あらゆる種類のプロジェクトに携わってきました。',
+        about_p2: '複雑な問題に対してシンプルな解決策を見つけることが好きです。各クライアントと密接に協力し、ニーズを理解し、本当に機能するものを提供します。',
+        about_p3: 'YouTubeチャンネル <strong>Nekophase</strong> でも開発プロセスを共有しており、開発しているアプリやツールを紹介しています。',
+        srv_tag: 'サービス', srv_h2: 'どのようにお手伝いできますか？',
+        srv_desc: 'ランディングページからAI統合モバイルアプリまで、必要なプロジェクトに合わせます。',
+        srv1_h3: 'Web開発', srv1_p: 'プロフェッショナルなWebサイト、ランディングページ、カスタムWebアプリケーション。高速、モダン、クライアント獲得に最適化。',
+        srv2_h3: 'モバイルアプリ', srv2_p: 'ネイティブAndroidアプリケーション。アイデアからGoogle Play公開まで、全プロセス込み。',
+        srv3_h3: 'AI統合', srv3_p: '製品に人工知能を追加：チャットボット、自動化、データ分析、または自律機能。',
+        srv_btn: '興味があります！',
+        port_tag: 'ポートフォリオ', port_h2: '完成プロジェクト',
+        port_desc: '開発したいくつかのプロジェクト。通話でより詳しくお伝えできます。',
+        proj1_h3: 'ビジネスモバイルアプリ', proj1_p: 'ビジネス管理とリソース管理に特化したネイティブモバイルアプリの開発。', proj1_link: 'Google Playで見る →',
+        proj2_h3: 'ウェブサイト', proj2_p: '企業向けWebページ開発。', proj2_link: 'プロジェクトを見る →',
+        yt_tag: 'YouTubeチャンネル', yt_h3: 'リアルなアプリ、リアルなプロセス',
+        yt_desc: 'アプリとツールの開発プロセスを共有しています。本物がどのように作られるかを見るのが好きなら、気に入るはずです。',
+        yt_p: 'Nekophaseでは、モバイルアプリの開発方法、AI統合、便利なツールの作成を紹介しています。フィルターなしで、完全なプロセスを。',
+        yt_btn: '▶ チャンネルを見る',
+        con_tag: 'お問い合わせ', con_h2: 'プロジェクトについて話しましょう',
+        con_intro: 'アイデアはありますか？教えてください。Web、アプリ、AIに関わることでも、一緒に見てみましょう。何の義務もありません。',
+        con_email_label: '直接メール', con_cal: '電話を予約する',
+        con_cal_label: '都合のよい日時を選んでください', con_yt_label: 'YouTubeチャンネル',
+        form_name: '名前', form_name_ph: 'あなたの名前',
+        form_msg: 'プロジェクトについて教えてください', form_msg_ph: 'アプリ、Web、AI統合...',
+        form_submit: 'メッセージを送る →'
       }
+    };
+
+    function applyTranslations(lang) {
+      const t = TRANSLATIONS[lang] || TRANSLATIONS['es'];
+      // Fade out
+      document.body.classList.add('lang-switching');
+      setTimeout(() => {
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+          const key = el.getAttribute('data-i18n');
+          if (t[key] !== undefined) el.innerHTML = t[key];
+        });
+        document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+          const key = el.getAttribute('data-i18n-placeholder');
+          if (t[key] !== undefined) el.placeholder = t[key];
+        });
+        // Fade in
+        document.body.classList.remove('lang-switching');
+      }, 150);
+    }
+
+    function changeLanguage(langCode) {
+      localStorage.setItem('siteLang', langCode);
+      applyTranslations(langCode);
+      const selectEl = document.getElementById('lang-select');
+      if (selectEl) selectEl.value = langCode;
+    }
+
+    // Aplicar idioma guardado al cargar
+    window.addEventListener('DOMContentLoaded', () => {
+      const savedLang = localStorage.getItem('siteLang') || 'es';
+      const selectEl = document.getElementById('lang-select');
+      if (selectEl) selectEl.value = savedLang;
+      if (savedLang !== 'es') applyTranslations(savedLang);
     });
   </script>
-  <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </body>
 
 </html>
