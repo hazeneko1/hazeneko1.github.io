@@ -14,7 +14,7 @@
   <link rel="icon" href="img/favicon00.webp" type="image/webp">
   <!-- Script síncrono: detecta idioma activo ANTES de que se rendericen animaciones CSS -->
   <script>
-    (function() {
+    (function () {
       var lang = localStorage.getItem('siteLang') || 'es';
       if (lang && lang !== 'es') {
         document.documentElement.classList.add('translated');
@@ -22,9 +22,6 @@
     })();
   </script>
   <style>
-    
-
-
     /* ==========================================================================
        VARIABLES Y RESET
        ========================================================================== */
@@ -168,8 +165,8 @@
     }
 
     .hero-text h1 {
-      /* Curva ajustada para que no frene tanto al final */
-      animation: titleArcIn 1.1s cubic-bezier(.16, .52, .33, 1.02) 0.1s forwards;
+      /* Curva ajustada + zoom de entrada para que al reducirse parezca que la estrella se mete detrás */
+      animation: titleArcIn 1.4s cubic-bezier(.16, .52, .33, 1.02) 0.6s forwards;
       opacity: 0;
     }
 
@@ -348,14 +345,20 @@
     @keyframes titleArcIn {
       0% {
         opacity: 0;
-        /* translateX(-500px): viene desde muy a la izquierda | translateY: un poco arriba */
-        transform: translateX(-500px) translateY(-100px) rotate(-5deg);
+        /* Viene desde la izquierda, algo arriba, y ligeramente sobredimensionado */
+        transform: translateX(-500px) translateY(-100px) rotate(-5deg) scale(1.3);
+      }
+
+      60% {
+        opacity: 1;
+        /* Ya en posición pero todavía con un toque de zoom — en este momento la estrella ya es más pequeña */
+        transform: translateX(0) translateY(0) rotate(0deg) scale(1.08);
       }
 
       100% {
         opacity: 1;
-        /* Todo a 0 para que repose en su posición natural de la web */
-        transform: translateX(0) translateY(0) rotate(0deg);
+        /* Reposa en tamaño natural: ya tapa la estrella detrás */
+        transform: translateX(0) translateY(0) rotate(0deg) scale(1);
       }
     }
 
@@ -368,6 +371,132 @@
       to {
         opacity: 1;
         transform: translateX(0);
+      }
+    }
+
+    /* ==========================================================================
+       ESTRELLA - ANIMACIÓN CINEMATOGRÁFICA DE ENTRADA
+       Empieza pegada a la cámara (zoom enorme) y vuela hacia el fondo
+       ========================================================================== */
+
+    /* Contenedor fijo que cubre TODA la pantalla durante la animación */
+    .star-cinema-wrapper {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      pointer-events: none;
+      animation: wrapperFade 3.2s ease forwards;
+    }
+
+    @keyframes wrapperFade {
+      0% {
+        pointer-events: all;
+      }
+
+      90% {
+        pointer-events: none;
+      }
+
+      100% {
+        pointer-events: none;
+      }
+    }
+
+    /* La estrella - usa CSS Motion Path para seguir la curva S sin ninguna esquina */
+    .star-cinema {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 130px;
+      height: 130px;
+      /* El punto de anclaje es el centro del elemento (130/2 = 65px) */
+      offset-anchor: 65px 65px;
+      /* No gira para seguir la dirección del camino, se queda quieta */
+      offset-rotate: 0deg;
+      filter: drop-shadow(0 0 50px rgba(0, 119, 255, 0.8)) drop-shadow(0 0 100px rgba(0, 194, 255, 0.5));
+      /* linear() permite definir velocidad punto a punto:
+         0→25% del tiempo cubre el 45% del recorrido  → RÁPIDO al entrar
+         25%→75% del tiempo cubre solo el 10%          → LENTO en la barriga
+         75%→100% del tiempo cubre el 45% restante     → RÁPIDO al salir
+         (cubic-bezier no puede hacer esto: solo tiene 2 controles de velocidad) */
+      animation:
+        starMotion 3.5s cubic-bezier(0.16, 0.5, 0.3, 1) 0.1s forwards,
+        starScaleOpacity 3.5s cubic-bezier(0.16, 0.5, 0.3, 1) 0.1s forwards;
+      /* La offset-path (el camino S) se asigna por JavaScript según el tamaño real de pantalla */
+    }
+
+    /* Si hay traducción activa, saltamos la animación de la estrella */
+    html.translated .star-cinema-wrapper {
+      display: none;
+    }
+
+    /* Animación 1: recorre el camino S de principio a fin (el camino en sí lo define JS) */
+    @keyframes starMotion {
+      from {
+        offset-distance: 0%;
+      }
+
+      to {
+        offset-distance: 100%;
+      }
+    }
+
+    /* Animación 2: escala + opacidad — SOLO from→to, sin keyframes intermedios.
+       ease-out = encoge rápido al inicio (cuando la estrella es enorme y ocupa la
+       pantalla), luego se va frenando al llegar a la posición final.
+       Sin keyframes intermedios = sin ningún “trompiccón” posible. */
+    @keyframes starScaleOpacity {
+      from {
+        transform: scale(16);
+        opacity: 1;
+        filter: drop-shadow(0 0 80px rgba(0, 194, 255, 1)) drop-shadow(0 0 160px rgba(0, 119, 255, 0.8));
+      }
+
+      to {
+        transform: scale(1);
+        opacity: 0.18;
+        filter: drop-shadow(0 0 8px rgba(0, 119, 255, 0.2));
+      }
+    }
+
+    /* La estrella decorativa FIJA que queda en el hero una vez termina la animación del cinema */
+    .star-hero-deco {
+      position: absolute;
+      /* Posición final: esquina superior-izquierda del hero, detrás del texto */
+      top: 2%;
+      left: -1%;
+      width: 130px;
+      height: 130px;
+      opacity: 0;
+      z-index: 0;
+      pointer-events: none;
+      filter: drop-shadow(0 0 8px rgba(0, 119, 255, 0.3));
+      /* Aparece justo cuando la estrella del cinema llega a su destino (~3.1s) */
+      animation: starDecoAppear 0.4s ease 3.0s forwards, starSpin 25s linear 3.4s infinite;
+    }
+
+    html.translated .star-hero-deco {
+      opacity: 0.18;
+      animation: starSpin 20s linear infinite;
+    }
+
+    @keyframes starDecoAppear {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 0.18;
+      }
+    }
+
+    @keyframes starSpin {
+      from {
+        transform: rotate(0deg);
+      }
+
+      to {
+        transform: rotate(360deg);
       }
     }
 
@@ -1157,7 +1286,8 @@
       background-position: calc(100% - 0.6rem) center;
     }
 
-    .lang-select:hover, .lang-select:focus {
+    .lang-select:hover,
+    .lang-select:focus {
       border-color: var(--accent);
       background-color: var(--bg3);
       box-shadow: 0 0 10px rgba(0, 194, 255, 0.2);
@@ -1167,6 +1297,7 @@
     [data-i18n] {
       transition: opacity 0.15s ease;
     }
+
     .lang-switching [data-i18n] {
       opacity: 0;
     }
@@ -1206,15 +1337,23 @@
     </div>
   </nav>
 
+  <!-- ESTRELLA CINEMATOGRÁFICA: empieza pegada a la pantalla y vuela al fondo del hero -->
+  <div class="star-cinema-wrapper">
+    <img class="star-cinema"   src="img/star.png" alt="" aria-hidden="true" />
+  </div>
+
   <!-- SECTION: HERO (PORTADA) -->
   <section id="inicio" class="hero">
     <div class="glow1"></div>
     <div class="glow2"></div>
+    <!-- Estrella decorativa fija que aparece en el hero una vez termina la animación cinematográfica -->
+    <img class="star-hero-deco" src="img/star.png" alt="" aria-hidden="true" />
     <div class="hero-inner">
       <div class="hero-text">
         <div class="badge" data-i18n="hero_badge">Disponible para proyectos</div>
         <h1 data-i18n="hero_h1">Tu idea,<br>convertida en<br><span class="ac">producto digital</span></h1>
-        <p class="sub" data-i18n="hero_sub">Desarrollo web, apps móviles e integración de IA.<br>Convierto lo que tienes en mente en algo real y funcional.</p>
+        <p class="sub" data-i18n="hero_sub">Desarrollo web, apps móviles e integración de IA.<br>Convierto lo que tienes
+          en mente en algo real y funcional.</p>
         <div class="actions">
           <a href="#servicios" class="btn-p" data-i18n="hero_cta1">→ ¡Me interesa!</a>
           <a href="#portfolio" class="btn-s" data-i18n="hero_cta2">Ver proyectos</a>
@@ -1228,9 +1367,12 @@
 
   <!-- SECTION: ESTADÍSTICAS -->
   <div class="stats reveal reveal-up">
-    <div class="stat"><span class="stat-n">+15</span><span class="stat-l" data-i18n="stat1">Años programando</span></div>
-    <div class="stat"><span class="stat-n">+20</span><span class="stat-l" data-i18n="stat2">Proyectos completados</span></div>
-    <div class="stat"><span class="stat-n">100%</span><span class="stat-l" data-i18n="stat3">Compromiso con el cliente</span></div>
+    <div class="stat"><span class="stat-n">+15</span><span class="stat-l" data-i18n="stat1">Años programando</span>
+    </div>
+    <div class="stat"><span class="stat-n">+20</span><span class="stat-l" data-i18n="stat2">Proyectos completados</span>
+    </div>
+    <div class="stat"><span class="stat-n">100%</span><span class="stat-l" data-i18n="stat3">Compromiso con el
+        cliente</span></div>
   </div>
 
   <!-- SECTION: SOBRE MÍ -->
@@ -1243,9 +1385,12 @@
         <div class="about-text reveal reveal-right">
           <p class="stag" data-i18n="about_tag">Sobre mí</p>
           <h2 data-i18n="about_h2">Soy César Hidalgo,<br><span style="color:var(--accent)">desarrollador</span></h2>
-          <p data-i18n="about_p1"><strong>Más de 15 años programando</strong>, he trabajado en proyectos de todo tipo: desde webs corporativas hasta Apps móviles con integración de inteligencia artificial.</p>
-          <p data-i18n="about_p2">Me apasiona encontrar soluciones simples a problemas complejos. Trabajo de forma cercana con cada cliente para entender bien qué necesitan y entregar algo que de verdad funcione.</p>
-          <p data-i18n="about_p3">También comparto mi proceso en mi canal de YouTube <strong>Nekophase</strong>, donde muestro las apps y herramientas que desarrollo.</p>
+          <p data-i18n="about_p1"><strong>Más de 15 años programando</strong>, he trabajado en proyectos de todo tipo:
+            desde webs corporativas hasta Apps móviles con integración de inteligencia artificial.</p>
+          <p data-i18n="about_p2">Me apasiona encontrar soluciones simples a problemas complejos. Trabajo de forma
+            cercana con cada cliente para entender bien qué necesitan y entregar algo que de verdad funcione.</p>
+          <p data-i18n="about_p3">También comparto mi proceso en mi canal de YouTube <strong>Nekophase</strong>, donde
+            muestro las apps y herramientas que desarrollo.</p>
           <div class="tags">
             <span class="tag">Android</span><span class="tag">Web</span><span class="tag">Python</span>
             <span class="tag">IA</span><span class="tag">Java</span><span class="tag">HTML/CSS/JS</span>
@@ -1260,14 +1405,16 @@
     <div class="inner">
       <p class="stag" data-i18n="srv_tag">Servicios</p>
       <h2 data-i18n="srv_h2">¿En qué puedo ayudarte?</h2>
-      <p class="sdesc" data-i18n="srv_desc">Desde una landing page hasta una App para Móviles con IA integrada. Me adapto al proyecto que necesitas.</p>
+      <p class="sdesc" data-i18n="srv_desc">Desde una landing page hasta una App para Móviles con IA integrada. Me
+        adapto al proyecto que necesitas.</p>
       <div class="srv-grid">
         <div class="srv-card reveal reveal-up">
           <div class="srv-img" style="background: #0e1728;">
             <img src="img/desarrolloweb1.webp" alt="Desarrollo Web" />
           </div>
           <h3 data-i18n="srv1_h3">Desarrollo Web</h3>
-          <p data-i18n="srv1_p">Webs profesionales, landing pages y aplicaciones web a medida. Rápidas, modernas y optimizadas para captar clientes.</p>
+          <p data-i18n="srv1_p">Webs profesionales, landing pages y aplicaciones web a medida. Rápidas, modernas y
+            optimizadas para captar clientes.</p>
           <a href="asesoramiento.html?tipo=web" class="srv-btn" data-i18n="srv_btn">¡Me interesa!</a>
         </div>
         <div class="srv-card reveal reveal-up" style="transition-delay: 0.2s;">
@@ -1275,7 +1422,8 @@
             <img src="img/appmovil.webp" alt="Apps Móviles" />
           </div>
           <h3 data-i18n="srv2_h3">Apps Móviles</h3>
-          <p data-i18n="srv2_p">Aplicaciones Android nativas. Desde la idea hasta publicación en Google Play, con todo el proceso incluido.</p>
+          <p data-i18n="srv2_p">Aplicaciones Android nativas. Desde la idea hasta publicación en Google Play, con todo
+            el proceso incluido.</p>
           <a href="asesoramiento.html?tipo=apps" class="srv-btn" data-i18n="srv_btn">¡Me interesa!</a>
         </div>
         <div class="srv-card reveal reveal-up" style="transition-delay: 0.4s;">
@@ -1283,7 +1431,8 @@
             <img src="img/iaintegrada.webp" alt="Integración de IA" style="object-fit: cover;" />
           </div>
           <h3 data-i18n="srv3_h3">Integración de IA</h3>
-          <p data-i18n="srv3_p">Añado inteligencia artificial a tus productos: chatbots, automatizaciones, análisis de datos o funciones autónomas.</p>
+          <p data-i18n="srv3_p">Añado inteligencia artificial a tus productos: chatbots, automatizaciones, análisis de
+            datos o funciones autónomas.</p>
           <a href="asesoramiento.html?tipo=web" class="srv-btn" data-i18n="srv_btn">¡Me interesa!</a>
         </div>
       </div>
@@ -1297,7 +1446,8 @@
     <div class="inner">
       <p class="stag" data-i18n="port_tag">Portfolio</p>
       <h2 data-i18n="port_h2">Proyectos realizados</h2>
-      <p class="sdesc" data-i18n="port_desc">Algunos de los proyectos que he desarrollado. Puedo contarte más detalles en una llamada.</p>
+      <p class="sdesc" data-i18n="port_desc">Algunos de los proyectos que he desarrollado. Puedo contarte más detalles
+        en una llamada.</p>
 
       <!-- ÍNDICE DE SECCIONES PARA MEJORAR LA LECTURA -->
 
@@ -1311,8 +1461,10 @@
             </div>
             <div class="pinfo">
               <h3 data-i18n="proj1_h3">App de Negocios móvil</h3>
-              <p data-i18n="proj1_p">Desarrollo de aplicación móvil nativa enfocada en la gestión empresarial y administración de recursos.</p>
-              <div class="ptags"><span class="ptag">Android</span><span class="ptag">Java</span><span class="ptag">Google Play</span></div>
+              <p data-i18n="proj1_p">Desarrollo de aplicación móvil nativa enfocada en la gestión empresarial y
+                administración de recursos.</p>
+              <div class="ptags"><span class="ptag">Android</span><span class="ptag">Java</span><span
+                  class="ptag">Google Play</span></div>
               <a href="https://play.google.com/store/apps/details?id=com.nekophase.battlefieldredsecguide"
                 target="_blank" class="plink" data-i18n="proj1_link">Ver en Google Play →</a>
             </div>
@@ -1328,7 +1480,8 @@
               <h3 data-i18n="proj2_h3">Páginas Webs</h3>
               <p data-i18n="proj2_p">Desarrollo de página web para empresa.</p>
               <div class="ptags"><span class="ptag">Web</span><span class="ptag">Html</span></div>
-              <a href="https://hazeneko1.github.io/escuelaParapente/" target="_blank" class="plink" data-i18n="proj2_link">Ver proyecto →</a>
+              <a href="https://hazeneko1.github.io/escuelaParapente/" target="_blank" class="plink"
+                data-i18n="proj2_link">Ver proyecto →</a>
             </div>
           </div>
         </div>
@@ -1366,7 +1519,8 @@
     <div class="inner">
       <p class="stag" data-i18n="yt_tag">Canal de YouTube</p>
       <h2>Nekophase</h2>
-      <p class="sdesc" data-i18n="yt_desc">Comparto el proceso de desarrollo de mis apps y herramientas. Si te gusta ver cómo se construyen cosas reales, esto te va a gustar.</p>
+      <p class="sdesc" data-i18n="yt_desc">Comparto el proceso de desarrollo de mis apps y herramientas. Si te gusta ver
+        cómo se construyen cosas reales, esto te va a gustar.</p>
       <div class="yt-card reveal reveal-up">
         <div class="yt-thumb">
           <img src="img/thumbnail.webp" alt="Nekophase" style="width:100%;height:100%;object-fit:contain" />
@@ -1374,8 +1528,10 @@
         </div>
         <div class="yt-info">
           <h3 data-i18n="yt_h3">Apps reales, proceso real</h3>
-          <p data-i18n="yt_p">En Nekophase muestro cómo desarrollo aplicaciones móviles, integro IA y creo herramientas útiles. Sin filtros, con el proceso completo.</p>
-          <a href="https://youtube.com/@NekoPhase199" target="_blank" class="btn-p" style="align-self:flex-start" data-i18n="yt_btn">▶ Ver el canal</a>
+          <p data-i18n="yt_p">En Nekophase muestro cómo desarrollo aplicaciones móviles, integro IA y creo herramientas
+            útiles. Sin filtros, con el proceso completo.</p>
+          <a href="https://youtube.com/@NekoPhase199" target="_blank" class="btn-p" style="align-self:flex-start"
+            data-i18n="yt_btn">▶ Ver el canal</a>
         </div>
       </div>
     </div>
@@ -1388,7 +1544,8 @@
       <h2 data-i18n="con_h2">Hablemos de tu proyecto</h2>
       <div class="con-grid">
         <div class="reveal reveal-left">
-          <p style="color:var(--muted);line-height:1.7;font-weight:300" data-i18n="con_intro">¿Tienes una idea en mente? Cuéntamela. Tanto si es una web, una app o algo con IA, le echamos un vistazo juntos sin compromiso.</p>
+          <p style="color:var(--muted);line-height:1.7;font-weight:300" data-i18n="con_intro">¿Tienes una idea en mente?
+            Cuéntamela. Tanto si es una web, una app o algo con IA, le echamos un vistazo juntos sin compromiso.</p>
           <div class="con-methods">
             <a href="mailto:cesar.hidalgo1@outlook.com" class="con-method">
               <div class="con-icon">✉️</div>
@@ -1414,9 +1571,12 @@
           </div>
         </div>
         <form id="contact-form" class="form reveal reveal-right" action="https://formspree.io/f/xeerqapd" method="POST">
-          <div class="fg"><label data-i18n="form_name">Nombre</label><input type="text" name="nombre" data-i18n-placeholder="form_name_ph" placeholder="Tu nombre" required /></div>
-          <div class="fg"><label>Email</label><input type="email" name="_replyto" placeholder="tu@email.com" required /></div>
-          <div class="fg"><label data-i18n="form_msg">Cuéntame tu proyecto</label><textarea name="mensaje" data-i18n-placeholder="form_msg_ph" placeholder="App, web, integración de IA..."></textarea></div>
+          <div class="fg"><label data-i18n="form_name">Nombre</label><input type="text" name="nombre"
+              data-i18n-placeholder="form_name_ph" placeholder="Tu nombre" required /></div>
+          <div class="fg"><label>Email</label><input type="email" name="_replyto" placeholder="tu@email.com" required />
+          </div>
+          <div class="fg"><label data-i18n="form_msg">Cuéntame tu proyecto</label><textarea name="mensaje"
+              data-i18n-placeholder="form_msg_ph" placeholder="App, web, integración de IA..."></textarea></div>
           <button type="submit" id="form-submit" class="fsub" data-i18n="form_submit">Enviar mensaje →</button>
           <div id="form-status" style="margin-top:1rem; font-size:0.9rem; display:none;"></div>
         </form>
@@ -1827,6 +1987,111 @@
       if (selectEl) selectEl.value = savedLang;
       if (savedLang !== 'es') applyTranslations(savedLang);
     });
+
+    // ==========================================================================
+    // ESTRELLAS - Motion Path: calcula la curva S según el tamaño real de pantalla
+    // Por qué hace falta JS: offset-path no acepta vw/vh dentro del path()
+    // así que medimos el viewport y construimos las coordenadas en píxeles reales.
+    // ==========================================================================
+    (function initStarPaths() {
+      var vw = window.innerWidth;
+      var vh = window.innerHeight;
+
+      // --- CURVA BASE (estrella principal) ---
+      //
+      // Los valores vienen de los sliders de Desmos:
+      //   P0=(4.284, 6.4)  P1=(5.02, 6.2)  P2=(6.72, 6.474)  P3=(4.18, 6.86)
+      //
+      // Conversión aplicada:
+      //   1) Invertir el recorrido (animación va P3→P0, igual que Desmos al revés)
+      //   2) Invertir eje Y (Desmos Y sube, SVG Y baja)
+      //   3) Escalar al viewport: Desmos x[4.18..6.72] → vw[5%..70%]
+      //                           Desmos y[6.2..6.86]  → vh[7%..35%]
+      //
+      // Para ajustar en el futuro: cambia los 4 pares de valores de Desmos
+      // y vuelve a ejecutar la misma conversión.
+
+      var sx  = -vw * 0.06, sy  = -vh * 0.05;  // START: ligeramente fuera de pantalla (esquina sup-izq)
+      var c1x =  vw * 0.59, c1y =  vh * 0.04;  // c1 ← Desmos P2 (tira hacia la derecha)
+      var c2x =  vw * 0.27, c2y =  vh * 0.69;  // c2 ← Desmos P1 (vuelve a la izquierda)
+      var ex  =  vw * 0.07, ey  =  vh * 0.28;  // END: detrás de las letras del hero
+
+      function buildPath(ox, oy) {
+        // ox/oy: desplazamiento uniforme en píxeles aplicado a todos los puntos
+        return 'M ' + (sx+ox)  + ',' + (sy+oy)  +
+               ' C ' + (c1x+ox) + ',' + (c1y+oy) +
+               ' '  + (c2x+ox) + ',' + (c2y+oy) +
+               ' '  + (ex+ox)  + ',' + (ey+oy);
+      }
+
+      // --- Estrella 1 (original) ---
+      var star1 = document.querySelector('.star-cinema');
+      if (star1) {
+        var path1 = buildPath(0, 0);
+        console.log('star1:', path1);
+        star1.style.offsetPath = "path('" + path1 + "')";
+      }
+
+      // ==========================================================================
+      // MODO DEBUG: dibuja los puntos de inicio/fin (rojo) y las líneas "tiradoras"
+      // hacia los puntos de control (naranja), para poder ajustar la curva a ojo.
+      // Actívalo añadiendo ?debug=1 a la URL.
+      // ==========================================================================
+      var DEBUG_PATH = window.location.search.includes('debug=1');
+
+      if (DEBUG_PATH) {
+        var svgNS = 'http://www.w3.org/2000/svg';
+        var debugSvg = document.createElementNS(svgNS, 'svg');
+        debugSvg.setAttribute('width', vw);
+        debugSvg.setAttribute('height', vh);
+        debugSvg.style.position = 'fixed';
+        debugSvg.style.top = '0';
+        debugSvg.style.left = '0';
+        debugSvg.style.zIndex = '99999';
+        debugSvg.style.pointerEvents = 'none';
+
+        function debugDot(x, y, color, radius) {
+          var c = document.createElementNS(svgNS, 'circle');
+          c.setAttribute('cx', x);
+          c.setAttribute('cy', y);
+          c.setAttribute('r', radius || 6);
+          c.setAttribute('fill', color);
+          debugSvg.appendChild(c);
+        }
+
+        function debugLine(x1, y1, x2, y2, color) {
+          var l = document.createElementNS(svgNS, 'line');
+          l.setAttribute('x1', x1);
+          l.setAttribute('y1', y1);
+          l.setAttribute('x2', x2);
+          l.setAttribute('y2', y2);
+          l.setAttribute('stroke', color);
+          l.setAttribute('stroke-width', 2);
+          l.setAttribute('stroke-dasharray', '6,4');
+          debugSvg.appendChild(l);
+        }
+
+        // Dibujar las 3 curvas
+        [[0,0,'rgba(255,255,255,0.4)'],[vw*0.08,vh*0.08,'rgba(255,200,100,0.4)'],[-vw*0.08,vh*0.08,'rgba(100,200,255,0.4)']].forEach(function(d) {
+          var dp = document.createElementNS(svgNS, 'path');
+          dp.setAttribute('d', buildPath(d[0], d[1]));
+          dp.setAttribute('stroke', d[2]);
+          dp.setAttribute('stroke-width', 2);
+          dp.setAttribute('fill', 'none');
+          debugSvg.appendChild(dp);
+        });
+
+        // Tiradores de la curva base
+        debugLine(sx, sy, c1x, c1y, 'orange');
+        debugLine(ex, ey, c2x, c2y, 'orange');
+        debugDot(c1x, c1y, 'orange', 5);
+        debugDot(c2x, c2y, 'orange', 5);
+        debugDot(sx, sy, 'red', 7);
+        debugDot(ex, ey, 'red', 7);
+
+        document.body.appendChild(debugSvg);
+      }
+    })();
   </script>
 </body>
 
