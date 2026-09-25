@@ -1,0 +1,2226 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>César Hidalgo — Desarrollo Web, Apps y IA</title>
+  <meta name="description" content="Desarrollo web, apps móviles e integración de IA." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@700;800;900&family=DM+Sans:wght@300;400;500&display=swap"
+    rel="stylesheet" />
+  <link rel="icon" href="img/favicon00.webp" type="image/webp">
+  <!-- Script síncrono: detecta idioma activo ANTES de que se rendericen animaciones CSS -->
+  <script>
+    (function () {
+      var lang = localStorage.getItem('siteLang') || 'es';
+      if (lang && lang !== 'es') {
+        document.documentElement.classList.add('translated');
+      }
+    })();
+  </script>
+  <style>
+    /* ==========================================================================
+       VARIABLES Y RESET
+       ========================================================================== */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0
+    }
+
+    :root {
+      --bg: #0f1520;
+      --bg2: #151e2e;
+      --bg3: #1a2438;
+      --accent: #00c2ff;
+      --accent2: #0077ff;
+      --text: #e8f0fe;
+      --muted: #7a8fa6;
+      --border: rgba(0, 194, 255, 0.12);
+      --card: rgba(255, 255, 255, 0.03);
+    }
+
+    html {
+      scroll-behavior: smooth
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden
+    }
+
+    /* ==========================================================================
+       NAVEGACIÓN (MENÚ)
+       ========================================================================== */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.2rem 5%;
+      background: rgba(15, 21, 32, .92);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border)
+    }
+
+    .nav-logo {
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 800;
+      font-size: 1.3rem;
+      color: var(--text);
+      text-decoration: none
+    }
+
+    .nav-logo span {
+      color: var(--accent)
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none
+    }
+
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: .9rem;
+      font-weight: 500;
+      transition: color .2s
+    }
+
+    .nav-links a:hover {
+      color: var(--text)
+    }
+
+    .nav-cta {
+      background: linear-gradient(135deg, var(--accent2), var(--accent));
+      color: #fff !important;
+      padding: .55rem 1.3rem;
+      border-radius: 6px;
+      font-weight: 600 !important
+    }
+
+    /* ==========================================================================
+       HERO SECTION (PORTADA)
+       ========================================================================== */
+    .hero {
+      min-height: 80vh;
+      display: flex;
+      align-items: center;
+      padding: 7rem 5% 4rem;
+      position: relative;
+      overflow: hidden
+    }
+
+    .glow1 {
+      position: absolute;
+      width: 700px;
+      height: 700px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(0, 119, 255, .18) 0%, transparent 70%);
+      top: -100px;
+      right: -100px;
+      pointer-events: none
+    }
+
+    .glow2 {
+      position: absolute;
+      width: 400px;
+      height: 400px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(0, 194, 255, .1) 0%, transparent 70%);
+      bottom: 0;
+      left: 10%;
+      pointer-events: none
+    }
+
+    .hero-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 4rem;
+      width: 100%;
+      max-width: 1280px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1
+    }
+
+    .hero-text {
+      flex: 1;
+      max-width: 600px;
+      /* <--- Animación de entrada */
+    }
+
+    .hero-text h1 {
+      /* Curva ajustada + zoom de entrada para que al reducirse parezca que la estrella se mete detrás */
+      animation: titleArcIn 1.4s cubic-bezier(.16, .52, .33, 1.02) 0.6s forwards;
+      opacity: 0;
+    }
+
+    .hero-text p,
+    .hero-text .badge,
+    .hero-text .actions {
+      /* Entrada más rápida y directa */
+      animation: slideInLeft 0.9s cubic-bezier(0.34, 1, 0.68, 1) 0.3s forwards;
+      opacity: 0;
+    }
+
+    /* Si hay traducción activa, saltamos las animaciones de entrada para evitar el flash en español */
+    html.translated .hero-text h1,
+    html.translated .hero-text p,
+    html.translated .hero-text .badge,
+    html.translated .hero-text .actions {
+      animation: none;
+      opacity: 1;
+      transform: none;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      background: rgba(0, 194, 255, .08);
+      border: 1px solid rgba(0, 194, 255, .2);
+      color: var(--accent);
+      padding: .4rem 1rem;
+      border-radius: 100px;
+      font-size: .8rem;
+      font-weight: 600;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem
+    }
+
+    .badge::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      animation: pulse 1.5s infinite
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        opacity: 1;
+        transform: scale(1)
+      }
+
+      50% {
+        opacity: .4;
+        transform: scale(1.3)
+      }
+    }
+
+    h1 {
+      font-family: 'DM Sans', sans-serif;
+      font-size: clamp(2.8rem, 5.5vw, 4.8rem);
+      font-weight: 800;
+      line-height: 1.18;
+      letter-spacing: -.01em;
+      margin-bottom: 1.2rem
+    }
+
+    h1 .ac {
+      color: var(--accent)
+    }
+
+    .sub {
+      font-size: 1.1rem;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 2.2rem;
+      font-weight: 300
+    }
+
+    .actions {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap
+    }
+
+    .btn-p {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      background: linear-gradient(135deg, var(--accent2), var(--accent));
+      color: #fff;
+      padding: .85rem 1.8rem;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: .95rem;
+      text-decoration: none;
+      transition: transform .2s, box-shadow .2s;
+      box-shadow: 0 0 30px rgba(0, 119, 255, .3)
+    }
+
+    .btn-p:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 40px rgba(0, 194, 255, .4)
+    }
+
+    .btn-s {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: .85rem 1.8rem;
+      border-radius: 8px;
+      font-weight: 500;
+      font-size: .95rem;
+      text-decoration: none;
+      transition: border-color .2s, background .2s
+    }
+
+    .btn-s:hover {
+      border-color: var(--accent);
+      background: rgba(0, 194, 255, .05)
+    }
+
+    .hero-photo {
+      flex-shrink: 0;
+      width: 490px;
+      height: 490px;
+      border-radius: 50%;
+      background: var(--bg3);
+      border: 3px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      box-shadow: 0 0 80px rgba(0, 119, 255, .25);
+      transition: transform .3s ease;
+      /* Animación ahora más lenta (2.2s) y con curva suave (ease-in-out) */
+      animation: sphereRotateIn 2s ease-in-out forwards;
+      perspective: 1000px;
+    }
+
+    /* Sin animación de foto si hay traducción activa */
+    html.translated .hero-photo {
+      animation: none;
+      opacity: 1;
+      transform: none;
+    }
+
+    .hero-photo:hover {
+      transform: scale(1.2);
+    }
+
+    /* ANIMACIONES AVANZADAS */
+    @keyframes sphereRotateIn {
+      0% {
+        opacity: 0;
+        /* Viene desde la derecha (translateX) y un poco abajo (translateY) */
+        transform: translateX(150px) translateY(50px) rotate(8deg) scale(0.49);
+      }
+
+      50% {
+        opacity: 1;
+        /* Rebota suavemente hacia la izquierda (-15px) */
+        transform: translateX(-15px) translateY(-35px) rotate(0deg) scale(1.07);
+      }
+
+      100% {
+        opacity: 1;
+        transform: translateX(0) translateY(0) rotate(0deg) scale(1);
+      }
+    }
+
+    @keyframes titleArcIn {
+      0% {
+        opacity: 0;
+        /* Viene desde la izquierda, algo arriba, y ligeramente sobredimensionado */
+        transform: translateX(-500px) translateY(-100px) rotate(-5deg) scale(1.3);
+      }
+
+      60% {
+        opacity: 1;
+        /* Ya en posición pero todavía con un toque de zoom — en este momento la estrella ya es más pequeña */
+        transform: translateX(0) translateY(0) rotate(0deg) scale(1.08);
+      }
+
+      100% {
+        opacity: 1;
+        /* Reposa en tamaño natural: ya tapa la estrella detrás */
+        transform: translateX(0) translateY(0) rotate(0deg) scale(1);
+      }
+    }
+
+    @keyframes slideInLeft {
+      from {
+        opacity: 0;
+        transform: translateX(-40px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    /* ==========================================================================
+       ESTRELLA - ANIMACIÓN CINEMATOGRÁFICA DE ENTRADA
+       Empieza pegada a la cámara (zoom enorme) y vuela hacia el fondo
+       ========================================================================== */
+
+    /* Contenedor fijo que cubre TODA la pantalla durante la animación */
+    .star-cinema-wrapper {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      pointer-events: none;
+      animation: wrapperFade 3.2s ease forwards;
+    }
+
+    @keyframes wrapperFade {
+      0% {
+        pointer-events: all;
+      }
+
+      90% {
+        pointer-events: none;
+      }
+
+      100% {
+        pointer-events: none;
+      }
+    }
+
+    /* La estrella - usa CSS Motion Path para seguir la curva S sin ninguna esquina */
+    .star-cinema {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 130px;
+      height: 130px;
+      /* El punto de anclaje es el centro del elemento (130/2 = 65px) */
+      offset-anchor: 65px 65px;
+      /* No gira para seguir la dirección del camino, se queda quieta */
+      offset-rotate: 0deg;
+      filter: drop-shadow(0 0 50px rgba(0, 119, 255, 0.8)) drop-shadow(0 0 100px rgba(0, 194, 255, 0.5));
+      /* linear() permite definir velocidad punto a punto:
+         0→25% del tiempo cubre el 45% del recorrido  → RÁPIDO al entrar
+         25%→75% del tiempo cubre solo el 10%          → LENTO en la barriga
+         75%→100% del tiempo cubre el 45% restante     → RÁPIDO al salir
+         (cubic-bezier no puede hacer esto: solo tiene 2 controles de velocidad) */
+      animation:
+        starMotion 3.5s cubic-bezier(0.16, 0.5, 0.3, 1) 0.1s forwards,
+        starScaleOpacity 3.5s cubic-bezier(0.16, 0.5, 0.3, 1) 0.1s forwards;
+      /* La offset-path (el camino S) se asigna por JavaScript según el tamaño real de pantalla */
+    }
+
+    /* Si hay traducción activa, saltamos la animación de la estrella */
+    html.translated .star-cinema-wrapper {
+      display: none;
+    }
+
+    /* Animación 1: recorre el camino S de principio a fin (el camino en sí lo define JS) */
+    @keyframes starMotion {
+      from {
+        offset-distance: 0%;
+      }
+
+      to {
+        offset-distance: 100%;
+      }
+    }
+
+    /* Animación 2: escala + opacidad — SOLO from→to, sin keyframes intermedios.
+       ease-out = encoge rápido al inicio (cuando la estrella es enorme y ocupa la
+       pantalla), luego se va frenando al llegar a la posición final.
+       Sin keyframes intermedios = sin ningún “trompiccón” posible. */
+    @keyframes starScaleOpacity {
+      from {
+        transform: scale(16);
+        opacity: 1;
+        filter: drop-shadow(0 0 80px rgba(0, 194, 255, 1)) drop-shadow(0 0 160px rgba(0, 119, 255, 0.8));
+      }
+
+      to {
+        transform: scale(1);
+        opacity: 0.18;
+        filter: drop-shadow(0 0 8px rgba(0, 119, 255, 0.2));
+      }
+    }
+
+    /* La estrella decorativa FIJA que queda en el hero una vez termina la animación del cinema */
+    .star-hero-deco {
+      position: absolute;
+      /* Posición final: esquina superior-izquierda del hero, detrás del texto */
+      top: 2%;
+      left: -1%;
+      width: 130px;
+      height: 130px;
+      opacity: 0;
+      z-index: 0;
+      pointer-events: none;
+      filter: drop-shadow(0 0 8px rgba(0, 119, 255, 0.3));
+      /* Aparece justo cuando la estrella del cinema llega a su destino (~3.1s) */
+      animation: starDecoAppear 0.4s ease 3.0s forwards, starSpin 25s linear 3.4s infinite;
+    }
+
+    html.translated .star-hero-deco {
+      opacity: 0.18;
+      animation: starSpin 20s linear infinite;
+    }
+
+    @keyframes starDecoAppear {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 0.18;
+      }
+    }
+
+    @keyframes starSpin {
+      from {
+        transform: rotate(0deg);
+      }
+
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* =========================================================================
+       REVEAL ON SCROLL (ANIMACIONES AL BAJAR)
+       ========================================================================= */
+    .reveal {
+      opacity: 0;
+      transition: all 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+      /* Un pelín más lento para que se aprecie el recorrido */
+    }
+
+    .reveal-left {
+      transform: translateX(-150px);
+      /* Antes 20px, ahora viene desde mucho más a la izquierda */
+    }
+
+    .reveal-right {
+      transform: translateX(150px);
+      /* Antes 20px, ahora viene desde mucho más a la derecha */
+    }
+
+    .reveal-up {
+      transform: translateY(80px);
+      /* Un poco más de recorrido desde abajo */
+    }
+
+    .reveal.active {
+      opacity: 1;
+      transform: translate(0, 0);
+    }
+
+    .ph {
+      color: var(--muted);
+      font-size: .85rem;
+      text-align: center;
+      padding: 1rem
+    }
+
+    .hero-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      /* Centramos la foto para que no te veas cortado */
+    }
+
+    /* ==========================================================================
+       ESTADÍSTICAS
+       ========================================================================== */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border)
+    }
+
+    .stat {
+      background: var(--bg);
+      padding: 2.5rem 2rem;
+      text-align: center
+    }
+
+    .stat-n {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: var(--accent);
+      display: block
+    }
+
+    .stat-l {
+      color: var(--muted);
+      font-size: .9rem;
+      margin-top: .3rem
+    }
+
+    section {
+      padding: 6rem 5%
+    }
+
+    .inner {
+      max-width: 1200px;
+      margin: 0 auto
+    }
+
+    .stag {
+      font-size: .75rem;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: .8rem
+    }
+
+    h2 {
+      font-family: 'DM Sans', sans-serif;
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      font-weight: 800;
+      letter-spacing: -.01em;
+      line-height: 1.2;
+      margin-bottom: 1rem
+    }
+
+    .sdesc {
+      color: var(--muted);
+      font-size: 1rem;
+      line-height: 1.7;
+      max-width: 540px;
+      margin-bottom: 1.8rem;
+      font-weight: 300
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center
+    }
+
+    .about-img {
+      border-radius: 16px;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      /* He quitado el aspect-ratio fijo para que no se corte la captura */
+    }
+
+    .about-img img {
+      width: 100%;
+      height: auto;
+      /* Para que la imagen se vea entera sin deformarse */
+      object-fit: contain;
+      border-radius: 16px
+    }
+
+    .about-text p {
+      color: var(--muted);
+      line-height: 1.8;
+      margin-bottom: 1rem;
+      font-weight: 300
+    }
+
+    .about-text p strong {
+      color: var(--text);
+      font-weight: 500
+    }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .5rem;
+      margin-top: 1.5rem
+    }
+
+    /* ==========================================================================
+       SOBRE MÍ
+       ========================================================================== */
+    #sobre-mi {
+      background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.15) 5%, transparent 65%);
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      padding: 8rem 5%;
+    }
+
+    .tag {
+      background: rgba(0, 194, 255, .07);
+      border: 1px solid rgba(0, 194, 255, .15);
+      color: var(--accent);
+      padding: .35rem .9rem;
+      border-radius: 100px;
+      font-size: .8rem;
+      font-weight: 500
+    }
+
+    /* ==========================================================================
+       SERVICIOS
+       ========================================================================== */
+    #servicios {
+      background: var(--bg2)
+    }
+
+    .srv-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem
+    }
+
+    .srv-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2rem;
+      transition: border-color .3s, transform .3s;
+      position: relative;
+      overflow: hidden
+    }
+
+    .srv-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent2), var(--accent));
+      opacity: 0;
+      transition: opacity .3s
+    }
+
+    .srv-card:hover {
+      border-color: rgba(0, 194, 255, .3);
+      transform: translateY(-4px)
+    }
+
+    .srv-card:hover::before {
+      opacity: 1
+    }
+
+    .srv-icon {
+      /* Mantenemos el estilo de icono por si acaso */
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      background: rgba(0, 194, 255, .1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      margin-bottom: 1.2rem
+    }
+
+    .srv-img {
+      width: 100%;
+      height: 160px;
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 1.5rem;
+      border: 1px solid var(--border);
+    }
+
+    .srv-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      transition: transform 0.5s ease;
+    }
+
+    .srv-card:hover .srv-img img {
+      transform: scale(1.1);
+    }
+
+    .srv-card h3 {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: .6rem
+    }
+
+    .srv-card p {
+      color: var(--muted);
+      font-size: .9rem;
+      line-height: 1.6;
+      font-weight: 300;
+      margin-bottom: 1.5rem;
+      /* Más espacio para el botón */
+    }
+
+    .srv-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(0, 194, 255, 0.05);
+      border: 1px solid rgba(0, 194, 255, 0.2);
+      color: var(--accent);
+      padding: 0.6rem 1.2rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    .srv-btn:hover {
+      background: var(--accent);
+      color: #fff;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0, 194, 255, 0.3);
+    }
+
+    /* WhatsApp Floating Button */
+    .wsp-float {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 60px;
+      height: 60px;
+      background: #25d366;
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 30px;
+      box-shadow: 0 10px 25px rgba(37, 211, 102, 0.3);
+      z-index: 1000;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      animation: wspPulse 2s infinite;
+    }
+
+    .wsp-float:hover {
+      transform: scale(1.1) rotate(5deg);
+      background: #20ba5a;
+    }
+
+    @keyframes wspPulse {
+      0% {
+        box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.4);
+      }
+
+      70% {
+        box-shadow: 0 0 0 15px rgba(37, 211, 102, 0);
+      }
+
+      100% {
+        box-shadow: 0 0 0 0 rgba(37, 211, 102, 0);
+      }
+    }
+
+    /* ==========================================================================
+       PORTFOLIO (PROYECTOS)
+       ========================================================================== */
+
+    /* ==========================================================================
+       PORTFOLIO (PROYECTOS)
+       ========================================================================== */
+    .port-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem
+    }
+
+    .pcard {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      transition: border-color .3s, transform .3s
+    }
+
+    .pcard:hover {
+      border-color: rgba(0, 194, 255, .3);
+      transform: translateY(-4px)
+    }
+
+    .pimg {
+      width: 100%;
+      aspect-ratio: 16/9;
+      background: var(--bg3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden
+    }
+
+    .pimg img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      /* Cambio de cover a contain para no cortar las capturas */
+      padding: 10px;
+      /* Un poco de margen para que no toque los bordes */
+    }
+
+    .pinfo {
+      padding: 1.5rem
+    }
+
+    .pinfo h3 {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: .4rem
+    }
+
+    .pinfo p {
+      color: var(--muted);
+      font-size: .88rem;
+      line-height: 1.6;
+      margin-bottom: 1rem;
+      font-weight: 300
+    }
+
+    .ptags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .4rem
+    }
+
+    .ptag {
+      background: rgba(0, 194, 255, .06);
+      border: 1px solid rgba(0, 194, 255, .12);
+      color: var(--muted);
+      padding: .25rem .7rem;
+      border-radius: 100px;
+      font-size: .75rem
+    }
+
+    /* Estilos para etiquetas de sección */
+    .p-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+
+    .p-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      opacity: 0.8;
+    }
+
+    .p-label::before {
+      content: '';
+      width: 20px;
+      height: 1px;
+      background: var(--accent);
+      display: inline-block;
+    }
+
+    .p-index-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 2.5rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .p-nav-item {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--muted);
+      cursor: default;
+      transition: color 0.3s;
+    }
+
+    .p-nav-item span {
+      color: var(--accent);
+      margin-right: 0.4rem;
+    }
+
+    .plink {
+      display: inline-flex;
+      align-items: center;
+      gap: .3rem;
+      color: var(--accent);
+      font-size: .85rem;
+      font-weight: 500;
+      text-decoration: none;
+      margin-top: .8rem;
+      transition: gap .2s
+    }
+
+    .plink:hover {
+      gap: .6rem
+    }
+
+    /* ==========================================================================
+       NEKOPHASE (YOUTUBE)
+       ========================================================================== */
+    #nekophase {
+      background: var(--bg2)
+    }
+
+    .yt-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      display: flex;
+      align-items: stretch
+    }
+
+    .yt-thumb {
+      width: 480px;
+      /* He subido de 380px a 480px */
+      flex-shrink: 0;
+      background: var(--bg3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      min-height: 300px
+        /* He subido de 220px a 300px */
+    }
+
+    .yt-play {
+      position: absolute;
+      width: 60px;
+      height: 60px;
+      background: rgba(255, 0, 0, .9);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      text-decoration: none;
+      color: #fff;
+      transition: transform .2s
+    }
+
+    .yt-play:hover {
+      transform: scale(1.1)
+    }
+
+    .yt-info {
+      padding: 3.5rem;
+      /* Más aire en el texto (de 2.5rem a 3.5rem) */
+      display: flex;
+      flex-direction: column;
+      justify-content: center
+    }
+
+    .yt-info h3 {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1.8rem;
+      /* Título más grande (de 1.4rem a 1.8rem) */
+      font-weight: 800;
+      margin-bottom: .8rem
+    }
+
+    .yt-info p {
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 1.5rem;
+      font-weight: 300
+    }
+
+    /* ==========================================================================
+       CONTACTO
+       ========================================================================== */
+    .con-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: start
+    }
+
+    .con-methods {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-top: 2rem
+    }
+
+    .con-method {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.2rem 1.5rem;
+      text-decoration: none;
+      color: var(--text);
+      transition: border-color .2s, background .2s
+    }
+
+    .con-method:hover {
+      border-color: rgba(0, 194, 255, .3);
+      background: rgba(0, 194, 255, .04)
+    }
+
+    .con-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: rgba(0, 194, 255, .1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      flex-shrink: 0
+    }
+
+    .con-label {
+      color: var(--muted);
+      font-size: .75rem
+    }
+
+    .form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem
+    }
+
+    .fg {
+      display: flex;
+      flex-direction: column;
+      gap: .4rem
+    }
+
+    .fg label {
+      font-size: .85rem;
+      color: var(--muted);
+      font-weight: 500
+    }
+
+    .fg input,
+    .fg textarea {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: .85rem 1rem;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: .95rem;
+      outline: none;
+      transition: border-color .2s;
+      resize: vertical
+    }
+
+    .fg input:focus,
+    .fg textarea:focus {
+      border-color: var(--accent)
+    }
+
+    .fg textarea {
+      min-height: 120px
+    }
+
+    .fsub {
+      background: linear-gradient(135deg, var(--accent2), var(--accent));
+      color: #fff;
+      border: none;
+      padding: .9rem 2rem;
+      border-radius: 8px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity .2s;
+      margin-top: .5rem
+    }
+
+    .fsub:hover {
+      opacity: .85
+    }
+
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 2.5rem 5%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem
+    }
+
+    .f-logo {
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 800;
+      font-size: 1.1rem;
+      color: var(--text)
+    }
+
+    .f-logo span {
+      color: var(--accent)
+    }
+
+    .f-links {
+      display: flex;
+      gap: 1.5rem
+    }
+
+    .f-links a {
+      color: var(--muted);
+      font-size: .85rem;
+      text-decoration: none;
+      transition: color .2s
+    }
+
+    .f-links a:hover {
+      color: var(--text)
+    }
+
+    .f-copy {
+      color: var(--muted);
+      font-size: .8rem
+    }
+
+    /* ==========================================================================
+       DISEÑO RESPONSIVO (MÓVIL)
+       ========================================================================== */
+    @media(max-width:900px) {
+      .hero-inner {
+        flex-direction: column-reverse;
+        text-align: center
+      }
+
+      .hero-photo {
+        width: 300px;
+        height: 300px;
+        margin-top: 2rem
+      }
+
+      .actions {
+        justify-content: center
+      }
+
+      .about-grid,
+      .con-grid {
+        grid-template-columns: 1fr
+      }
+
+      .srv-grid {
+        grid-template-columns: 1fr
+      }
+
+      .port-grid {
+        grid-template-columns: 1fr
+      }
+
+      .yt-card {
+        flex-direction: column
+      }
+
+      .yt-thumb {
+        width: 100%
+      }
+
+      .nav-links {
+        display: none
+      }
+
+      .stats {
+        grid-template-columns: 1fr
+      }
+    }
+
+    .reveal-left.active,
+    .reveal-right.active {
+      transform: translateX(0);
+    }
+
+    /* Language Selector Styles */
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .lang-selector-container {
+      position: relative;
+      display: inline-block;
+    }
+
+    .lang-select {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 0.45rem 1.8rem 0.45rem 0.8rem;
+      border-radius: 6px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      outline: none;
+      transition: all 0.2s ease;
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' fill='%237a8fa6' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: calc(100% - 0.6rem) center;
+    }
+
+    .lang-select:hover,
+    .lang-select:focus {
+      border-color: var(--accent);
+      background-color: var(--bg3);
+      box-shadow: 0 0 10px rgba(0, 194, 255, 0.2);
+    }
+
+    /* Transición suave al cambiar idioma */
+    [data-i18n] {
+      transition: opacity 0.15s ease;
+    }
+
+    .lang-switching [data-i18n] {
+      opacity: 0;
+    }
+
+    /* ==========================================================================
+       RECURSOS
+       ========================================================================== */
+    #recursos {
+      background: var(--bg);
+    }
+
+    .recursos-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2.5rem;
+    }
+
+    .recurso-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 2rem 1.5rem 1.6rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+      text-decoration: none;
+      color: var(--text);
+      transition: transform 0.25s, border-color 0.25s, box-shadow 0.25s;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .recurso-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at top, rgba(0,194,255,0.07) 0%, transparent 70%);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .recurso-card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(0, 194, 255, 0.35);
+      box-shadow: 0 12px 40px rgba(0, 194, 255, 0.12);
+    }
+
+    .recurso-card:hover::before {
+      opacity: 1;
+    }
+
+    .recurso-icon {
+      width: 64px;
+      height: 64px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, rgba(0,194,255,0.15), rgba(0,119,255,0.08));
+      border: 1px solid rgba(0,194,255,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      flex-shrink: 0;
+    }
+
+    .recurso-name {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text);
+      text-align: center;
+      line-height: 1.3;
+    }
+
+    .recurso-desc {
+      font-size: 0.78rem;
+      color: var(--muted);
+      text-align: center;
+      line-height: 1.5;
+      flex: 1;
+    }
+
+    .recurso-link-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--accent);
+      background: rgba(0,194,255,0.08);
+      border: 1px solid rgba(0,194,255,0.18);
+      padding: 0.3rem 0.8rem;
+      border-radius: 100px;
+      transition: background 0.2s;
+    }
+
+    .recurso-card:hover .recurso-link-badge {
+      background: rgba(0,194,255,0.15);
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- 
+  ==========================================================================
+  ESTRUCTURA HTML (BODY)
+  ========================================================================== 
+  -->
+  <nav>
+    <a href="#inicio" class="nav-logo">César<span>.</span></a>
+    <div class="nav-actions">
+      <ul class="nav-links">
+        <li><a href="#sobre-mi" data-i18n="nav_about">Sobre mí</a></li>
+        <li><a href="#servicios" data-i18n="nav_services">Servicios</a></li>
+        <li><a href="asesoramiento.html" data-i18n="nav_prices">Precios</a></li>
+        <li><a href="#portfolio">Portfolio</a></li>
+        <li><a href="#nekophase">Nekophase</a></li>
+        <li><a href="#recursos">Recursos</a></li>
+        <li><a href="#contacto" class="nav-cta" data-i18n="nav_contact">Contactar →</a></li>
+      </ul>
+      <div class="lang-selector-container">
+        <select id="lang-select" class="lang-select" onchange="changeLanguage(this.value)">
+          <option value="es">Español</option>
+          <option value="en">English</option>
+          <option value="it">Italiano</option>
+          <option value="fr">Français</option>
+          <option value="nl">Nederlands</option>
+          <option value="de">Deutsch</option>
+          <option value="zh-CN">中文</option>
+          <option value="ja">日本語</option>
+        </select>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ESTRELLA CINEMATOGRÁFICA: empieza pegada a la pantalla y vuela al fondo del hero -->
+  <div class="star-cinema-wrapper">
+    <img class="star-cinema" src="img/star.webp" alt="" aria-hidden="true" />
+  </div>
+
+  <!-- SECTION: HERO (PORTADA) -->
+  <section id="inicio" class="hero">
+    <div class="glow1"></div>
+    <div class="glow2"></div>
+    <!-- Estrella decorativa fija que aparece en el hero una vez termina la animación cinematográfica -->
+    <img class="star-hero-deco" src="img/star.webp" alt="" aria-hidden="true" />
+    <div class="hero-inner">
+      <div class="hero-text">
+        <div class="badge" data-i18n="hero_badge">Disponible para proyectos</div>
+        <h1 data-i18n="hero_h1">Tu idea,<br>convertida en<br><span class="ac">producto digital</span></h1>
+        <p class="sub" data-i18n="hero_sub">Desarrollo web, apps móviles e integración de IA.<br>Convierto lo que tienes
+          en mente en algo real y funcional.</p>
+        <div class="actions">
+          <a href="#servicios" class="btn-p" data-i18n="hero_cta1">→ ¡Me interesa!</a>
+          <a href="#portfolio" class="btn-s" data-i18n="hero_cta2">Ver proyectos</a>
+        </div>
+      </div>
+      <div class="hero-photo">
+        <img src="img/portadabuena.webp" alt="César Hidalgo" />
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION: ESTADÍSTICAS -->
+  <div class="stats reveal reveal-up">
+    <div class="stat"><span class="stat-n">+15</span><span class="stat-l" data-i18n="stat1">Años programando</span>
+    </div>
+    <div class="stat"><span class="stat-n">+20</span><span class="stat-l" data-i18n="stat2">Proyectos completados</span>
+    </div>
+    <div class="stat"><span class="stat-n">100%</span><span class="stat-l" data-i18n="stat3">Compromiso con el
+        cliente</span></div>
+  </div>
+
+  <!-- SECTION: SOBRE MÍ -->
+  <section id="sobre-mi">
+    <div class="inner">
+      <div class="about-grid">
+        <div class="about-img reveal reveal-left">
+          <img src="img/captura3.webp" alt="Ejemplo Programa" />
+        </div>
+        <div class="about-text reveal reveal-right">
+          <p class="stag" data-i18n="about_tag">Sobre mí</p>
+          <h2 data-i18n="about_h2">Soy César Hidalgo,<br><span style="color:var(--accent)">desarrollador</span></h2>
+          <p data-i18n="about_p1"><strong>Más de 15 años programando</strong>, he trabajado en proyectos de todo tipo:
+            desde webs corporativas hasta Apps móviles con integración de inteligencia artificial.</p>
+          <p data-i18n="about_p2">Me apasiona encontrar soluciones simples a problemas complejos. Trabajo de forma
+            cercana con cada cliente para entender bien qué necesitan y entregar algo que de verdad funcione.</p>
+          <p data-i18n="about_p3">También comparto mi proceso en mi canal de YouTube <strong>Nekophase</strong>, donde
+            muestro las apps y herramientas que desarrollo.</p>
+          <div class="tags">
+            <span class="tag">Android</span><span class="tag">Web</span><span class="tag">Python</span>
+            <span class="tag">IA</span><span class="tag">Java</span><span class="tag">HTML/CSS/JS</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION: SERVICIOS -->
+  <section id="servicios">
+    <div class="inner">
+      <p class="stag" data-i18n="srv_tag">Servicios</p>
+      <h2 data-i18n="srv_h2">¿En qué puedo ayudarte?</h2>
+      <p class="sdesc" data-i18n="srv_desc">Desde una landing page hasta una App para Móviles con IA integrada. Me
+        adapto al proyecto que necesitas.</p>
+      <div class="srv-grid">
+        <div class="srv-card reveal reveal-up">
+          <div class="srv-img" style="background: #0e1728;">
+            <img src="img/desarrolloweb1.webp" alt="Desarrollo Web" />
+          </div>
+          <h3 data-i18n="srv1_h3">Desarrollo Web</h3>
+          <p data-i18n="srv1_p">Webs profesionales, landing pages y aplicaciones web a medida. Rápidas, modernas y
+            optimizadas para captar clientes.</p>
+          <a href="asesoramiento.html?tipo=web" class="srv-btn" data-i18n="srv_btn">¡Me interesa!</a>
+        </div>
+        <div class="srv-card reveal reveal-up" style="transition-delay: 0.2s;">
+          <div class="srv-img" style="background: #eff1f5;">
+            <img src="img/appmovil.webp" alt="Apps Móviles" />
+          </div>
+          <h3 data-i18n="srv2_h3">Apps Móviles</h3>
+          <p data-i18n="srv2_p">Aplicaciones Android nativas. Desde la idea hasta publicación en Google Play, con todo
+            el proceso incluido.</p>
+          <a href="asesoramiento.html?tipo=apps" class="srv-btn" data-i18n="srv_btn">¡Me interesa!</a>
+        </div>
+        <div class="srv-card reveal reveal-up" style="transition-delay: 0.4s;">
+          <div class="srv-img" style="background: #0e1728;">
+            <img src="img/iaintegrada.webp" alt="Integración de IA" style="object-fit: cover;" />
+          </div>
+          <h3 data-i18n="srv3_h3">Integración de IA</h3>
+          <p data-i18n="srv3_p">Añado inteligencia artificial a tus productos: chatbots, automatizaciones, análisis de
+            datos o funciones autónomas.</p>
+          <a href="asesoramiento.html?tipo=web" class="srv-btn" data-i18n="srv_btn">¡Me interesa!</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  </section>
+
+  <!-- SECTION: PORTFOLIO -->
+  <section id="portfolio">
+    <div class="inner">
+      <p class="stag" data-i18n="port_tag">Portfolio</p>
+      <h2 data-i18n="port_h2">Proyectos realizados</h2>
+      <p class="sdesc" data-i18n="port_desc">Algunos de los proyectos que he desarrollado. Puedo contarte más detalles
+        en una llamada.</p>
+
+      <!-- ÍNDICE DE SECCIONES PARA MEJORAR LA LECTURA -->
+
+
+      <div class="port-grid">
+        <!-- SECCIÓN 1 -->
+        <div class="p-item reveal reveal-up">
+          <div class="pcard">
+            <div class="pimg">
+              <img src="img/appnegocios.webp" alt="App Negocio" />
+            </div>
+            <div class="pinfo">
+              <h3 data-i18n="proj1_h3">App de Negocios móvil</h3>
+              <p data-i18n="proj1_p">Desarrollo de aplicación móvil nativa enfocada en la gestión empresarial y
+                administración de recursos.</p>
+              <div class="ptags"><span class="ptag">Android</span><span class="ptag">Java</span><span
+                  class="ptag">Google Play</span></div>
+              <a href="https://play.google.com/store/apps/details?id=com.nekophase.battlefieldredsecguide"
+                target="_blank" class="plink" data-i18n="proj1_link">Ver en Google Play →</a>
+            </div>
+          </div>
+        </div>
+        <!-- SECCIÓN 2 -->
+        <div class="p-item reveal reveal-up" style="transition-delay: 0.1s;">
+          <div class="pcard">
+            <div class="pimg">
+              <img src="img/pginaweb.webp" alt="App Negocio" />
+            </div>
+            <div class="pinfo">
+              <h3 data-i18n="proj2_h3">Páginas Webs</h3>
+              <p data-i18n="proj2_p">Desarrollo de página web para empresa.</p>
+              <div class="ptags"><span class="ptag">Web</span><span class="ptag">Html</span></div>
+              <a href="https://hazeneko1.github.io/escuelaParapente/" target="_blank" class="plink"
+                data-i18n="proj2_link">Ver proyecto →</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- PROYECTOS OCULTOS TEMPORALMENTE (Sección 3 y 4)
+        <div class="p-item reveal reveal-up" style="transition-delay: 0.2s;">
+          <div class="pcard">
+            <div class="pimg"><span class="ph">📸 Captura del proyecto</span></div>
+            <div class="pinfo">
+              <h3>Proyecto 3: IA & Mobile</h3>
+              <p>Sistemas inteligentes integrados en entornos móviles para la automatización de tareas complejas.</p>
+              <div class="ptags"><span class="ptag">IA</span><span class="ptag">App móvil</span></div>
+              <a href="#" class="plink">Ver proyecto →</a>
+            </div>
+          </div>
+        </div>
+        <div class="p-item reveal reveal-up" style="transition-delay: 0.3s;">
+          <div class="pcard">
+            <div class="pimg"><span class="ph">📸 Captura del proyecto</span></div>
+            <div class="pinfo">
+              <h3>Proyecto 4: API & Web</h3>
+              <p>Plataformas web escalables conectadas mediante APIs RESTful para una experiencia de usuario fluida.</p>
+              <div class="ptags"><span class="ptag">Web</span><span class="ptag">API</span></div>
+              <a href="#" class="plink">Ver proyecto →</a>
+            </div>
+          </div>
+        </div>
+        -->
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION: NEKOPHASE (YOUTUBE) -->
+  <section id="nekophase">
+    <div class="inner">
+      <p class="stag" data-i18n="yt_tag">Canal de YouTube</p>
+      <h2>Nekophase</h2>
+      <p class="sdesc" data-i18n="yt_desc">Comparto el proceso de desarrollo de mis apps y herramientas. Si te gusta ver
+        cómo se construyen cosas reales, esto te va a gustar.</p>
+      <div class="yt-card reveal reveal-up">
+        <div class="yt-thumb">
+          <img src="img/thumbnail.webp" alt="Nekophase" style="width:100%;height:100%;object-fit:contain" />
+          <a href="https://www.youtube.com/watch?v=FweqL2XNErw&t" target="_blank" class="yt-play">▶</a>
+        </div>
+        <div class="yt-info">
+          <h3 data-i18n="yt_h3">Apps reales, proceso real</h3>
+          <p data-i18n="yt_p">En Nekophase muestro cómo desarrollo aplicaciones móviles, integro IA y creo herramientas
+            útiles. Sin filtros, con el proceso completo.</p>
+          <a href="https://youtube.com/@NekoPhase199" target="_blank" class="btn-p" style="align-self:flex-start"
+            data-i18n="yt_btn">▶ Ver el canal</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION: CONTACTO -->
+  <section id="contacto">
+    <div class="inner">
+      <p class="stag" data-i18n="con_tag">Contacto</p>
+      <h2 data-i18n="con_h2">Hablemos de tu proyecto</h2>
+      <div class="con-grid">
+        <div class="reveal reveal-left">
+          <p style="color:var(--muted);line-height:1.7;font-weight:300" data-i18n="con_intro">¿Tienes una idea en mente?
+            Cuéntamela. Tanto si es una web, una app o algo con IA, le echamos un vistazo juntos sin compromiso.</p>
+          <div class="con-methods">
+            <a href="mailto:cesar.hidalgo1@outlook.com" class="con-method">
+              <div class="con-icon">✉️</div>
+              <div>
+                <div>cesar.hidalgo1@outlook.com</div>
+                <div class="con-label" data-i18n="con_email_label">Email directo</div>
+              </div>
+            </a>
+            <a href="https://calendly.com/cesar-hidalgo1/30min" target="_blank" class="con-method">
+              <div class="con-icon">📅</div>
+              <div>
+                <div data-i18n="con_cal">Agendar una llamada</div>
+                <div class="con-label" data-i18n="con_cal_label">Elige el día y hora que mejor te venga</div>
+              </div>
+            </a>
+            <a href="https://www.youtube.com/@NekoPhase199/shorts" target="_blank" class="con-method">
+              <div class="con-icon">▶️</div>
+              <div>
+                <div>@nekophase</div>
+                <div class="con-label" data-i18n="con_yt_label">Canal de YouTube</div>
+              </div>
+            </a>
+          </div>
+        </div>
+        <form id="contact-form" class="form reveal reveal-right" action="https://formspree.io/f/xeerqapd" method="POST">
+          <div class="fg"><label data-i18n="form_name">Nombre</label><input type="text" name="nombre"
+              data-i18n-placeholder="form_name_ph" placeholder="Tu nombre" required /></div>
+          <div class="fg"><label>Email</label><input type="email" name="_replyto" placeholder="tu@email.com" required />
+          </div>
+          <div class="fg"><label data-i18n="form_msg">Cuéntame tu proyecto</label><textarea name="mensaje"
+              data-i18n-placeholder="form_msg_ph" placeholder="App, web, integración de IA..."></textarea></div>
+          <button type="submit" id="form-submit" class="fsub" data-i18n="form_submit">Enviar mensaje →</button>
+          <div id="form-status" style="margin-top:1rem; font-size:0.9rem; display:none;"></div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION: RECURSOS -->
+  <section id="recursos">
+    <div class="inner">
+      <p class="stag">Recursos</p>
+      <h2>Herramientas <span style="color:var(--accent)">gratuitas</span></h2>
+      <p class="sdesc">Pequeños programas y utilidades que uso en mi día a día. Código abierto, para que los uses y adaptes libremente.</p>
+      <div class="recursos-grid">
+
+        <!-- RECURSO 1: CurvaSVG.py -->
+        <a href="https://github.com/hazeneko1/SVGTranslator"
+           target="_blank"
+           rel="noopener noreferrer"
+           class="recurso-card reveal reveal-up"
+           id="recurso-curvasvg"
+           title="Ver CurvaSVG en GitHub">
+          <div class="recurso-icon">📁</div>
+          <div class="recurso-name">CurvaSVG.py</div>
+          <div class="recurso-desc">
+            Traduce las coordenadas que aparecen en el log de debug de tu web a valores SVG estándar, y viceversa. Ideal para ajustar curvas de motion-path.
+          </div>
+          <span class="recurso-link-badge">Ver en GitHub →</span>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="f-logo">César<span>.</span></div>
+    <div class="f-links">
+      <a href="#sobre-mi" data-i18n="nav_about">Sobre mí</a>
+      <a href="#servicios" data-i18n="nav_services">Servicios</a>
+      <a href="#portfolio">Portfolio</a>
+      <a href="#recursos">Recursos</a>
+      <a href="#contacto" data-i18n="nav_contact2">Contacto</a>
+    </div>
+  </footer>
+
+  <script>
+    /* OBSERVADOR PARA REVELAR ELEMENTOS AL BAJAR */
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('active');
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    /* MANEJO DEL FORMULARIO CON FORMSPREE */
+    const form = document.getElementById("contact-form");
+    const status = document.getElementById("form-status");
+    const submitBtn = document.getElementById("form-submit");
+
+    form.addEventListener("submit", async function (event) {
+      event.preventDefault();
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Enviando...";
+
+      const data = new FormData(event.target);
+      fetch(event.target.action, {
+        method: form.method,
+        body: data,
+        headers: {
+          'Accept': 'application/json'
+        }
+      }).then(response => {
+        if (response.ok) {
+          status.innerHTML = "✓ ¡Mensaje enviado con éxito! Te responderé pronto.";
+          status.style.display = "block";
+          status.style.color = "#00c2ff";
+          form.reset();
+          submitBtn.textContent = "Mensaje enviado";
+        } else {
+          response.json().then(data => {
+            if (Object.hasOwn(data, 'errors')) {
+              status.innerHTML = data["errors"].map(error => error["message"]).join(", ");
+            } else {
+              status.innerHTML = "Oops! Hubo un problema al enviar el formulario";
+            }
+          })
+        }
+      }).catch(error => {
+        status.innerHTML = "Oops! Hubo un problema al conectar con el servidor";
+        status.style.display = "block";
+        status.style.color = "red";
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Enviar mensaje →";
+      });
+    });
+
+    // Asegura que al recargar la página siempre empiece desde arriba, 
+    // incluso si la URL tiene un #ancla de un clic anterior.
+    if ('scrollRestoration' in history) {
+      history.scrollRestoration = 'manual';
+    }
+
+    window.addEventListener('load', () => {
+      window.scrollTo(0, 0);
+      // Limpia el # de la URL para que la próxima recarga también empiece arriba
+      if (window.location.hash) {
+        history.replaceState(null, null, window.location.pathname + window.location.search);
+      }
+    });
+
+  </script>
+
+  <!-- Botón Flotante de WhatsApp -->
+  <a href="https://wa.me/34722398219?text=Hola%20César!%20Vengo%20de%20tu%20web%20y%20me%20gustaría%20hablar%20contigo."
+    class="wsp-float" target="_blank" title="Contactar por WhatsApp">
+    <svg viewBox="0 0 32 32" style="width:35px;height:35px;fill:currentColor;">
+      <path
+        d="M16 0C7.163 0 0 7.163 0 16c0 2.825.733 5.475 2.015 7.781L0 32l8.47-1.748C10.74 31.428 13.273 32 16 32c8.837 0 16-7.163 16-16S24.837 0 16 0zm8.807 23.32c-.365 1.03-1.84 1.88-2.613 2.01-.773.13-1.73.235-2.825-.105-1.095-.34-2.19-.785-3.285-1.23-.71-.29-1.395-.625-2.03-1.01-4.04-2.455-6.685-6.525-6.885-6.79-.2-.265-1.465-1.95-1.465-3.725 0-1.775.93-2.645 1.265-3.005.335-.36 1.03-.45 1.395-.45h.865c.295 0 .56.015.82.72.33.895 1.13 2.755 1.23 2.95s.165.425.035.69c-.13.265-.295.425-.595.785-.3.36-.63.66-.895.995-.265.33-.535.69-.235 1.23.3.535 1.325 2.185 2.85 3.54 1.96 1.74 3.61 2.28 4.14 2.545.535.265.865.23 1.195-.14.33-.37 1.43-1.655 1.825-2.22s.76-.46 1.295-.265c.535.195 3.385 1.595 3.98 1.89s.995.425 1.13.66c.135.235.135 1.365-.23 2.395z" />
+    </svg>
+  </a>
+
+  <!-- Sistema de traducción instantánea (sin recarga de página) -->
+  <script>
+    const TRANSLATIONS = {
+      es: {
+        nav_about: 'Sobre mí', nav_services: 'Servicios', nav_prices: 'Precios',
+        nav_contact: 'Contactar →', nav_contact2: 'Contacto',
+        hero_badge: 'Disponible para proyectos',
+        hero_h1: 'Tu idea,<br>convertida en<br><span class="ac">producto digital</span>',
+        hero_sub: 'Desarrollo web, apps móviles e integración de IA.<br>Convierto lo que tienes en mente en algo real y funcional.',
+        hero_cta1: '→ ¡Me interesa!', hero_cta2: 'Ver proyectos',
+        stat1: 'Años programando', stat2: 'Proyectos completados', stat3: 'Compromiso con el cliente',
+        about_tag: 'Sobre mí',
+        about_h2: 'Soy César Hidalgo,<br><span style="color:var(--accent)">desarrollador</span>',
+        about_p1: '<strong>Más de 15 años programando</strong>, he trabajado en proyectos de todo tipo: desde webs corporativas hasta Apps móviles con integración de inteligencia artificial.',
+        about_p2: 'Me apasiona encontrar soluciones simples a problemas complejos. Trabajo de forma cercana con cada cliente para entender bien qué necesitan y entregar algo que de verdad funcione.',
+        about_p3: 'También comparto mi proceso en mi canal de YouTube <strong>Nekophase</strong>, donde muestro las apps y herramientas que desarrollo.',
+        srv_tag: 'Servicios', srv_h2: '¿En qué puedo ayudarte?',
+        srv_desc: 'Desde una landing page hasta una App para Móviles con IA integrada. Me adapto al proyecto que necesitas.',
+        srv1_h3: 'Desarrollo Web', srv1_p: 'Webs profesionales, landing pages y aplicaciones web a medida. Rápidas, modernas y optimizadas para captar clientes.',
+        srv2_h3: 'Apps Móviles', srv2_p: 'Aplicaciones Android nativas. Desde la idea hasta publicación en Google Play, con todo el proceso incluido.',
+        srv3_h3: 'Integración de IA', srv3_p: 'Añado inteligencia artificial a tus productos: chatbots, automatizaciones, análisis de datos o funciones autónomas.',
+        srv_btn: '¡Me interesa!',
+        port_tag: 'Portfolio', port_h2: 'Proyectos realizados',
+        port_desc: 'Algunos de los proyectos que he desarrollado. Puedo contarte más detalles en una llamada.',
+        proj1_h3: 'App de Negocios móvil', proj1_p: 'Desarrollo de aplicación móvil nativa enfocada en la gestión empresarial y administración de recursos.', proj1_link: 'Ver en Google Play →',
+        proj2_h3: 'Páginas Webs', proj2_p: 'Desarrollo de página web para empresa.', proj2_link: 'Ver proyecto →',
+        yt_tag: 'Canal de YouTube', yt_h3: 'Apps reales, proceso real',
+        yt_desc: 'Comparto el proceso de desarrollo de mis apps y herramientas. Si te gusta ver cómo se construyen cosas reales, esto te va a gustar.',
+        yt_p: 'En Nekophase muestro cómo desarrollo aplicaciones móviles, integro IA y creo herramientas útiles. Sin filtros, con el proceso completo.',
+        yt_btn: '▶ Ver el canal',
+        con_tag: 'Contacto', con_h2: 'Hablemos de tu proyecto',
+        con_intro: '¿Tienes una idea en mente? Cuéntamela. Tanto si es una web, una app o algo con IA, le echamos un vistazo juntos sin compromiso.',
+        con_email_label: 'Email directo', con_cal: 'Agendar una llamada',
+        con_cal_label: 'Elige el día y hora que mejor te venga', con_yt_label: 'Canal de YouTube',
+        form_name: 'Nombre', form_name_ph: 'Tu nombre',
+        form_msg: 'Cuéntame tu proyecto', form_msg_ph: 'App, web, integración de IA...',
+        form_submit: 'Enviar mensaje →'
+      },
+      en: {
+        nav_about: 'About me', nav_services: 'Services', nav_prices: 'Pricing',
+        nav_contact: 'Contact →', nav_contact2: 'Contact',
+        hero_badge: 'Available for projects',
+        hero_h1: 'Your idea,<br>turned into a<br><span class="ac">digital product</span>',
+        hero_sub: 'Web development, mobile apps and AI integration.<br>I turn what you have in mind into something real and functional.',
+        hero_cta1: '→ I\'m interested!', hero_cta2: 'View projects',
+        stat1: 'Years coding', stat2: 'Completed projects', stat3: 'Client commitment',
+        about_tag: 'About me',
+        about_h2: 'I am César Hidalgo,<br><span style="color:var(--accent)">developer</span>',
+        about_p1: '<strong>Over 15 years programming</strong>, I have worked on all kinds of projects: from corporate websites to mobile apps with artificial intelligence integration.',
+        about_p2: 'I love finding simple solutions to complex problems. I work closely with each client to understand what they need and deliver something that truly works.',
+        about_p3: 'I also share my process on my YouTube channel <strong>Nekophase</strong>, where I show the apps and tools I develop.',
+        srv_tag: 'Services', srv_h2: 'How can I help you?',
+        srv_desc: 'From a landing page to a mobile app with integrated AI. I adapt to the project you need.',
+        srv1_h3: 'Web Development', srv1_p: 'Professional websites, landing pages and custom web applications. Fast, modern and optimized to attract clients.',
+        srv2_h3: 'Mobile Apps', srv2_p: 'Native Android applications. From idea to Google Play publication, with the whole process included.',
+        srv3_h3: 'AI Integration', srv3_p: 'I add artificial intelligence to your products: chatbots, automations, data analysis or autonomous functions.',
+        srv_btn: 'I\'m interested!',
+        port_tag: 'Portfolio', port_h2: 'Completed projects',
+        port_desc: 'Some of the projects I have developed. I can tell you more details in a call.',
+        proj1_h3: 'Business Mobile App', proj1_p: 'Development of a native mobile application focused on business management and resource administration.', proj1_link: 'View on Google Play →',
+        proj2_h3: 'Websites', proj2_p: 'Web page development for a company.', proj2_link: 'View project →',
+        yt_tag: 'YouTube Channel', yt_h3: 'Real apps, real process',
+        yt_desc: 'I share the development process of my apps and tools. If you like to see how real things are built, you will enjoy this.',
+        yt_p: 'On Nekophase I show how I develop mobile applications, integrate AI and create useful tools. No filters, the complete process.',
+        yt_btn: '▶ View channel',
+        con_tag: 'Contact', con_h2: 'Let\'s talk about your project',
+        con_intro: 'Do you have an idea in mind? Tell me about it. Whether it\'s a website, an app or something with AI, we\'ll take a look together with no commitment.',
+        con_email_label: 'Direct email', con_cal: 'Schedule a call',
+        con_cal_label: 'Choose the day and time that suits you best', con_yt_label: 'YouTube Channel',
+        form_name: 'Name', form_name_ph: 'Your name',
+        form_msg: 'Tell me about your project', form_msg_ph: 'App, web, AI integration...',
+        form_submit: 'Send message →'
+      },
+      it: {
+        nav_about: 'Chi sono', nav_services: 'Servizi', nav_prices: 'Prezzi',
+        nav_contact: 'Contattami →', nav_contact2: 'Contatto',
+        hero_badge: 'Disponibile per progetti',
+        hero_h1: 'La tua idea,<br>trasformata in<br><span class="ac">prodotto digitale</span>',
+        hero_sub: 'Sviluppo web, app mobile e integrazione IA.<br>Trasformo ciò che hai in mente in qualcosa di reale e funzionale.',
+        hero_cta1: '→ Mi interessa!', hero_cta2: 'Vedi progetti',
+        stat1: 'Anni di programmazione', stat2: 'Progetti completati', stat3: 'Impegno con il cliente',
+        about_tag: 'Chi sono',
+        about_h2: 'Sono César Hidalgo,<br><span style="color:var(--accent)">sviluppatore</span>',
+        about_p1: '<strong>Oltre 15 anni di programmazione</strong>, ho lavorato su tutti i tipi di progetti: dai siti web aziendali alle app mobile con integrazione di intelligenza artificiale.',
+        about_p2: 'Amo trovare soluzioni semplici a problemi complessi. Lavoro a stretto contatto con ogni cliente per capire le sue esigenze e consegnare qualcosa che funzioni davvero.',
+        about_p3: 'Condivido anche il mio processo sul mio canale YouTube <strong>Nekophase</strong>, dove mostro le app e gli strumenti che sviluppo.',
+        srv_tag: 'Servizi', srv_h2: 'Come posso aiutarti?',
+        srv_desc: 'Da una landing page a un\'app mobile con IA integrata. Mi adatto al progetto di cui hai bisogno.',
+        srv1_h3: 'Sviluppo Web', srv1_p: 'Siti web professionali, landing page e applicazioni web personalizzate. Veloci, moderne e ottimizzate per acquisire clienti.',
+        srv2_h3: 'App Mobile', srv2_p: 'Applicazioni Android native. Dall\'idea alla pubblicazione su Google Play, con tutto il processo incluso.',
+        srv3_h3: 'Integrazione IA', srv3_p: 'Aggiungo intelligenza artificiale ai tuoi prodotti: chatbot, automazioni, analisi dei dati o funzioni autonome.',
+        srv_btn: 'Mi interessa!',
+        port_tag: 'Portfolio', port_h2: 'Progetti realizzati',
+        port_desc: 'Alcuni dei progetti che ho sviluppato. Posso raccontarti più dettagli in una chiamata.',
+        proj1_h3: 'App Mobile Aziendale', proj1_p: 'Sviluppo di un\'applicazione mobile nativa focalizzata sulla gestione aziendale e l\'amministrazione delle risorse.', proj1_link: 'Vedi su Google Play →',
+        proj2_h3: 'Siti Web', proj2_p: 'Sviluppo di sito web per azienda.', proj2_link: 'Vedi progetto →',
+        yt_tag: 'Canale YouTube', yt_h3: 'App reali, processo reale',
+        yt_desc: 'Condivido il processo di sviluppo delle mie app e strumenti. Se ti piace vedere come vengono costruite cose reali, questo ti piacerà.',
+        yt_p: 'Su Nekophase mostro come sviluppo applicazioni mobile, integro IA e creo strumenti utili. Senza filtri, con il processo completo.',
+        yt_btn: '▶ Vedi il canale',
+        con_tag: 'Contatto', con_h2: 'Parliamo del tuo progetto',
+        con_intro: 'Hai un\'idea in mente? Raccontamela. Che si tratti di un sito web, un\'app o qualcosa con l\'IA, la esaminiamo insieme senza impegno.',
+        con_email_label: 'Email diretta', con_cal: 'Programma una chiamata',
+        con_cal_label: 'Scegli il giorno e l\'ora che ti conviene di più', con_yt_label: 'Canale YouTube',
+        form_name: 'Nome', form_name_ph: 'Il tuo nome',
+        form_msg: 'Parlami del tuo progetto', form_msg_ph: 'App, web, integrazione IA...',
+        form_submit: 'Invia messaggio →'
+      },
+      fr: {
+        nav_about: 'À propos', nav_services: 'Services', nav_prices: 'Tarifs',
+        nav_contact: 'Me contacter →', nav_contact2: 'Contact',
+        hero_badge: 'Disponible pour des projets',
+        hero_h1: 'Votre idée,<br>transformée en<br><span class="ac">produit numérique</span>',
+        hero_sub: 'Développement web, apps mobiles et intégration IA.<br>Je transforme ce que vous avez en tête en quelque chose de réel et fonctionnel.',
+        hero_cta1: '→ Ça m\'intéresse!', hero_cta2: 'Voir les projets',
+        stat1: 'Ans de programmation', stat2: 'Projets réalisés', stat3: 'Engagement client',
+        about_tag: 'À propos',
+        about_h2: 'Je suis César Hidalgo,<br><span style="color:var(--accent)">développeur</span>',
+        about_p1: '<strong>Plus de 15 ans de programmation</strong>, j\'ai travaillé sur toutes sortes de projets: des sites web d\'entreprise aux apps mobiles avec intégration d\'intelligence artificielle.',
+        about_p2: 'J\'aime trouver des solutions simples à des problèmes complexes. Je travaille en étroite collaboration avec chaque client pour bien comprendre ses besoins et livrer quelque chose qui fonctionne vraiment.',
+        about_p3: 'Je partage également mon processus sur ma chaîne YouTube <strong>Nekophase</strong>, où je montre les apps et outils que je développe.',
+        srv_tag: 'Services', srv_h2: 'Comment puis-je vous aider?',
+        srv_desc: 'D\'une landing page à une app mobile avec IA intégrée. Je m\'adapte au projet dont vous avez besoin.',
+        srv1_h3: 'Développement Web', srv1_p: 'Sites web professionnels, landing pages et applications web sur mesure. Rapides, modernes et optimisés pour attirer des clients.',
+        srv2_h3: 'Apps Mobiles', srv2_p: 'Applications Android natives. De l\'idée à la publication sur Google Play, avec tout le processus inclus.',
+        srv3_h3: 'Intégration IA', srv3_p: 'J\'ajoute de l\'intelligence artificielle à vos produits: chatbots, automatisations, analyse de données ou fonctions autonomes.',
+        srv_btn: 'Ça m\'intéresse!',
+        port_tag: 'Portfolio', port_h2: 'Projets réalisés',
+        port_desc: 'Quelques-uns des projets que j\'ai développés. Je peux vous donner plus de détails lors d\'un appel.',
+        proj1_h3: 'App Mobile d\'Entreprise', proj1_p: 'Développement d\'une application mobile native axée sur la gestion d\'entreprise et l\'administration des ressources.', proj1_link: 'Voir sur Google Play →',
+        proj2_h3: 'Sites Web', proj2_p: 'Développement de site web pour une entreprise.', proj2_link: 'Voir le projet →',
+        yt_tag: 'Chaîne YouTube', yt_h3: 'Apps réelles, processus réel',
+        yt_desc: 'Je partage le processus de développement de mes apps et outils. Si vous aimez voir comment les vraies choses sont construites, vous allez adorer.',
+        yt_p: 'Sur Nekophase, je montre comment je développe des applications mobiles, intègre l\'IA et crée des outils utiles. Sans filtres, avec le processus complet.',
+        yt_btn: '▶ Voir la chaîne',
+        con_tag: 'Contact', con_h2: 'Parlons de votre projet',
+        con_intro: 'Vous avez une idée en tête? Racontez-moi. Qu\'il s\'agisse d\'un site web, d\'une app ou de quelque chose avec l\'IA, nous y jetons un œil ensemble sans engagement.',
+        con_email_label: 'Email direct', con_cal: 'Planifier un appel',
+        con_cal_label: 'Choisissez le jour et l\'heure qui vous convient le mieux', con_yt_label: 'Chaîne YouTube',
+        form_name: 'Nom', form_name_ph: 'Votre nom',
+        form_msg: 'Parlez-moi de votre projet', form_msg_ph: 'App, web, intégration IA...',
+        form_submit: 'Envoyer le message →'
+      },
+      nl: {
+        nav_about: 'Over mij', nav_services: 'Diensten', nav_prices: 'Prijzen',
+        nav_contact: 'Contact →', nav_contact2: 'Contact',
+        hero_badge: 'Beschikbaar voor projecten',
+        hero_h1: 'Jouw idee,<br>omgezet in een<br><span class="ac">digitaal product</span>',
+        hero_sub: 'Webontwikkeling, mobiele apps en AI-integratie.<br>Ik zet wat je in gedachten hebt om in iets echts en functioneels.',
+        hero_cta1: '→ Ik ben geïnteresseerd!', hero_cta2: 'Projecten bekijken',
+        stat1: 'Jaar programmeren', stat2: 'Afgeronde projecten', stat3: 'Klantbetrokkenheid',
+        about_tag: 'Over mij',
+        about_h2: 'Ik ben César Hidalgo,<br><span style="color:var(--accent)">ontwikkelaar</span>',
+        about_p1: '<strong>Meer dan 15 jaar programmeren</strong>, ik heb gewerkt aan allerlei projecten: van zakelijke websites tot mobiele apps met kunstmatige intelligentie-integratie.',
+        about_p2: 'Ik ben dol op het vinden van eenvoudige oplossingen voor complexe problemen. Ik werk nauw samen met elke klant om goed te begrijpen wat ze nodig hebben en iets te leveren dat echt werkt.',
+        about_p3: 'Ik deel ook mijn proces op mijn YouTube-kanaal <strong>Nekophase</strong>, waar ik de apps en tools laat zien die ik ontwikkel.',
+        srv_tag: 'Diensten', srv_h2: 'Hoe kan ik je helpen?',
+        srv_desc: 'Van een landingspagina tot een mobiele app met geïntegreerde AI. Ik pas me aan het project aan dat je nodig hebt.',
+        srv1_h3: 'Webontwikkeling', srv1_p: 'Professionele websites, landingspagina\'s en maatwerk webapplicaties. Snel, modern en geoptimaliseerd om klanten aan te trekken.',
+        srv2_h3: 'Mobiele Apps', srv2_p: 'Native Android-applicaties. Van idee tot publicatie op Google Play, met het hele proces inbegrepen.',
+        srv3_h3: 'AI-integratie', srv3_p: 'Ik voeg kunstmatige intelligentie toe aan jouw producten: chatbots, automatiseringen, data-analyse of autonome functies.',
+        srv_btn: 'Ik ben geïnteresseerd!',
+        port_tag: 'Portfolio', port_h2: 'Gerealiseerde projecten',
+        port_desc: 'Enkele van de projecten die ik heb ontwikkeld. Ik kan je meer details vertellen in een gesprek.',
+        proj1_h3: 'Zakelijke Mobiele App', proj1_p: 'Ontwikkeling van een native mobiele applicatie gericht op bedrijfsbeheer en resourcebeheer.', proj1_link: 'Bekijk op Google Play →',
+        proj2_h3: 'Websites', proj2_p: 'Webpagina-ontwikkeling voor een bedrijf.', proj2_link: 'Project bekijken →',
+        yt_tag: 'YouTube-kanaal', yt_h3: 'Echte apps, echt proces',
+        yt_desc: 'Ik deel het ontwikkelproces van mijn apps en tools. Als je graag ziet hoe echte dingen worden gemaakt, zul je dit geweldig vinden.',
+        yt_p: 'Op Nekophase laat ik zien hoe ik mobiele applicaties ontwikkel, AI integreer en nuttige tools maak. Zonder filters, met het volledige proces.',
+        yt_btn: '▶ Kanaal bekijken',
+        con_tag: 'Contact', con_h2: 'Laten we over jouw project praten',
+        con_intro: 'Heb je een idee in gedachten? Vertel het me. Of het nu een website, een app of iets met AI is, we bekijken het samen zonder verplichtingen.',
+        con_email_label: 'Directe e-mail', con_cal: 'Een gesprek plannen',
+        con_cal_label: 'Kies de dag en tijd die jou het beste uitkomt', con_yt_label: 'YouTube-kanaal',
+        form_name: 'Naam', form_name_ph: 'Jouw naam',
+        form_msg: 'Vertel me over jouw project', form_msg_ph: 'App, web, AI-integratie...',
+        form_submit: 'Bericht versturen →'
+      },
+      de: {
+        nav_about: 'Über mich', nav_services: 'Dienste', nav_prices: 'Preise',
+        nav_contact: 'Kontakt →', nav_contact2: 'Kontakt',
+        hero_badge: 'Verfügbar für Projekte',
+        hero_h1: 'Deine Idee,<br>verwandelt in ein<br><span class="ac">digitales Produkt</span>',
+        hero_sub: 'Webentwicklung, mobile Apps und KI-Integration.<br>Ich verwandle das, was du im Sinn hast, in etwas Reales und Funktionales.',
+        hero_cta1: '→ Interessiert mich!', hero_cta2: 'Projekte ansehen',
+        stat1: 'Jahre Programmierung', stat2: 'Abgeschlossene Projekte', stat3: 'Kundenverpflichtung',
+        about_tag: 'Über mich',
+        about_h2: 'Ich bin César Hidalgo,<br><span style="color:var(--accent)">Entwickler</span>',
+        about_p1: '<strong>Über 15 Jahre Programmierung</strong>, ich habe an allen Arten von Projekten gearbeitet: von Unternehmenswebsites bis hin zu mobilen Apps mit Integration von künstlicher Intelligenz.',
+        about_p2: 'Ich liebe es, einfache Lösungen für komplexe Probleme zu finden. Ich arbeite eng mit jedem Kunden zusammen, um ihre Bedürfnisse genau zu verstehen und etwas zu liefern, das wirklich funktioniert.',
+        about_p3: 'Ich teile auch meinen Prozess auf meinem YouTube-Kanal <strong>Nekophase</strong>, wo ich die Apps und Tools zeige, die ich entwickle.',
+        srv_tag: 'Dienste', srv_h2: 'Wie kann ich dir helfen?',
+        srv_desc: 'Von einer Landing Page bis zu einer mobilen App mit integrierter KI. Ich passe mich dem Projekt an, das du brauchst.',
+        srv1_h3: 'Webentwicklung', srv1_p: 'Professionelle Websites, Landing Pages und maßgeschneiderte Webanwendungen. Schnell, modern und optimiert, um Kunden zu gewinnen.',
+        srv2_h3: 'Mobile Apps', srv2_p: 'Native Android-Anwendungen. Von der Idee bis zur Veröffentlichung im Google Play, mit dem gesamten Prozess inklusive.',
+        srv3_h3: 'KI-Integration', srv3_p: 'Ich füge künstliche Intelligenz zu deinen Produkten hinzu: Chatbots, Automatisierungen, Datenanalyse oder autonome Funktionen.',
+        srv_btn: 'Interessiert mich!',
+        port_tag: 'Portfolio', port_h2: 'Realisierte Projekte',
+        port_desc: 'Einige der Projekte, die ich entwickelt habe. Ich kann dir mehr Details in einem Gespräch mitteilen.',
+        proj1_h3: 'Business Mobile App', proj1_p: 'Entwicklung einer nativen mobilen Anwendung, die sich auf Unternehmensführung und Ressourcenverwaltung konzentriert.', proj1_link: 'Auf Google Play ansehen →',
+        proj2_h3: 'Webseiten', proj2_p: 'Entwicklung einer Webseite für ein Unternehmen.', proj2_link: 'Projekt ansehen →',
+        yt_tag: 'YouTube-Kanal', yt_h3: 'Echte Apps, echter Prozess',
+        yt_desc: 'Ich teile den Entwicklungsprozess meiner Apps und Tools. Wenn du gerne siehst, wie echte Dinge gebaut werden, wirst du das lieben.',
+        yt_p: 'Auf Nekophase zeige ich, wie ich mobile Anwendungen entwickle, KI integriere und nützliche Tools erstelle. Ohne Filter, mit dem gesamten Prozess.',
+        yt_btn: '▶ Kanal ansehen',
+        con_tag: 'Kontakt', con_h2: 'Lass uns über dein Projekt sprechen',
+        con_intro: 'Hast du eine Idee? Erzähl mir davon. Ob es eine Website, eine App oder etwas mit KI ist, wir schauen es uns gemeinsam unverbindlich an.',
+        con_email_label: 'Direkte E-Mail', con_cal: 'Einen Anruf planen',
+        con_cal_label: 'Wähle den Tag und die Uhrzeit, die dir am besten passen', con_yt_label: 'YouTube-Kanal',
+        form_name: 'Name', form_name_ph: 'Dein Name',
+        form_msg: 'Erzähl mir von deinem Projekt', form_msg_ph: 'App, Web, KI-Integration...',
+        form_submit: 'Nachricht senden →'
+      },
+      'zh-CN': {
+        nav_about: '关于我', nav_services: '服务', nav_prices: '价格',
+        nav_contact: '联系我 →', nav_contact2: '联系',
+        hero_badge: '接受项目委托',
+        hero_h1: '您的想法，<br>转化为<br><span class="ac">数字产品</span>',
+        hero_sub: '网页开发、移动应用和AI集成。<br>我将您脑海中的想法变成真实可用的产品。',
+        hero_cta1: '→ 我感兴趣！', hero_cta2: '查看项目',
+        stat1: '年编程经验', stat2: '已完成项目', stat3: '客户承诺',
+        about_tag: '关于我',
+        about_h2: '我是César Hidalgo，<br><span style="color:var(--accent)">开发者</span>',
+        about_p1: '<strong>超过15年的编程经验</strong>，我参与过各类项目：从企业网站到集成人工智能的移动应用。',
+        about_p2: '我热衷于为复杂问题找到简单解决方案。我与每位客户密切合作，充分了解他们的需求，并交付真正有效的成果。',
+        about_p3: '我也在我的YouTube频道 <strong>Nekophase</strong> 上分享我的开发过程，展示我开发的应用和工具。',
+        srv_tag: '服务', srv_h2: '我能为您做什么？',
+        srv_desc: '从落地页到集成AI的移动应用，我适应您所需的项目。',
+        srv1_h3: '网页开发', srv1_p: '专业网站、落地页和定制网络应用。快速、现代，优化以吸引客户。',
+        srv2_h3: '移动应用', srv2_p: '原生Android应用。从创意到Google Play发布，包含整个流程。',
+        srv3_h3: 'AI集成', srv3_p: '我为您的产品添加人工智能：聊天机器人、自动化、数据分析或自主功能。',
+        srv_btn: '我感兴趣！',
+        port_tag: '作品集', port_h2: '已完成项目',
+        port_desc: '我开发的一些项目。我可以在电话中告诉您更多详情。',
+        proj1_h3: '商业移动应用', proj1_p: '专注于企业管理和资源管理的原生移动应用开发。', proj1_link: '在Google Play上查看 →',
+        proj2_h3: '网站', proj2_p: '为企业开发网页。', proj2_link: '查看项目 →',
+        yt_tag: 'YouTube频道', yt_h3: '真实应用，真实过程',
+        yt_desc: '我分享应用和工具的开发过程。如果您喜欢看真实的东西是如何构建的，您会喜欢这个。',
+        yt_p: '在Nekophase上，我展示如何开发移动应用、集成AI和创建有用的工具。不加滤镜，展示完整过程。',
+        yt_btn: '▶ 查看频道',
+        con_tag: '联系', con_h2: '让我们谈谈您的项目',
+        con_intro: '有想法？告诉我。无论是网站、应用还是AI相关内容，我们一起看看，没有任何义务。',
+        con_email_label: '直接邮件', con_cal: '安排通话',
+        con_cal_label: '选择最适合您的日期和时间', con_yt_label: 'YouTube频道',
+        form_name: '姓名', form_name_ph: '您的姓名',
+        form_msg: '告诉我您的项目', form_msg_ph: '应用、网站、AI集成...',
+        form_submit: '发送消息 →'
+      },
+      ja: {
+        nav_about: '私について', nav_services: 'サービス', nav_prices: '料金',
+        nav_contact: 'お問い合わせ →', nav_contact2: 'お問い合わせ',
+        hero_badge: 'プロジェクト受付中',
+        hero_h1: 'あなたのアイデアを、<br>デジタル製品に<br><span class="ac">変えます</span>',
+        hero_sub: 'Web開発、モバイルアプリ、AI統合。<br>あなたの考えを現実の機能するものに変えます。',
+        hero_cta1: '→ 興味があります！', hero_cta2: 'プロジェクトを見る',
+        stat1: '年のプログラミング経験', stat2: '完了したプロジェクト', stat3: 'クライアントへのコミットメント',
+        about_tag: '私について',
+        about_h2: '私はCésar Hidalgo、<br><span style="color:var(--accent)">開発者です</span>',
+        about_p1: '<strong>15年以上のプログラミング経験</strong>があり、企業向けWebサイトからAI統合モバイルアプリまで、あらゆる種類のプロジェクトに携わってきました。',
+        about_p2: '複雑な問題に対してシンプルな解決策を見つけることが好きです。各クライアントと密接に協力し、ニーズを理解し、本当に機能するものを提供します。',
+        about_p3: 'YouTubeチャンネル <strong>Nekophase</strong> でも開発プロセスを共有しており、開発しているアプリやツールを紹介しています。',
+        srv_tag: 'サービス', srv_h2: 'どのようにお手伝いできますか？',
+        srv_desc: 'ランディングページからAI統合モバイルアプリまで、必要なプロジェクトに合わせます。',
+        srv1_h3: 'Web開発', srv1_p: 'プロフェッショナルなWebサイト、ランディングページ、カスタムWebアプリケーション。高速、モダン、クライアント獲得に最適化。',
+        srv2_h3: 'モバイルアプリ', srv2_p: 'ネイティブAndroidアプリケーション。アイデアからGoogle Play公開まで、全プロセス込み。',
+        srv3_h3: 'AI統合', srv3_p: '製品に人工知能を追加：チャットボット、自動化、データ分析、または自律機能。',
+        srv_btn: '興味があります！',
+        port_tag: 'ポートフォリオ', port_h2: '完成プロジェクト',
+        port_desc: '開発したいくつかのプロジェクト。通話でより詳しくお伝えできます。',
+        proj1_h3: 'ビジネスモバイルアプリ', proj1_p: 'ビジネス管理とリソース管理に特化したネイティブモバイルアプリの開発。', proj1_link: 'Google Playで見る →',
+        proj2_h3: 'ウェブサイト', proj2_p: '企業向けWebページ開発。', proj2_link: 'プロジェクトを見る →',
+        yt_tag: 'YouTubeチャンネル', yt_h3: 'リアルなアプリ、リアルなプロセス',
+        yt_desc: 'アプリとツールの開発プロセスを共有しています。本物がどのように作られるかを見るのが好きなら、気に入るはずです。',
+        yt_p: 'Nekophaseでは、モバイルアプリの開発方法、AI統合、便利なツールの作成を紹介しています。フィルターなしで、完全なプロセスを。',
+        yt_btn: '▶ チャンネルを見る',
+        con_tag: 'お問い合わせ', con_h2: 'プロジェクトについて話しましょう',
+        con_intro: 'アイデアはありますか？教えてください。Web、アプリ、AIに関わることでも、一緒に見てみましょう。何の義務もありません。',
+        con_email_label: '直接メール', con_cal: '電話を予約する',
+        con_cal_label: '都合のよい日時を選んでください', con_yt_label: 'YouTubeチャンネル',
+        form_name: '名前', form_name_ph: 'あなたの名前',
+        form_msg: 'プロジェクトについて教えてください', form_msg_ph: 'アプリ、Web、AI統合...',
+        form_submit: 'メッセージを送る →'
+      }
+    };
+
+    function applyTranslations(lang) {
+      const t = TRANSLATIONS[lang] || TRANSLATIONS['es'];
+      // Fade out
+      document.body.classList.add('lang-switching');
+      setTimeout(() => {
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+          const key = el.getAttribute('data-i18n');
+          if (t[key] !== undefined) el.innerHTML = t[key];
+        });
+        document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+          const key = el.getAttribute('data-i18n-placeholder');
+          if (t[key] !== undefined) el.placeholder = t[key];
+        });
+        // Fade in
+        document.body.classList.remove('lang-switching');
+      }, 150);
+    }
+
+    function changeLanguage(langCode) {
+      localStorage.setItem('siteLang', langCode);
+      applyTranslations(langCode);
+      const selectEl = document.getElementById('lang-select');
+      if (selectEl) selectEl.value = langCode;
+    }
+
+    // Aplicar idioma guardado al cargar
+    window.addEventListener('DOMContentLoaded', () => {
+      const savedLang = localStorage.getItem('siteLang') || 'es';
+      const selectEl = document.getElementById('lang-select');
+      if (selectEl) selectEl.value = savedLang;
+      if (savedLang !== 'es') applyTranslations(savedLang);
+    });
+
+
+
+
+
+    // ==========================================================================
+    // ESTRELLAS - Motion Path: calcula la curva S según el tamaño real de pantalla
+    // Por qué hace falta JS: offset-path no acepta vw/vh dentro del path()
+    // así que medimos el viewport y construimos las coordenadas en píxeles reales.
+    // ==========================================================================
+    (function initStarPaths() {
+      var vw = window.innerWidth;
+      var vh = window.innerHeight;
+
+      // --- CURVA BASE (estrella principal) ---
+      //
+      // Los valores vienen de los sliders de Desmos:
+      //   P0=(4.284, 6.4)  P1=(5.02, 6.2)  P2=(6.72, 6.474)  P3=(4.18, 6.86)
+      //
+      // Conversión aplicada:
+      //   1) Invertir el recorrido (animación va P3→P0, igual que Desmos al revés)
+      //   2) Invertir eje Y (Desmos Y sube, SVG Y baja)
+      //   3) Escalar al viewport: Desmos x[4.18..6.72] → vw[5%..70%]
+      //                           Desmos y[6.2..6.86]  → vh[7%..35%]
+      //
+      // Para ajustar en el futuro: cambia los 4 pares de valores de Desmos
+      // y vuelve a ejecutar la misma conversión.
+      var sx = vw * 0.09, sy = vh * 0.13;   // START
+      var c1x = vw * 0.53, c1y = vh * 0.19;   // tirador de inicio
+      var c2x = vw * 0.23, c2y = vh * 0.54;   // tirador de fin
+      var ex = vw * 0.07, ey = vh * 0.33;    // END
+
+      function buildPath(ox, oy) {
+        // ox/oy: desplazamiento uniforme en píxeles aplicado a todos los puntos
+        return 'M ' + (sx + ox) + ',' + (sy + oy) +
+          ' C ' + (c1x + ox) + ',' + (c1y + oy) +
+          ' ' + (c2x + ox) + ',' + (c2y + oy) +
+          ' ' + (ex + ox) + ',' + (ey + oy);
+      }
+
+      // --- Estrella 1 (original) ---
+      var star1 = document.querySelector('.star-cinema');
+      if (star1) {
+        var path1 = buildPath(0, 0);
+        console.log('star1:', path1);
+        star1.style.offsetPath = "path('" + path1 + "')";
+      }
+
+      // ==========================================================================
+      // MODO DEBUG: dibuja los puntos de inicio/fin (rojo) y las líneas "tiradoras"
+      // hacia los puntos de control (naranja), para poder ajustar la curva a ojo.
+      // Actívalo añadiendo ?debug=1 a la URL.
+      // ==========================================================================
+      var DEBUG_PATH = window.location.search.includes('debug=1');
+
+      if (DEBUG_PATH) {
+        var svgNS = 'http://www.w3.org/2000/svg';
+        var debugSvg = document.createElementNS(svgNS, 'svg');
+        debugSvg.setAttribute('width', vw);
+        debugSvg.setAttribute('height', vh);
+        debugSvg.style.position = 'fixed';
+        debugSvg.style.top = '0';
+        debugSvg.style.left = '0';
+        debugSvg.style.zIndex = '99999';
+        debugSvg.style.pointerEvents = 'none';
+
+        function debugDot(x, y, color, radius) {
+          var c = document.createElementNS(svgNS, 'circle');
+          c.setAttribute('cx', x);
+          c.setAttribute('cy', y);
+          c.setAttribute('r', radius || 6);
+          c.setAttribute('fill', color);
+          debugSvg.appendChild(c);
+        }
+
+        function debugLine(x1, y1, x2, y2, color) {
+          var l = document.createElementNS(svgNS, 'line');
+          l.setAttribute('x1', x1);
+          l.setAttribute('y1', y1);
+          l.setAttribute('x2', x2);
+          l.setAttribute('y2', y2);
+          l.setAttribute('stroke', color);
+          l.setAttribute('stroke-width', 2);
+          l.setAttribute('stroke-dasharray', '6,4');
+          debugSvg.appendChild(l);
+        }
+
+        // Dibujar solo la curva base
+        var dp = document.createElementNS(svgNS, 'path');
+        dp.setAttribute('d', buildPath(0, 0));
+        dp.setAttribute('stroke', 'rgba(255,255,255,0.4)');
+        dp.setAttribute('stroke-width', 2);
+        dp.setAttribute('fill', 'none');
+        debugSvg.appendChild(dp);
+
+        // Tiradores de la curva base
+        debugLine(sx, sy, c1x, c1y, 'orange');
+        debugLine(ex, ey, c2x, c2y, 'orange');
+        debugDot(c1x, c1y, 'orange', 5);
+        debugDot(c2x, c2y, 'orange', 5);
+        debugDot(sx, sy, 'red', 7);
+        debugDot(ex, ey, 'red', 7);
+
+        document.body.appendChild(debugSvg);
+      }
+    })();
+
+  </script>
+</body>
+
+</html>
