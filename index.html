@@ -1301,103 +1301,6 @@
     .lang-switching [data-i18n] {
       opacity: 0;
     }
-
-    /* ==========================================================================
-       RECURSOS
-       ========================================================================== */
-    #recursos {
-      background: var(--bg);
-    }
-
-    .recursos-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 1.5rem;
-      margin-top: 2.5rem;
-    }
-
-    .recurso-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      padding: 2rem 1.5rem 1.6rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 1rem;
-      text-decoration: none;
-      color: var(--text);
-      transition: transform 0.25s, border-color 0.25s, box-shadow 0.25s;
-      cursor: pointer;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .recurso-card::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(ellipse at top, rgba(0,194,255,0.07) 0%, transparent 70%);
-      opacity: 0;
-      transition: opacity 0.3s;
-    }
-
-    .recurso-card:hover {
-      transform: translateY(-6px);
-      border-color: rgba(0, 194, 255, 0.35);
-      box-shadow: 0 12px 40px rgba(0, 194, 255, 0.12);
-    }
-
-    .recurso-card:hover::before {
-      opacity: 1;
-    }
-
-    .recurso-icon {
-      width: 64px;
-      height: 64px;
-      border-radius: 14px;
-      background: linear-gradient(135deg, rgba(0,194,255,0.15), rgba(0,119,255,0.08));
-      border: 1px solid rgba(0,194,255,0.2);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 2rem;
-      flex-shrink: 0;
-    }
-
-    .recurso-name {
-      font-size: 0.95rem;
-      font-weight: 700;
-      color: var(--text);
-      text-align: center;
-      line-height: 1.3;
-    }
-
-    .recurso-desc {
-      font-size: 0.78rem;
-      color: var(--muted);
-      text-align: center;
-      line-height: 1.5;
-      flex: 1;
-    }
-
-    .recurso-link-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.35rem;
-      font-size: 0.72rem;
-      font-weight: 600;
-      color: var(--accent);
-      background: rgba(0,194,255,0.08);
-      border: 1px solid rgba(0,194,255,0.18);
-      padding: 0.3rem 0.8rem;
-      border-radius: 100px;
-      transition: background 0.2s;
-    }
-
-    .recurso-card:hover .recurso-link-badge {
-      background: rgba(0,194,255,0.15);
-    }
   </style>
 </head>
 
@@ -1417,7 +1320,7 @@
         <li><a href="asesoramiento.html" data-i18n="nav_prices">Precios</a></li>
         <li><a href="#portfolio">Portfolio</a></li>
         <li><a href="#nekophase">Nekophase</a></li>
-        <li><a href="#recursos">Recursos</a></li>
+        <li><a href="recursos.html">Recursos</a></li>
         <li><a href="#contacto" class="nav-cta" data-i18n="nav_contact">Contactar →</a></li>
       </ul>
       <div class="lang-selector-container">
@@ -1682,31 +1585,6 @@
     </div>
   </section>
 
-  <!-- SECTION: RECURSOS -->
-  <section id="recursos">
-    <div class="inner">
-      <p class="stag">Recursos</p>
-      <h2>Herramientas <span style="color:var(--accent)">gratuitas</span></h2>
-      <p class="sdesc">Pequeños programas y utilidades que uso en mi día a día. Código abierto, para que los uses y adaptes libremente.</p>
-      <div class="recursos-grid">
-
-        <!-- RECURSO 1: CurvaSVG.py -->
-        <a href="https://github.com/hazeneko1/SVGTranslator"
-           target="_blank"
-           rel="noopener noreferrer"
-           class="recurso-card reveal reveal-up"
-           id="recurso-curvasvg"
-           title="Ver CurvaSVG en GitHub">
-          <div class="recurso-icon">📁</div>
-          <div class="recurso-name">CurvaSVG.py</div>
-          <div class="recurso-desc">
-            Traduce las coordenadas que aparecen en el log de debug de tu web a valores SVG estándar, y viceversa. Ideal para ajustar curvas de motion-path.
-          </div>
-          <span class="recurso-link-badge">Ver en GitHub →</span>
-        </a>
-
-      </div>
-    </div>
   </section>
 
   <footer>
@@ -1715,7 +1593,7 @@
       <a href="#sobre-mi" data-i18n="nav_about">Sobre mí</a>
       <a href="#servicios" data-i18n="nav_services">Servicios</a>
       <a href="#portfolio">Portfolio</a>
-      <a href="#recursos">Recursos</a>
+      <a href="recursos.html">Recursos</a>
       <a href="#contacto" data-i18n="nav_contact2">Contacto</a>
     </div>
   </footer>

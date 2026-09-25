@@ -1,0 +1,121 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>Recursos — César Hidalgo</title>
+  <meta name="description" content="Herramientas y utilidades gratuitas desarrolladas por César Hidalgo. Código abierto para usar y adaptar libremente." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@700;800;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="icon" href="img/favicon00.webp" type="image/webp">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#0f1520;--bg2:#151e2e;--bg3:#1a2438;--accent:#00c2ff;--accent2:#0077ff;--text:#e8f0fe;--muted:#7a8fa6;--border:rgba(0,194,255,.12);--card:rgba(255,255,255,.03)}
+    html{scroll-behavior:smooth}
+    body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;min-height:100vh}
+    nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:1.2rem 5%;background:rgba(15,21,32,.92);backdrop-filter:blur(14px);border-bottom:1px solid var(--border)}
+    .nav-logo{font-family:'DM Sans',sans-serif;font-weight:800;font-size:1.3rem;color:var(--text);text-decoration:none}
+    .nav-logo span{color:var(--accent)}
+    .nav-links{display:flex;gap:2rem;list-style:none}
+    .nav-links a{color:var(--muted);text-decoration:none;font-size:.9rem;font-weight:500;transition:color .2s}
+    .nav-links a:hover,.nav-links a.active{color:var(--text)}
+    .nav-cta{background:var(--accent);color:#000!important;padding:.45rem 1.1rem;border-radius:8px;font-weight:700!important;transition:opacity .2s!important}
+    .nav-cta:hover{opacity:.85}
+    .recursos-hero{padding:9rem 5% 4rem;text-align:center;position:relative;overflow:hidden}
+    .recursos-hero::before{content:'';position:absolute;top:-80px;left:50%;transform:translateX(-50%);width:600px;height:600px;background:radial-gradient(ellipse,rgba(0,194,255,.08) 0%,transparent 70%);pointer-events:none}
+    .recursos-hero .stag{font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.15em;color:var(--accent);margin-bottom:1rem}
+    .recursos-hero h1{font-size:clamp(2.2rem,5vw,3.5rem);font-weight:900;line-height:1.1;margin-bottom:1.2rem}
+    .recursos-hero h1 span{color:var(--accent)}
+    .recursos-hero p{color:var(--muted);font-size:1.05rem;font-weight:300;max-width:560px;margin:0 auto;line-height:1.7}
+    .recursos-section{padding:2rem 5% 6rem;max-width:1100px;margin:0 auto}
+    .recursos-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1.5rem;margin-top:1rem}
+    .recurso-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:2.2rem 1.8rem 1.8rem;display:flex;flex-direction:column;align-items:center;gap:1rem;text-decoration:none;color:var(--text);transition:transform .25s,border-color .25s,box-shadow .25s;cursor:pointer;position:relative;overflow:hidden}
+    .recurso-card::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at top,rgba(0,194,255,.08) 0%,transparent 70%);opacity:0;transition:opacity .3s}
+    .recurso-card:hover{transform:translateY(-8px);border-color:rgba(0,194,255,.4);box-shadow:0 16px 48px rgba(0,194,255,.14)}
+    .recurso-card:hover::before{opacity:1}
+    .recurso-icon{width:72px;height:72px;border-radius:16px;background:linear-gradient(135deg,rgba(0,194,255,.18),rgba(0,119,255,.08));border:1px solid rgba(0,194,255,.22);display:flex;align-items:center;justify-content:center;font-size:2.2rem;flex-shrink:0;position:relative;z-index:1}
+    .recurso-name{font-size:1rem;font-weight:700;text-align:center;line-height:1.3;position:relative;z-index:1}
+    .recurso-lang{font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);background:rgba(0,194,255,.07);border:1px solid rgba(0,194,255,.15);padding:.2rem .65rem;border-radius:100px;position:relative;z-index:1}
+    .recurso-desc{font-size:.82rem;color:var(--muted);text-align:center;line-height:1.6;flex:1;position:relative;z-index:1}
+    .recurso-link-badge{display:inline-flex;align-items:center;gap:.4rem;font-size:.75rem;font-weight:700;color:var(--accent);background:rgba(0,194,255,.08);border:1px solid rgba(0,194,255,.2);padding:.35rem .9rem;border-radius:100px;transition:background .2s,gap .2s;position:relative;z-index:1}
+    .recurso-card:hover .recurso-link-badge{background:rgba(0,194,255,.18);gap:.6rem}
+    .reveal{opacity:0;transform:translateY(28px);transition:opacity .6s ease,transform .6s ease}
+    .reveal.active{opacity:1;transform:none}
+    footer{background:var(--bg2);border-top:1px solid var(--border);padding:2.5rem 5%;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1.5rem}
+    .f-logo{font-family:'DM Sans',sans-serif;font-weight:800;font-size:1.2rem;color:var(--text)}
+    .f-logo span{color:var(--accent)}
+    .f-links{display:flex;gap:2rem;flex-wrap:wrap}
+    .f-links a{color:var(--muted);text-decoration:none;font-size:.9rem;font-weight:500;transition:color .2s}
+    .f-links a:hover{color:var(--text)}
+    @media(max-width:600px){.nav-links{display:none}.recursos-grid{grid-template-columns:1fr}footer{flex-direction:column;align-items:flex-start}}
+  </style>
+</head>
+
+<body>
+
+  <nav>
+    <a href="index.html" class="nav-logo">César<span>.</span></a>
+    <div>
+      <ul class="nav-links">
+        <li><a href="index.html#sobre-mi">Sobre mí</a></li>
+        <li><a href="index.html#servicios">Servicios</a></li>
+        <li><a href="asesoramiento.html">Precios</a></li>
+        <li><a href="index.html#portfolio">Portfolio</a></li>
+        <li><a href="index.html#nekophase">Nekophase</a></li>
+        <li><a href="recursos.html" class="active">Recursos</a></li>
+        <li><a href="index.html#contacto" class="nav-cta">Contactar →</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="recursos-hero">
+    <p class="stag">Recursos</p>
+    <h1>Herramientas <span>gratuitas</span></h1>
+    <p>Pequeños programas y utilidades que uso en mi día a día. Código abierto, para que los uses y adaptes libremente.</p>
+  </div>
+
+  <div class="recursos-section">
+    <div class="recursos-grid">
+
+      <!-- RECURSO 1: CurvaSVG.py -->
+      <a href="https://github.com/hazeneko1/SVGTranslator"
+         target="_blank"
+         rel="noopener noreferrer"
+         class="recurso-card reveal"
+         id="recurso-curvasvg"
+         title="Ver CurvaSVG en GitHub">
+        <div class="recurso-icon">📁</div>
+        <div class="recurso-name">CurvaSVG.py</div>
+        <span class="recurso-lang">Python</span>
+        <div class="recurso-desc">
+          Traduce las coordenadas que aparecen en el log de debug de tu web a valores SVG estándar, y viceversa.
+          Ideal para ajustar curvas de <code style="font-size:.78rem;color:var(--accent)">offset-path</code> sin complicaciones.
+        </div>
+        <span class="recurso-link-badge">Ver en GitHub →</span>
+      </a>
+
+    </div>
+  </div>
+
+  <footer>
+    <div class="f-logo">César<span>.</span></div>
+    <div class="f-links">
+      <a href="index.html#sobre-mi">Sobre mí</a>
+      <a href="index.html#servicios">Servicios</a>
+      <a href="index.html#portfolio">Portfolio</a>
+      <a href="recursos.html">Recursos</a>
+      <a href="index.html#contacto">Contacto</a>
+    </div>
+  </footer>
+
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('active'); });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>
